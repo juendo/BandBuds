@@ -1,4 +1,4 @@
-
+from django.db import models
 class Band(models.Model):
     name 	= models.CharField(max_length=128, unique=False);
     city 	= models.CharField(max_length=128, unique=False);
@@ -11,11 +11,11 @@ class User(models.Model):
 	user_id = models.CharField(max_length=128, unique=True);
 	f_name	= models.CharField(max_length=128, unique=False);
 	s_name  = models.CharField(max_length=128, unique=False);
-	d.o.b	= models.DateField(default=DateField.auto_now_add);
+	dob	= models.DateField(default=models.DateField.auto_now_add);
 	smokes	= models.BooleanField();
 	gender  = models.CharField(max_length=128, unique=False);
 	alcohol = models.CharField(max_length=128, unique=False);
 
 class Liked_Band(models.Model):
-	band 	= models.Foreignkey(Band);
-    user 	= models.Foreignkey(User);
+	band 	= models.ForeignKey(Band);
+    user 	= models.ForeignKey(User);
