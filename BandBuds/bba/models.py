@@ -19,3 +19,5 @@ class User(models.Model):
 class Liked_Band(models.Model):
 	band 	= models.ForeignKey(Band);
     user 	= models.ForeignKey(User);
+
+#hello
