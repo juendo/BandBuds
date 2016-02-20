@@ -6,7 +6,6 @@ class Band(models.Model):
     formed 	= models.IntegerField(default=0)
     genre 	= models.CharField(max_length=128, unique=False)
 
-
 class User(models.Model):
 	user_id = models.CharField(max_length=128, unique=True)
 	f_name	= models.CharField(max_length=128, unique=False)
