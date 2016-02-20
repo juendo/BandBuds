@@ -10,25 +10,24 @@ from bba.models import Band, User, Liked_Band
 
 def populate():
     bloc = add_band('Bloc Party', 'London', 'England', 1999, 'Indie')
-    bloc_like = add_liked_band('Bloc Party', 'London', 'England', 'stevo')
-
     thewknd = add_band('The Weeknd','Toronto','Canada',1990,'R&B')
-    thewknd_like = add_band('The Weeknd','Toronto','Canada','stevo')
 
-    user = add_user('stevo','stevie','stando',date(1983,1,26),False,'Male','Jackie Daniels')
+    stevo = add_user('0106105s','stevie','stando',date(1983,1,26),False,'Male','Jackie Daniels')
+
+    bloc_like = add_liked_band(bloc, stevo)
+    thewknd_like = add_liked_band(thewknd,stevo)
 
     # Print out what we have added to the user.
     for u in User.objects.all():
-        for lb in Liked_Band.objects.filter(user=u):
+        for lb in Liked_Band.objects.filter(user_id=u.user_id):
             print "- {0} - {1}".format(str(u), str(lb))
 
 def add_band(name,city,country,formed,genre):
     b = Band.objects.get_or_create(name=name,city=city,country=country,formed=formed,genre=genre)[0]
     return b
 
-def add_liked_band(name,city,country,user_id):
-    lb = Liked_Band.objects.get_or_create(name=name,city=city,
-                                          country=country,user_id=user_id)[0]
+def add_liked_band(band,user):
+    lb = Liked_Band.objects.get_or_create(band=band,user=user)[0]
     return lb
 
 def add_user(user_id, f_name,s_name, dob, smokes, gender, alcohol):
