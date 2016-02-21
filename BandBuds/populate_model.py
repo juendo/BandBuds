@@ -19,20 +19,21 @@ def populate():
 
     # Print out what we have added to the user.
     for u in User.objects.all():
-        for lb in Liked_Band.objects.filter(user_id=u.user_id):
-            print "- {0} - {1}".format(str(u), str(lb))
+        for lb in Liked_Band.objects.all():
+            print str(lb)
 
 def add_band(name,city,country,formed,genre):
     b = Band.objects.get_or_create(name=name,city=city,country=country,formed=formed,genre=genre)[0]
     return b
 
-def add_liked_band(band,user):
-    lb = Liked_Band.objects.get_or_create(band=band,user=user)[0]
+def add_liked_band(b,u):
+    lb = Liked_Band.objects.get_or_create(band=b,user=u)[0]
     return lb
 
 def add_user(user_id, f_name,s_name, dob, smokes, gender, alcohol):
     u = User.objects.get_or_create(user_id=user_id, f_name=f_name,
                                     s_name=s_name, dob=dob, smokes=smokes, gender=gender, alcohol=alcohol)[0]
+    u.save()
     return u
 
 # Start execution here!
