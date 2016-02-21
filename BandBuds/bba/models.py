@@ -18,7 +18,7 @@ class Buddy(models.model):
     user_Id     = models.ForeignKey("user_Id")
 
  def __unicode__(self):
-        return self.user_Id + ' ' + self.user_Id
+        return 
 
 class Band(models.Model):
     name 	    = models.CharField(primary_key=True, max_length=50)
@@ -36,7 +36,7 @@ class Liked_Band(models.model):
     country     = models.ForeignKey(Country, max_length=50)
 
     def __unicode__(self):
-        return str(self.band) + ' ' + str(self.user)
+        return 
 
 
 class Performing_Band(models.model):
@@ -46,7 +46,7 @@ class Performing_Band(models.model):
     gig_Id      = models.ForeignKey(Gig_Id, max_length=50, unique=True)
 
  def __unicode__(self):
-        return self.name + ' ' + self.city + ' ' + self.country
+        return 
 
 class Gig(models.model):
     date        = models.DateField(default=models.DateField.auto_now_add)
@@ -57,14 +57,14 @@ class Gig(models.model):
     band_Name   = models.ForeignKey(Band_Name, max_length=128)
 
  def __unicode__(self):
-        return self.name + ' ' + self.city + ' ' + self.country
+        return 
 
 class Gig_Attendance(models.model):
     gig_Id      = models.CharField(primary_key=True, max_length=50)
     user_Id     = models.ForeignKey(User_Id, max_length=128, unique=True)
 
  def __unicode__(self):
-        return self.name + ' ' + self.city + ' ' + self.country
+        return 
 
 class Venue(models.model):
     city        = models.CharField(max_length=50)
@@ -74,8 +74,4 @@ class Venue(models.model):
     street      = models.CharField(max_length=128)
 
  def __unicode__(self):
-        return self.name + ' ' + self.city + ' ' + self.country
-
-
-
-#hello
+        return self.name
