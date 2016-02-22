@@ -2,6 +2,7 @@ import os
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'BandBuds.settings')
 
 from datetime import date
+from django.core.validators import validate_email
 
 import django
 django.setup()
@@ -12,7 +13,7 @@ def populate():
     bloc = add_band('Bloc Party', 'London', 'England', 1999, 'Indie')
     thewknd = add_band('The Weeknd','Toronto','Canada',1990,'R&B')
 
-    stevo = add_user('0106105s','stevie','stando',date(1983,1,26),False,'Male','Jackie Daniels')
+    stevo = add_user('0106105s','stevie','stando',date(1983,1,26),False,'Male',True)
 
     bloc_like = add_liked_band(bloc, stevo)
     thewknd_like = add_liked_band(thewknd,stevo)
@@ -30,9 +31,9 @@ def add_liked_band(b,u):
     lb = Liked_Band.objects.get_or_create(band=b,user=u)[0]
     return lb
 
-def add_user(user_id, f_name,s_name, dob, smokes, gender, alcohol):
-    u = User.objects.get_or_create(user_id=user_id, f_name=f_name,
-                                    s_name=s_name, dob=dob, smokes=smokes, gender=gender, alcohol=alcohol)[0]
+def add_user(user_id, f_Name,s_Name, dob, smokes, gender, drinks):
+    u = User.objects.get_or_create(user_id=user_id, f_Name=f_Name,
+                                    s_Name=s_Name, dob=dob, smokes=smokes, gender=gender, drinks=drinks)[0]
     u.save()
     return u
 
