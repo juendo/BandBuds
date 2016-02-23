@@ -118,7 +118,7 @@ var load = function() {
 		function( data ) {
 			console.log(data['resultsPage']['results']['event'][0]['performance'][0]['displayName']);
 			$.each( data['resultsPage']['results']['event'], function(key, val) {
-				$( '#filler' ).append('<div class="gig-box">' + val['performance'][0]['displayName'] + ' ' + val['venue']['displayName'] + '</div>');
+				$( '#filler' ).append('<div class="gig-box"><div class="gig-info-box"><div class="act-name-box"><div class="act-name">' + val['performance'][0]['displayName'] + '</div></div><div class="venue-name-box"><div class="venue-name">' + val['venue']['displayName'] + '</div></div></div><div class="gig-time-box"><div class="gig-time">7pm</div></div></div>');
 			});
 		});
 }
@@ -160,7 +160,7 @@ var addClickListeners = function() {
 			$( '#filter-panel' ).slideToggle(200);
 		}
 	});
-	$(window).scroll(function() {                  
+	$(window).scroll(function() {
 
 		var currentScroll = $(window).scrollTop(); 
 
