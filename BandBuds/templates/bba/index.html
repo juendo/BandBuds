@@ -12,10 +12,14 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
+    <script src="{% static 'bba/jquery.js' %}"></script>
+    <script src="{% static 'bba/bootstrap.js' %}"></script>
+    <script src="{% static 'bba/index.js' %}"></script>
+
     <title>BandBuds</title>
 
     <!-- Bootstrap core CSS -->
-    <link href="{% static 'bba/bootstrap.css' %}" rel="stylesheet">
+    <link href="{% static 'bba/bootstrap.min.css' %}" rel="stylesheet">
 
     <!-- Custom styles for this template -->
     <link href="{% static 'bba/index.css' %}" rel="stylesheet">
@@ -157,6 +161,29 @@
           </div>
         </div>
           <div id="filler">
+            {% if gigs %}
+            {% for gig in gigs %}
+            <div class="gig-box">
+              <div class="gig-info-box">
+                <div class="act-name-box">
+                  <div class="act-name">
+                    {{ gig.band.name }}
+                  </div>
+                </div>
+                <div class="venue-name-box">
+                  <div class="venue-name">
+                    {{ gig.venue.name }}
+                  </div>
+                </div>
+              </div>
+              <div class="gig-time-box">
+                <div class="gig-time">
+                  {{ gig.time }}
+                </div>
+              </div>
+            </div>
+            {% endfor %}
+            {% endif %}
           </div>
         </div>
       </div>
@@ -187,9 +214,6 @@
     <!-- Bootstrap core JavaScript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-    <script>window.jQuery || document.write('<script src="{% static "bba/jquery.js" %}"><\/script>')</script>
-    <script src="{% static 'bba/bootstrap.js' %}"></script>
-    <script src="{% static 'bba/index.js' %}"></script>
+    
   </body>
 </html>

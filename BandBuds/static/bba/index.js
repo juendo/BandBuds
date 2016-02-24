@@ -114,7 +114,7 @@ var load = function() {
 	);
 	$( '.prev-month > img' ).toggle(false);
 	addClickListeners();
-	$.getJSON( "http://api.songkick.com/api/3.0/metro_areas/24473-uk-glasgow/calendar.json?apikey=jwzmbEyCAIwD7HCy&per_page=45&page=1&perPage=1000&jsoncallback=?&per_page=50",
+	/*$.getJSON( "http://api.songkick.com/api/3.0/metro_areas/24473-uk-glasgow/calendar.json?apikey=jwzmbEyCAIwD7HCy&per_page=45&page=1&perPage=1000&jsoncallback=?&per_page=50",
 		function( data ) {
 			var runningDay = data['resultsPage']['results']['event'][0]['start']['date'];
 			$.each( data['resultsPage']['results']['event'], function(key, val) {
@@ -131,7 +131,7 @@ var load = function() {
 					$( '#filler' ).append('<div class="date-selector"><div class="scrolling-day-box ' + (val['start']['date']).split('').reverse().join('').substring(0, 2).split('').reverse().join('') + '">' + (val['start']['date']).split('').reverse().join('').substring(0, 2).split('').reverse().join('') + '</div></div>')
 				}
 			});
-		});
+		});*/
 }
 
 $( document ).ready(load);

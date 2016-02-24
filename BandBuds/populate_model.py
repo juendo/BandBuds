@@ -1,13 +1,17 @@
 import os
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'BandBuds.settings')
 
+import json
+import urllib
 from datetime import date
 from django.core.validators import validate_email
 
 import django
 django.setup()
 
-from bba.models import Band, User, Liked_Band
+from bba.models import Band, User, Liked_Band, Gig, Venue
+
+API_KEY = "jwzmbEyCAIwD7HCy"
 
 def populate():
     bloc = add_band('Bloc Party', 'London', 'England', 1999, 'Indie')
@@ -23,6 +27,8 @@ def populate():
         for lb in Liked_Band.objects.all():
             print str(lb)
 
+    getSongkickGigs()
+
 def add_band(name,city,country,formed,genre):
     b = Band.objects.get_or_create(name=name,city=city,country=country,formed=formed,genre=genre)[0]
     return b
@@ -36,6 +42,35 @@ def add_user(user_id, f_Name,s_Name, dob, smokes, gender, drinks):
                                     s_Name=s_Name, dob=dob, smokes=smokes, gender=gender, drinks=drinks)[0]
     u.save()
     return u
+# New venue for populate db with songkick
+def add_venue(venue_id, city, country, postcode, b_no, street):
+    print "venue entered"
+    v = Venue.objects.get_or_create(venue_id=venue_id, city=city, country=country, postcode=postcode, building_No=b_no, street=street)[0]
+    v.save()
+    print "added venue"
+    return v
+
+# New gig for populate db with songkick
+def add_gig(date, time, city, venue, band):
+    print "gig entered"
+    gig = Gig.objects.get_or_create(date=date, time=time, city=city, venue=venue, band=band)[0]
+    gig.save()
+    print "added gig"
+    return gig
+
+# New gig for populate db with songkick
+def getSongkickGigs():
+    url = 'http://api.songkick.com/api/3.0/metro_areas/24473-uk-glasgow/calendar.json?apikey=jwzmbEyCAIwD7HCy&page=1&per_page=50'
+    jsonurl = urllib.urlopen(url)
+    sk = json.loads(jsonurl.read())
+    print "loaded sk"
+    for gig in sk['resultsPage']['results']['event']:
+        print "next in loop"
+        b = add_band(gig['performance'][0]['artist']['displayName'], 'Glasgow', 'Scotland', 2001, 'Pop')
+        v = add_venue(gig['venue']['id'], 'Glasgow', 'Scotland', 'G1 1AA', 1, 'Glasgow Street')
+        time = '' if gig['start']['time'] is None else gig['start']['time']
+        date = '' if gig['start']['date'] is None else gig['start']['date']
+        g = add_gig(date, time, gig['location']['city'], v, b)
 
 # Start execution here!
 if __name__ == '__main__':
