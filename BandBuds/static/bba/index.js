@@ -116,9 +116,20 @@ var load = function() {
 	addClickListeners();
 	$.getJSON( "http://api.songkick.com/api/3.0/metro_areas/24473-uk-glasgow/calendar.json?apikey=jwzmbEyCAIwD7HCy&per_page=45&page=1&perPage=1000&jsoncallback=?&per_page=50",
 		function( data ) {
-			console.log(data['resultsPage']['results']['event'][0]['performance'][0]['displayName']);
+			var runningDay = data['resultsPage']['results']['event'][0]['start']['date'];
 			$.each( data['resultsPage']['results']['event'], function(key, val) {
-				$( '#filler' ).append('<div class="gig-box"><div class="gig-info-box"><div class="act-name-box"><div class="act-name">' + val['performance'][0]['displayName'] + '</div></div><div class="venue-name-box"><div class="venue-name">' + val['venue']['displayName'] + '</div></div></div><div class="gig-time-box"><div class="gig-time">7pm</div></div></div>');
+				$( '#filler' ).append(
+					'<div class="gig-box"><div class="gig-info-box"><div class="act-name-box"><div class="act-name">' 
+					+ val['performance'][0]['displayName'] 
+					+ '</div></div><div class="venue-name-box"><div class="venue-name">' 
+					+ val['venue']['displayName'] 
+					+ '</div></div></div><div class="gig-time-box"><div class="gig-time">' 
+					+ ((val['start']['time'] != null) ? val['start']['time'].substring(0, 5) : "")
+					+ '</div></div></div>');
+				if (val['start']['date'] != runningDay) {
+					runningDay = val['start']['date'];
+					$( '#filler' ).append('<div class="date-selector"><div class="scrolling-day-box ' + (val['start']['date']).split('').reverse().join('').substring(0, 2).split('').reverse().join('') + '">' + (val['start']['date']).split('').reverse().join('').substring(0, 2).split('').reverse().join('') + '</div></div>')
+				}
 			});
 		});
 }
@@ -131,9 +142,11 @@ var addClickListeners = function() {
 			if ($( this ).hasClass( 'gig' ) == false) {
 				return;
 			}
+			$( "." + $( '#current-day' ).html() ).parent().next().prevAll().toggle(true);
 			$( '.today' ).removeClass( 'today' );
 			$( this ).addClass( 'today' );
 			$( '#current-day' ).html($( '.today > .calendar-circle > .calendar-text' ).html());
+			$( "." + $( '#current-day' ).html() ).parent().next().prevAll().toggle(false);
 		});
 	}
 	$( '.next-month' ).click( function() {
