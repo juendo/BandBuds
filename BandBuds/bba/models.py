@@ -1,18 +1,28 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser
+from django.contrib.auth.models import User
+import os
+from django.conf import settings
+from django.core.validators import validate_email
+from django.template.defaultfilters import slugify
 
-class Member(AbstractBaseUser):
-    email = models.EmailField(unique=True)
-    username = models.CharField(max_length=40, unique=True)
+
+class User_Profile(models.Model):
+
+    user = models.OneToOneField(User)
     dob = models.DateField()
     smokes = models.BooleanField(default=None)
     gender = models.CharField(max_length=128, unique=False)
-    drinks = models.BooleanField(default=None)
-    first_name = models.CharField(max_length=40, unique=True)
-    last_name = models.CharField(max_length=40, unique=True)
+    drinks = models.IntegerField(default=0)
+    image = models.ImageField(default=os.path.join(settings.BASE_DIR,'static/bba/images/rango.jpg'))
+    slug = models.SlugField()
 
-def __unicode__(self):
-    return self.username
+    def save(self, *args, **kwargs):
+         self.slug = slugify(self.user)
+         super(User_Profile, self).save(*args, **kwargs)
+
+    def __unicode__(self):
+        return self.user
 
 class Band(models.Model):
     name = models.CharField(max_length=128, unique=False)
@@ -23,17 +33,29 @@ class Band(models.Model):
 
 class Liked_Band(models.Model):
     band = models.ForeignKey(Band)
-    member = models.ForeignKey(Member)
+    user = models.ForeignKey(User_Profile)
 
     def __unicode__(self):
-        return str(self.band) + ' ' + str(self.member)
+        return str(self.band) + ' ' + str(self.user)
+
+class Disliked_Bands(models.Model):
+    band = models.ForeignKey(Band)
+    user = models.ForeignKey(User_Profile)
+
+    def __unicode__(self):
+        return self.band + ' ' + self.user
 
 class Buddy(models.Model):
-    user = models.OneToOneField(Member,related_name='+')
-    buddy = models.ForeignKey(Member)
+    user = models.OneToOneField(User_Profile,related_name='+')
+    buddy = models.ForeignKey(User_Profile)
+    slug = models.SlugField()
+
+    def save(self, *args, **kwargs):
+         self.slug = slugify(self.user)
+         super(Buddy, self).save(*args, **kwargs)
 
     def __unicode__(self):
-        return self.member + ' buddied with ' + self.buddy
+        return self.User_Profile + ' buddied with ' + self.buddy
 
 
 class Venue(models.Model):
@@ -55,7 +77,7 @@ class Gig(models.Model):
     band = models.ForeignKey(Band)
 
     def __unicode__(self):
-        return self.venue + ' ' + self.band
+        return self.self.venue + ' ' + self.band
 
 
 class Performing_Band(models.Model):
@@ -65,18 +87,14 @@ class Performing_Band(models.Model):
     def __unicode__(self):
         return self.band + self.gig
 
-
-class Disliked_Bands(models.Model):
-    band = models.ForeignKey(Band)
-    member = models.ForeignKey(Member)
-
-    def __unicode__(self):
-        return self.band + ' ' + self.member
-
-
 class Gig_Attendance(models.Model):
     gig = models.CharField(Gig,max_length=30)
-    member = models.ForeignKey(Member)
+    user = models.ForeignKey(User_Profile)
+    slug = models.SlugField()
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.user)
+        super(Gig_Attendance, self).save(*args, **kwargs)
 
     def __unicode__(self):
-        return self.gig + ' ' + self.member
+        return self.gig + ' ' + self.user

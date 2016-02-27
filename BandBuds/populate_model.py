@@ -5,41 +5,47 @@ import json
 import urllib
 from datetime import date
 from django.core.validators import validate_email
-
 import django
 django.setup()
+from django.core.validators import validate_email
 
-from bba.models import Band, User, Liked_Band, Gig, Venue
+from bba.models import Band, User_Profile, Liked_Band, Gig, Venue
+
+from django.contrib.auth.models import User
 
 API_KEY = "jwzmbEyCAIwD7HCy"
 
 def populate():
 
-    stevo = add_user('0106105s','stevie','stando',date(1983,1,26),False,'Male',True)
+    stevo_user = add_user('steve','e@m.ail','sesame')
+    stevo_profile = add_profile(stevo_user,date(1983,1,26),False,'Male', True)
 
-    bloc_like = add_liked_band(bloc, stevo)
-    thewknd_like = add_liked_band(thewknd,stevo)
+    # Print out what we have added to the user
+    for m in User.objects.all():
+            print str(m)
 
-    # Print out what we have added to the user.
-    for u in User.objects.all():
-        for lb in Liked_Band.objects.all():
-            print str(lb)
-
+    # populate gigs from songkick.com
     getSongkickGigs()
 
-def add_band(name,city,country,formed,genre):
-    b = Band.objects.get_or_create(name=name,city=city,country=country,formed=formed,genre=genre)[0]
+
+def add_band(name,image_Ref):
+    b = Band.objects.get_or_create(name=name,image_Ref=image_Ref)[0]
     return b
 
 def add_liked_band(b,u):
     lb = Liked_Band.objects.get_or_create(band=b,user=u)[0]
     return lb
 
-def add_user(user_id, f_Name,s_Name, dob, smokes, gender, drinks):
-    u = User.objects.get_or_create(user_id=user_id, f_Name=f_Name,
-                                    s_Name=s_Name, dob=dob, smokes=smokes, gender=gender, drinks=drinks)[0]
+def add_profile(user, dob, smokes, gender, drinks):
+    u = User_Profile.objects.get_or_create(user=user, dob=dob, smokes=smokes, gender=gender, drinks=drinks)[0]
     u.save()
     return u
+
+def add_user(username,email,password):
+    u = User.objects.create_user(username, email, password)
+    u.save()
+    return u
+
 # New venue for populate db with songkick
 def add_venue(venue_id, city, country, postcode, b_no, street):
     print "venue entered"
@@ -72,7 +78,7 @@ def getSongkickGigs():
         
         # String for image for artist image
         artistID = gig['performance'][0]['artist']['id']
-        artist_image = url_start + artistID + url_end
+        artist_image = url_start + str(artistID) + url_end
         artist_name=gig['performance'][0]['artist']['displayName']
         print "next in loop " + artist_name
 
