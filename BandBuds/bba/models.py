@@ -14,7 +14,7 @@ class User_Profile(models.Model):
     smokes = models.BooleanField(default=None)
     gender = models.CharField(max_length=128, unique=False)
     drinks = models.IntegerField(default=0)
-    image = models.ImageField(default=os.path.join(settings.BASE_DIR,'static/bba/images/rango.jpg'))
+    image = models.ImageField(upload_to='profile_images',blank=True,default='MEDIA_ROOT')
     slug = models.SlugField()
 
     def save(self, *args, **kwargs):

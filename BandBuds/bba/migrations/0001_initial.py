@@ -97,7 +97,7 @@ class Migration(migrations.Migration):
                 ('smokes', models.BooleanField(default=None)),
                 ('gender', models.CharField(max_length=128)),
                 ('drinks', models.IntegerField(default=0)),
-                ('image', models.ImageField(default=b'/Users/Joel/PycharmProjects/BandBudsClone/BandBuds/BandBuds/static/bba/images/rango.jpg', upload_to=b'')),
+                ('image', models.ImageField(upload_to=b'profile_images', blank=True)),
                 ('slug', models.SlugField()),
                 ('user', models.OneToOneField(to=settings.AUTH_USER_MODEL)),
             ],
