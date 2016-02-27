@@ -14,8 +14,6 @@ from bba.models import Band, User, Liked_Band, Gig, Venue
 API_KEY = "jwzmbEyCAIwD7HCy"
 
 def populate():
-    bloc = add_band('Bloc Party', 'London', 'England', 1999, 'Indie')
-    thewknd = add_band('The Weeknd','Toronto','Canada',1990,'R&B')
 
     stevo = add_user('0106105s','stevie','stando',date(1983,1,26),False,'Male',True)
 
@@ -75,9 +73,10 @@ def getSongkickGigs():
         # String for image for artist image
         artistID = gig['performance'][0]['artist']['id']
         artist_image = url_start + artistID + url_end
-        print "next in loop"
+        artist_name=gig['performance'][0]['artist']['displayName']
+        print "next in loop " + artist_name
 
-        b = add_band(gig['performance'][0]['artist']['displayName'], 'Glasgow', 'Scotland', 2001, 'Pop')
+        b = add_band(artist_name, artist_image)
         v = add_venue(gig['venue']['id'], 'Glasgow', 'Scotland', 'G1 1AA', 1, 'Glasgow Street')
         time = '' if gig['start']['time'] is None else gig['start']['time']
         date = '' if gig['start']['date'] is None else gig['start']['date']

@@ -1,55 +1,47 @@
 from django.db import models
+from django.contrib.auth.models import AbstractBaseUser
 
-
-class Band(models.Model):
-    name = models.CharField(max_length=128, unique=False)
-    city = models.CharField(max_length=128, unique=False)
-    country = models.CharField(max_length=128, unique=False)
-    formed = models.IntegerField(default=0)
-    genre = models.CharField(max_length=128, unique=False)
-
-    def __unicode__(self):
-        return self.name + ' ' + self.city + ' ' + self.country
-
-
-class User(models.Model):
-    user_id = models.CharField(max_length=128, unique=True)
-    f_Name = models.CharField(max_length=128, unique=False)
-    s_Name = models.CharField(max_length=128, unique=False)
+class Member(AbstractBaseUser):
+    email = models.EmailField(unique=True)
+    username = models.CharField(max_length=40, unique=True)
     dob = models.DateField()
     smokes = models.BooleanField(default=None)
     gender = models.CharField(max_length=128, unique=False)
     drinks = models.BooleanField(default=None)
+    first_name = models.CharField(max_length=40, unique=True)
+    last_name = models.CharField(max_length=40, unique=True)
+
+def __unicode__(self):
+    return self.username
+
+class Band(models.Model):
+    name = models.CharField(max_length=128, unique=False)
+    image_Ref = models.CharField(max_length=128, unique=False)
 
     def __unicode__(self):
-        return self.user_id
-
+        return self.name
 
 class Liked_Band(models.Model):
     band = models.ForeignKey(Band)
-    user = models.ForeignKey(User)
+    member = models.ForeignKey(Member)
 
     def __unicode__(self):
-        return str(self.band) + ' ' + str(self.user)
-
-
-
+        return str(self.band) + ' ' + str(self.member)
 
 class Buddy(models.Model):
-    user = models.OneToOneField(User,related_name='+')
-    buddy = models.ForeignKey(User)
+    user = models.OneToOneField(Member,related_name='+')
+    buddy = models.ForeignKey(Member)
 
     def __unicode__(self):
-        return self.user + ' buddied with ' + self.buddy
-
+        return self.member + ' buddied with ' + self.buddy
 
 
 class Venue(models.Model):
     venue_id = models.IntegerField(default=0)
-    city = models.CharField(max_length=50)
-    country = models.CharField(max_length=50)
-    postcode = models.CharField(max_length=50)
-    building_No = models.IntegerField(default=0)
+    city = models.CharField(max_length=128)
+    country = models.CharField(max_length=128)
+    postcode = models.CharField(max_length=128)
+    building_No = models.IntegerField(default=128)
     street = models.CharField(max_length=128)
 
     def __unicode__(self):
@@ -76,18 +68,15 @@ class Performing_Band(models.Model):
 
 class Disliked_Bands(models.Model):
     band = models.ForeignKey(Band)
-    user = models.ForeignKey(User)
+    member = models.ForeignKey(Member)
 
     def __unicode__(self):
-        return self.band + ' ' + self.user
+        return self.band + ' ' + self.member
 
 
 class Gig_Attendance(models.Model):
     gig = models.CharField(Gig,max_length=30)
-    user = models.ForeignKey(User)
+    member = models.ForeignKey(Member)
 
     def __unicode__(self):
-        return self.gig + ' ' + self.user
-
-
-
+        return self.gig + ' ' + self.member
