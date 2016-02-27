@@ -58,14 +58,25 @@ def add_gig(date, time, city, venue, band):
     print "added gig"
     return gig
 
+
 # New gig for populate db with songkick
 def getSongkickGigs():
     url = 'http://api.songkick.com/api/3.0/metro_areas/24473-uk-glasgow/calendar.json?apikey=jwzmbEyCAIwD7HCy&page=1&per_page=50'
     jsonurl = urllib.urlopen(url)
     sk = json.loads(jsonurl.read())
+
+    # get images off song kick
+    url_start = 'http://images.sk-static.com/images/media/profile_images/artists/'
+    url_end = '/huge_avatar'
+
     print "loaded sk"
     for gig in sk['resultsPage']['results']['event']:
+        
+        # string image for artist image
+        artistID = gig['performance'][0]['artist']['id']
+        artist_image = url_start + artistID + url_end
         print "next in loop"
+
         b = add_band(gig['performance'][0]['artist']['displayName'], 'Glasgow', 'Scotland', 2001, 'Pop')
         v = add_venue(gig['venue']['id'], 'Glasgow', 'Scotland', 'G1 1AA', 1, 'Glasgow Street')
         time = '' if gig['start']['time'] is None else gig['start']['time']

@@ -1,3 +1,29 @@
+/* CSS Content */
+
+/* nav
+ * title
+ * link
+ * title
+ * link
+ * title
+ * link
+ * title
+ * link
+ * title
+ * link
+ * title
+ * link
+*/
+
+/* menu button calendar */
+
+
+/* bottom search and filter bar */
+
+
+
+/* list of gigs */
+
 body {
   padding-top: 30px;
 }
@@ -5,7 +31,7 @@ html, body {
     height: 100%;
 }
 
-
+/* nav */
 .navbar {
 	background: #D30439;
 	border-bottom: 0;
@@ -19,11 +45,6 @@ html, body {
 	background: #D30439;
 	border-top: 0;
 }
-
-
-
-
-
 
 
 
@@ -41,13 +62,6 @@ html, body {
 .navbar-brand {
 	padding: 5px;
 }
-
-
-
-
-
-
-
 
 
 
@@ -77,8 +91,6 @@ html, body {
 
 
 
-
-
 /* menu button */
 .navbar-inverse .navbar-toggle {
 	border: 0;
@@ -90,11 +102,6 @@ html, body {
 .navbar-inverse .navbar-toggle:focus {
 	background-color: #D30439;
 }
-
-
-
-
-
 
 
 
@@ -162,7 +169,6 @@ html, body {
 }
 #calendar-grid {
 	background-color: #ffe6e6;
-
 	padding-bottom: 15px;
 	/*padding-top:  15px;*/
 }
@@ -228,10 +234,6 @@ html, body {
 
 
 
-
-
-
-
 /* bottom search and filter bar */
 #bottom {
 	position: fixed;
@@ -281,9 +283,6 @@ html, body {
 	-ms-transform: translateY(-50%);
 	transform: translateY(-50%);
 }
-
-
-
 
 
 /* list of gigs */

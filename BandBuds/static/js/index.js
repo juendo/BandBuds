@@ -97,6 +97,7 @@ var loadPrevMonth = function() {
 }
 
 
+
 /* LAYOUT */
 
 var load = function() {
