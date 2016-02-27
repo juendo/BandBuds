@@ -13,11 +13,11 @@ def index(request):
 
 def user(request,user_name_slug):
     try:
-        user_profile=User_Profile.objects.get(slug=user_name_slug)
-        context_dict = {'user_name':user_profile.user}
+        user=User_Profile.objects.get(slug=user_name_slug)
+        context_dict = {'user':user}
 
     except User_Profile.DoesNotExist:
         context_dict={}
 
     # Render the response and send it back!
-    return render(request, 'bba/index.html', context_dict)
+    return render(request, 'bba/user.html', context_dict)
