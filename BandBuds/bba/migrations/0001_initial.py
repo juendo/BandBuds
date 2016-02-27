@@ -2,12 +2,14 @@
 from __future__ import unicode_literals
 
 from django.db import models, migrations
+from django.conf import settings
 import bba.models
 
 
 class Migration(migrations.Migration):
 
     dependencies = [
+        migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
@@ -16,10 +18,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('name', models.CharField(max_length=128)),
-                ('city', models.CharField(max_length=128)),
-                ('country', models.CharField(max_length=128)),
-                ('formed', models.IntegerField(default=0)),
-                ('genre', models.CharField(max_length=128)),
+                ('image_Ref', models.CharField(max_length=128)),
             ],
             options={
             },
@@ -29,6 +28,7 @@ class Migration(migrations.Migration):
             name='Buddy',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('slug', models.SlugField()),
             ],
             options={
             },
@@ -62,6 +62,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('gig', models.CharField(max_length=30, verbose_name=bba.models.Gig)),
+                ('slug', models.SlugField()),
             ],
             options={
             },
@@ -89,16 +90,16 @@ class Migration(migrations.Migration):
             bases=(models.Model,),
         ),
         migrations.CreateModel(
-            name='User',
+            name='User_Profile',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('user_id', models.CharField(unique=True, max_length=128)),
-                ('f_Name', models.CharField(max_length=128)),
-                ('s_Name', models.CharField(max_length=128)),
                 ('dob', models.DateField()),
                 ('smokes', models.BooleanField(default=None)),
                 ('gender', models.CharField(max_length=128)),
-                ('drinks', models.BooleanField(default=None)),
+                ('drinks', models.IntegerField(default=0)),
+                ('image', models.ImageField(default=b'/Users/Joel/PycharmProjects/BandBudsClone/BandBuds/BandBuds/static/bba/images/rango.jpg', upload_to=b'')),
+                ('slug', models.SlugField()),
+                ('user', models.OneToOneField(to=settings.AUTH_USER_MODEL)),
             ],
             options={
             },
@@ -109,10 +110,10 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('venue_id', models.IntegerField(default=0)),
-                ('city', models.CharField(max_length=50)),
-                ('country', models.CharField(max_length=50)),
-                ('postcode', models.CharField(max_length=50)),
-                ('building_No', models.IntegerField(default=0)),
+                ('city', models.CharField(max_length=128)),
+                ('country', models.CharField(max_length=128)),
+                ('postcode', models.CharField(max_length=128)),
+                ('building_No', models.IntegerField(default=128)),
                 ('street', models.CharField(max_length=128)),
             ],
             options={
@@ -122,13 +123,13 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='liked_band',
             name='user',
-            field=models.ForeignKey(to='bba.User'),
+            field=models.ForeignKey(to='bba.User_Profile'),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='gig_attendance',
             name='user',
-            field=models.ForeignKey(to='bba.User'),
+            field=models.ForeignKey(to='bba.User_Profile'),
             preserve_default=True,
         ),
         migrations.AddField(
@@ -140,19 +141,19 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='disliked_bands',
             name='user',
-            field=models.ForeignKey(to='bba.User'),
+            field=models.ForeignKey(to='bba.User_Profile'),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='buddy',
             name='buddy',
-            field=models.ForeignKey(to='bba.User'),
+            field=models.ForeignKey(to='bba.User_Profile'),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='buddy',
             name='user',
-            field=models.OneToOneField(related_name=b'+', to='bba.User'),
+            field=models.OneToOneField(related_name=b'+', to='bba.User_Profile'),
             preserve_default=True,
         ),
     ]

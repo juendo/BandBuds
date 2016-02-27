@@ -1,55 +1,69 @@
 from django.db import models
+from django.contrib.auth.models import AbstractBaseUser
+from django.contrib.auth.models import User
+import os
+from django.conf import settings
+from django.core.validators import validate_email
+from django.template.defaultfilters import slugify
 
 
-class Band(models.Model):
-    name = models.CharField(max_length=128, unique=False)
-    city = models.CharField(max_length=128, unique=False)
-    country = models.CharField(max_length=128, unique=False)
-    formed = models.IntegerField(default=0)
-    genre = models.CharField(max_length=128, unique=False)
+class User_Profile(models.Model):
 
-    def __unicode__(self):
-        return self.name + ' ' + self.city + ' ' + self.country
-
-
-class User(models.Model):
-    user_id = models.CharField(max_length=128, unique=True)
-    f_Name = models.CharField(max_length=128, unique=False)
-    s_Name = models.CharField(max_length=128, unique=False)
+    user = models.OneToOneField(User)
     dob = models.DateField()
     smokes = models.BooleanField(default=None)
     gender = models.CharField(max_length=128, unique=False)
-    drinks = models.BooleanField(default=None)
+    drinks = models.IntegerField(default=0)
+    image = models.ImageField(default=os.path.join(settings.BASE_DIR,'static/bba/images/rango.jpg'))
+    slug = models.SlugField()
+
+    def save(self, *args, **kwargs):
+         self.slug = slugify(self.user)
+         super(User_Profile, self).save(*args, **kwargs)
 
     def __unicode__(self):
-        return self.user_id
+        return self.user
 
+class Band(models.Model):
+    name = models.CharField(max_length=128, unique=False)
+    image_Ref = models.CharField(max_length=128, unique=False)
+
+    def __unicode__(self):
+        return self.name
 
 class Liked_Band(models.Model):
     band = models.ForeignKey(Band)
-    user = models.ForeignKey(User)
+    user = models.ForeignKey(User_Profile)
 
     def __unicode__(self):
         return str(self.band) + ' ' + str(self.user)
 
-
-
-
-class Buddy(models.Model):
-    user = models.OneToOneField(User,related_name='+')
-    buddy = models.ForeignKey(User)
+class Disliked_Bands(models.Model):
+    band = models.ForeignKey(Band)
+    user = models.ForeignKey(User_Profile)
 
     def __unicode__(self):
-        return self.user + ' buddied with ' + self.buddy
+        return self.band + ' ' + self.user
 
+class Buddy(models.Model):
+    user = models.OneToOneField(User_Profile,related_name='+')
+    buddy = models.ForeignKey(User_Profile)
+    slug = models.SlugField()
+
+    def save(self, *args, **kwargs):
+         self.slug = slugify(self.user)
+         super(Buddy, self).save(*args, **kwargs)
+
+    def __unicode__(self):
+        return self.User_Profile + ' buddied with ' + self.buddy
 
 
 class Venue(models.Model):
     venue_id = models.IntegerField(default=0)
-    city = models.CharField(max_length=50)
-    country = models.CharField(max_length=50)
-    postcode = models.CharField(max_length=50)
-    building_No = models.IntegerField(default=0)
+    city = models.CharField(max_length=128)
+    country = models.CharField(max_length=128)
+    postcode = models.CharField(max_length=128)
+    building_No = models.IntegerField(default=128)
     street = models.CharField(max_length=128)
 
     def __unicode__(self):
@@ -63,7 +77,7 @@ class Gig(models.Model):
     band = models.ForeignKey(Band)
 
     def __unicode__(self):
-        return self.venue + ' ' + self.band
+        return self.self.venue + ' ' + self.band
 
 
 class Performing_Band(models.Model):
@@ -73,21 +87,14 @@ class Performing_Band(models.Model):
     def __unicode__(self):
         return self.band + self.gig
 
-
-class Disliked_Bands(models.Model):
-    band = models.ForeignKey(Band)
-    user = models.ForeignKey(User)
-
-    def __unicode__(self):
-        return self.band + ' ' + self.user
-
-
 class Gig_Attendance(models.Model):
     gig = models.CharField(Gig,max_length=30)
-    user = models.ForeignKey(User)
+    user = models.ForeignKey(User_Profile)
+    slug = models.SlugField()
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.user)
+        super(Gig_Attendance, self).save(*args, **kwargs)
 
     def __unicode__(self):
         return self.gig + ' ' + self.user
-
-
-
