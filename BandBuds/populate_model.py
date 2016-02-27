@@ -72,7 +72,7 @@ def getSongkickGigs():
     print "loaded sk"
     for gig in sk['resultsPage']['results']['event']:
         
-        # string image for artist image
+        # String for image for artist image
         artistID = gig['performance'][0]['artist']['id']
         artist_image = url_start + artistID + url_end
         print "next in loop"
