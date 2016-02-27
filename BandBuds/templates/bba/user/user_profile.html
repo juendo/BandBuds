@@ -2,13 +2,13 @@
 
 <!--user form -->
 <form id="user_form" method="post" action=" ">
+
 	{% csrf_token %}
 	{% for hidden in form.hidden_fields %}
 		{{ hidden }}
-    {% endfor %}
-
-    {{ field.non_field_errors }}
-    {{ field.help_text }}
+	{% endfor %}
+	{{ field.non_field_errors }}
+	{{ field.help_text }}
 
 	<!--user image-->
 	<div><img src='' alt='users-image'></div>
@@ -16,11 +16,11 @@
 	<!--user f.name and s.name-->
 	<div class="form">
 		{{ form.f_name.errors }}
-    	<label for="{{ form.f_name.id_for_label }}">First Name:</label>
-    	{{ form.f_name }}
+		<label for="{{ form.f_name.id_for_label }}">First Name:</label>
+		{{ form.f_name }}
 		{{ form.s_name.errors }}
-    	<label for="{{ form.s_name.id_for_label }}">SurName:</label>
-    	{{ form.s_name }}
+		<label for="{{ form.s_name.id_for_label }}">SurName:</label>
+		{{ form.s_name }}
 	</div>
 
 	<!--user gig atributes form-->
@@ -47,9 +47,13 @@
 	</div>
 
 	</div>
-    <!-- After submit should take the user to calendar -->
-    <input type="submit" name="submit" value="Create User" />
+	<!-- After submit should take the user to calendar -->
+	<input type="submit" name="submit" value="Create User" />
 </form>
+
+<!-- user music preference -->
 <div>
-	<!--user music preference-->
+	<!---- insert user music preference ---->
+	{% include 'bba/user/user_music_taste.html' %}
 </div>
+

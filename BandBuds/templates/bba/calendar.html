@@ -1,19 +1,21 @@
-      <!--Clendar start -->
-      <div id="calendar">
-        <div id="inner-calendar">
-          <div class="date-selector d-s-top">
-            <div class="month-selector">
-            <div id="prev" class="prev-month">
-              <img src="{% static 'bba/images/left.png' %}">
-            </div>
-            <div id="month">
-            </div>
-            <div id="next" class="next-month">
-              <img src="{% static 'bba/images/right.png' %}">
-            </div>
-          </div>
+{% load staticfiles %}
+
+  <!--Clendar start -->
+  <div id="calendar">
+    <div id="inner-calendar">
+      <div class="date-selector d-s-top">
+        <div class="month-selector">
+        <div id="prev" class="prev-month">
+          <img src="{% static 'bba/images/left.png' %}">
         </div>
-        
+        <div id="month">
+        </div>
+        <div id="next" class="next-month">
+          <img src="{% static 'bba/images/right.png' %}">
+        </div>
+      </div>
+    </div>
+
         <!--Clendar grid start -->
         <div id="calendar-grid">
           <div class="calendar-row">
