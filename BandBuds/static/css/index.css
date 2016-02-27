@@ -1,28 +1,11 @@
 /* CSS Content */
-
 /* nav
  * title
  * link
- * title
- * link
- * title
- * link
- * title
- * link
- * title
- * link
- * title
- * link
-*/
-
-/* menu button calendar */
-
-
-/* bottom search and filter bar */
-
-
-
-/* list of gigs */
+ * menu button calendar
+ * bottom search and filter bar
+ * list of gigs
+ */
 
 body {
   padding-top: 30px;
@@ -45,7 +28,6 @@ html, body {
 	background: #D30439;
 	border-top: 0;
 }
-
 
 
 /* title */

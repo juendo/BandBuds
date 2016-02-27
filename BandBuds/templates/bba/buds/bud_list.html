@@ -1,0 +1,16 @@
+<!--bud list
+	Load to gig/gig_profile.html
+	populate with a list of buds-->
+<div class="bud-list">
+{% for bud in bud_list%}
+	<div class="bud-list">
+		<!--bud name-->
+		<a href=""><h6>{{ bud.name }}</h6></a>
+		<!--bud image-->
+		<img src="{{ bud.image }}" alt=""/>
+	</div>
+
+{% endfor %}
+
+</div>
+	
