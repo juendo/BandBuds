@@ -1,0 +1,34 @@
+<!--buds profile-->
+
+	<!--buds f.name and s.name-->
+	<div class=""><h3>{{ buds.f_name }} {{ buds.s_name }}</3></div>
+
+	<!--buds image-->
+	<div class=""><img src="{% static %}" alt="artists-image"></div>
+
+	{% for likes in buds.band_likes %}
+	<!--music taste-->
+	<div class="bud-music-taste">
+		<!--buds likes-->
+		<div>{{ buds.likes }}</div>
+	{% endfor %}
+	{% for dislikes in buds.band_dislikes %}
+		<!--buds dislikes-->
+		<div>{{ buds.dislikes }}</div>
+	{% endfor %}
+	</div>
+
+	<div class="bud-attributes">
+		<!--buds gender-->
+		<div>{{ buds.gender }}</div>
+		<!--buds smokes-->
+		<div>{{ buds.smokes }}</div>
+		<!--buds drinks-->
+		<div>{{ buds.drinks }}</div>
+	</div>
+
+	<div class="bud-nav">
+		<!---- Insert bud_nav.html ---->
+		 {% include 'bba/buds/bud_nav.html' %}
+
+	</div>

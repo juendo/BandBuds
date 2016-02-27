@@ -1,0 +1,29 @@
+<!-- user music preference
+	load to user_profile.html -->
+
+	<!--artist image-->
+	<div class=""><img src=" " alt="artists-image"></div>
+	<!--artist name-->
+	<div class=""><h4>{{ gig.band.name }}</4></div>
+
+<form id="user_form" method="post" action=" ">
+	<!--bandlikes form -->
+	{% csrf_token %}
+	{% for hidden in form.hidden_fields %}
+		{{ hidden }}
+    {% endfor %}
+
+    {{ field.non_field_errors }}
+    {{ field.help_text }}
+
+	<!--like button-->
+	{{ form.like.errors }}
+    	<input type="submit" name="like" value="like"/>
+    {{ form.like }}
+
+	<!--dislike button-->
+	{{ form.dislike.errors }}
+    	<input type="submit" name="dislike" value="dislike"/>
+    {{ form.dislike }}
+
+</form>

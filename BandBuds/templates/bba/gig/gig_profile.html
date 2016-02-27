@@ -1,0 +1,28 @@
+<!--gig profile-->
+<div class="gig-profile">
+	<div class=" band-gig">
+		<!--band name-->
+		<h2>{{ band.name }}</h2>
+		<!--band image-->
+		<img src=" {{ band.image }} "/>
+	</div>
+
+	<!--gig buttons-->
+	<div class="gig-buttons">
+		<!--going-->
+		<button name="going" value="going"></button>
+		<!--bud me up-->
+		<button name="bud me up" value="bud"></button>
+	</div>
+	<div class="venue-gig">
+		<!--venue name-->
+		<h2>{{ gig.name }}</h2>
+		<!--venue location?? goggle maps
+		<div class=""></div>-->
+	</div>
+</div>
+
+<div>
+	<!------ Insert bud/bud_list.html ------>
+	 {% include 'bba/buds/bud_list.html' %}
+</div>
