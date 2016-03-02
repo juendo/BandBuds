@@ -2,8 +2,9 @@
 from __future__ import unicode_literals
 
 from django.db import models, migrations
-from django.conf import settings
+import datetime
 import bba.models
+from django.conf import settings
 
 
 class Migration(migrations.Migration):
@@ -93,11 +94,11 @@ class Migration(migrations.Migration):
             name='User_Profile',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('dob', models.DateField()),
+                ('dob', models.DateField(default=datetime.date(2016, 3, 2))),
                 ('smokes', models.BooleanField(default=None)),
                 ('gender', models.CharField(max_length=128)),
                 ('drinks', models.IntegerField(default=0)),
-                ('image', models.ImageField(upload_to=b'profile_images', blank=True)),
+                ('image', models.ImageField(default=b'profile_images/default_image.png', upload_to=b'profile_images', blank=True)),
                 ('slug', models.SlugField()),
                 ('user', models.OneToOneField(to=settings.AUTH_USER_MODEL)),
             ],
@@ -110,11 +111,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('venue_id', models.IntegerField(default=0)),
-                ('city', models.CharField(max_length=128)),
-                ('country', models.CharField(max_length=128)),
-                ('postcode', models.CharField(max_length=128)),
-                ('building_No', models.IntegerField(default=128)),
-                ('street', models.CharField(max_length=128)),
+                ('name', models.CharField(max_length=128)),
             ],
             options={
             },

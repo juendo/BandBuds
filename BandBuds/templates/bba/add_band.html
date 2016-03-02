@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>BandBuds - Bands</title>
+    <link rel="stylesheet" href="../static/Skeleton-2.0.4/css/skeleton.css">
+</head>
+<body>
+
+<!--bands-->
+                <div>
+                    {% if bands %}
+                    <ul>
+                        {% for band in bands %}
+                        <li>{{ band.name}}</li>
+                        {% endfor %}
+                    </ul>
+                    {% else %}
+                        <strong>This ain't working bru!!</strong>
+                    {% endif %}
+
+                    <!--add bands form-->
+                    <div>
+                        <h5>Add Band</h5>
+                        <form id="band_form" method="post" action="/bba/add_band/">
+
+                        {% csrf_token %}
+                        {% for hidden in form.hidden_fields %}
+                            {{ hidden }}
+                        {% endfor %}
+
+                        {% for field in form.visible_fields %}
+                            {{ field.errors }}
+                            {{ field.help_text }}
+                            {{ field }}
+                        {% endfor %}
+
+                        <input type="submit" name="submit" value="Create Band" />
+                        </form>
+                    </div>
+                    <!--end of add bands form-->
+
+                    </div>
+                <!--end of bands-->
+
+
+</body>
+</html>

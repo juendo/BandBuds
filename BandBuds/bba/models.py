@@ -5,16 +5,17 @@ import os
 from django.conf import settings
 from django.core.validators import validate_email
 from django.template.defaultfilters import slugify
+from datetime import date
 
 
 class User_Profile(models.Model):
 
     user = models.OneToOneField(User)
-    dob = models.DateField()
+    dob = models.DateField(default=date.today())
     smokes = models.BooleanField(default=None)
     gender = models.CharField(max_length=128, unique=False)
     drinks = models.IntegerField(default=0)
-    image = models.ImageField(upload_to='profile_images',blank=True,default='MEDIA_ROOT')
+    image = models.ImageField(upload_to='profile_images',blank=True,default='profile_images/default_image.png')
     slug = models.SlugField()
 
     def save(self, *args, **kwargs):

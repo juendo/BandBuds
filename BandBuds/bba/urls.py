@@ -7,4 +7,5 @@ urlpatterns = patterns('',
     url(r'^(?P<user_name_slug>[\w\-]+)/$', views.user, name='user'),
     url(r'^user/(?P<buddy_slug>[\w\-]+)/$', views.index, name='user_buddy'),
     url(r'^user/(?P<attended_gig_slug>[\w\-]+)/$', views.index, name='user_gig'),
+    url(r'^user/register/$', views.register, name='register'),
 )
