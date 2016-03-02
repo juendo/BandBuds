@@ -1,6 +1,6 @@
 from django.conf.urls import patterns, url
 from bba import views
-
+#url patterns
 urlpatterns = patterns('',
     url(r'^$', views.index, name='index'),
     url(r'^calendar/(?P<month_string>[0-9]{4}-[0-9]{2})/$', views.calendar, name='calendar'),
