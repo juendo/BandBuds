@@ -5,14 +5,13 @@
     <div id="inner-calendar">
       <div class="date-selector d-s-top">
         <div class="month-selector">
-        <div id="prev" class="prev-month">
+        <a href='../{{ prev_date }}' id="prev" class="prev-month">
           <img src="{% static 'bba/images/left.png' %}">
-        </div>
-        <div id="month">
-        </div>
-        <div id="next" class="next-month">
+        </a>
+        <div id="month">{{ month_string }}</div>
+        <a href='../{{ next_date }}' id="next" class="next-month">
           <img src="{% static 'bba/images/right.png' %}">
-        </div>
+        </a>
       </div>
     </div>
 

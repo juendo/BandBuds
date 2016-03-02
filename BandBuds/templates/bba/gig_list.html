@@ -7,7 +7,8 @@
             <div id="prev">
               <img src="{% static 'bba/images/leftBlack.png' %}">
             </div>
-            <div id="current-day">
+            <div id="a-day">
+              {{ day_string }}
             </div>
             <div id="next">
               <img src="{% static 'bba/images/rightBlack.png' %}">
@@ -17,7 +18,7 @@
           <div id="filler">
             {% if gigs %}
             {% for gig in gigs %}
-            <div class="gig-box">
+            <div class="gig-box gig-on-day-{{ gig.date.month.day }}">
               <div class="gig-info-box">
                 <div class="act-name-box">
                   <div class="act-name">

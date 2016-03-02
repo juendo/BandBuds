@@ -74,19 +74,29 @@ def getSongkickGigs():
     url_end = '/huge_avatar'
 
     print "loaded sk"
-    for gig in sk['resultsPage']['results']['event']:
-        
-        # String for image for artist image
-        artistID = gig['performance'][0]['artist']['id']
-        artist_image = url_start + str(artistID) + url_end
-        artist_name=gig['performance'][0]['artist']['displayName']
-        print "next in loop " + artist_name
+    for i in range(1,11):
 
-        b = add_band(artist_name, artist_image)
-        v = add_venue(gig['venue']['id'], gig['venue']['displayName'])
-        time = '' if gig['start']['time'] is None else gig['start']['time']
-        date = '' if gig['start']['date'] is None else gig['start']['date']
-        g = add_gig(date, time, gig['location']['city'], v, b)
+        url = 'http://api.songkick.com/api/3.0/metro_areas/24473-uk-glasgow/calendar.json?apikey=jwzmbEyCAIwD7HCy&page=' + str(i) + '&per_page=50'
+        jsonurl = urllib.urlopen(url)
+        sk = json.loads(jsonurl.read())
+
+        # get images off song kick
+        url_start = 'http://images.sk-static.com/images/media/profile_images/artists/'
+        url_end = '/huge_avatar'
+
+        for gig in sk['resultsPage']['results']['event']:
+            
+            # String for image for artist image
+            artistID = 0 if len(gig['performance']) == 0 else gig['performance'][0]['artist']['id']
+            artist_image = url_start + str(artistID) + url_end
+            artist_name= '' if len(gig['performance']) == 0 else gig['performance'][0]['artist']['displayName']
+            print "next in loop " + artist_name
+
+            b = add_band(artist_name, artist_image)
+            v = add_venue(0 if gig['venue']['id'] is None else gig['venue']['id'], gig['venue']['displayName'])
+            time = '' if gig['start']['time'] is None else gig['start']['time']
+            date = '' if gig['start']['date'] is None else gig['start']['date']
+            g = add_gig(date, time, gig['location']['city'], v, b)
 
 # Start execution here!
 if __name__ == '__main__':

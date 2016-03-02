@@ -134,7 +134,7 @@ html, body {
 	text-align: center;
 	width: 34%;
 }
-.month-selector > div, .day-selector > div {
+.month-selector > div, .month-selector > a, .day-selector > div {
 	width: 33%;
 	float:left;
 	height: 100%;
@@ -143,7 +143,7 @@ html, body {
 	font-size: 20px;
 	margin: 0px;
 }
-.month-selector > div > img, .day-selector > div > img {
+.month-selector > div > img, .month-selector > a > img, .day-selector > div > img {
 	width: 25px;
 }
 #next, #prev {
