@@ -18,6 +18,7 @@
             {% for gig in gigs %}
             <div class="gig-box gig-on-day-{{ gig.date.day }}">
               <div class="gig-info-box">
+                <img style="height:100%; float: right" src='{{ gig.band.image_Ref }}'>
                 <div class="act-name-box">
                   <div class="act-name">
                     {{ gig.band.name }}
@@ -35,6 +36,7 @@
                 </div>
               </div>
             </div>
+            
             {% endfor %}
             {% endif %}
           </div>
