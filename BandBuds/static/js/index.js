@@ -16,8 +16,6 @@ var months = ['.row1 > .mon', '.row1 > .tue', '.row1 > .wed', '.row1 > .thu', '.
 */
 var loadMonth = function(name, startDay, length, dayToSelect) {
 
-	// show month name in bar above calendar
-	$( '#month' ).html(name + ' ' + currentDate.getFullYear().toString());
 	// get string for jquery look up of calendar cell corresponding to start day of month
 	var index = months.indexOf('.row1 > .' + startDay);
 	// remove existing gig classes and clear html
@@ -40,103 +38,39 @@ function daysInMonth(month,year) {
     return new Date(year, month, 0).getDate();
 }
 
-/**
-* Load the next month into the calendar.
-*/
-var loadNextMonth = function() {
-
-	// get first of next month
-	$( '.prev-month > img' ).toggle(true);
-	var now = currentDate;
-	if (now.getMonth() == 11) {
-	    currentDate = new Date(now.getFullYear() + 1, 0, 1);
-	} else {
-	    currentDate = new Date(now.getFullYear(), now.getMonth() + 1, 1);
-	}
-	loadMonth(
-		monthNames[currentDate.getMonth()], 
-		dayNames[currentDate.getDay()], 
-		daysInMonth(currentDate.getMonth() + 1, currentDate.getFullYear()), 
-		1
-	);
-}
-
-/**
-* Load the previous month into the calendar.
-*/
-var loadPrevMonth = function() {
-
-	// get first of next month
-	var now = currentDate;
-	var today = new Date();
-	if (currentDate.getFullYear() == today.getFullYear() && currentDate.getMonth() == today.getMonth()) {
-		return;
-	}
-	if (now.getMonth() == 0) {
-	    currentDate = new Date(now.getFullYear() - 1, 11, 1);
-	} else {
-	    currentDate = new Date(now.getFullYear(), now.getMonth() - 1, 1);
-	}
-	if (currentDate.getFullYear() == today.getFullYear() && currentDate.getMonth() == today.getMonth()) {
-		currentDate = new Date();
-		loadMonth(
-			monthNames[currentDate.getMonth()], 
-			dayNames[new Date(currentDate.getFullYear(), currentDate.getMonth(), 1).getDay()], 
-			daysInMonth(currentDate.getMonth() + 1, currentDate.getFullYear()), 
-			currentDate.getDate()
-		);
-		$( '.prev-month > img' ).toggle(false);
-	} else {
-		loadMonth(
-			monthNames[currentDate.getMonth()], 
-			dayNames[currentDate.getDay()], 
-			daysInMonth(currentDate.getMonth() + 1, currentDate.getFullYear()), 
-			1
-		);
-	}
-}
-
-
-
 /* LAYOUT */
 
 var load = function() {
+
 	setCalendarHeight();
-	   // get initial position of the element
-	calendar_grid_height = $( '#calendar-grid' ).height() + 15; 
-	$( '#current-day' ).html($( '.today > .calendar-circle > .calendar-text' ).html());
-	currentDate = new Date();
+	// get initial position of the element
+	//calendar_grid_height = $( '#calendar-grid' ).height() + 15; 
+
+	currentDate = new Date($( '#month' ).html() + '-' + $('#current-day').html());
+
 	loadMonth(
 		monthNames[currentDate.getMonth()], 
 		dayNames[new Date(currentDate.getFullYear(), currentDate.getMonth(), 1).getDay()], 
 		daysInMonth(currentDate.getMonth() + 1, currentDate.getFullYear()), 
 		currentDate.getDate()
 	);
-	$( '.prev-month > img' ).toggle(false);
+
+	var now = new Date();
+
+	if (currentDate.getMonth() == now.getMonth() && currentDate.getFullYear() == now.getFullYear()) {
+		$( '.prev-month > img' ).toggle(false);
+	}
+	
 	addClickListeners();
-	/*$.getJSON( "http://api.songkick.com/api/3.0/metro_areas/24473-uk-glasgow/calendar.json?apikey=jwzmbEyCAIwD7HCy&per_page=45&page=1&perPage=1000&jsoncallback=?&per_page=50",
-		function( data ) {
-			var runningDay = data['resultsPage']['results']['event'][0]['start']['date'];
-			$.each( data['resultsPage']['results']['event'], function(key, val) {
-				$( '#filler' ).append(
-					'<div class="gig-box"><div class="gig-info-box"><div class="act-name-box"><div class="act-name">' 
-					+ val['performance'][0]['displayName'] 
-					+ '</div></div><div class="venue-name-box"><div class="venue-name">' 
-					+ val['venue']['displayName'] 
-					+ '</div></div></div><div class="gig-time-box"><div class="gig-time">' 
-					+ ((val['start']['time'] != null) ? val['start']['time'].substring(0, 5) : "")
-					+ '</div></div></div>');
-				if (val['start']['date'] != runningDay) {
-					runningDay = val['start']['date'];
-					$( '#filler' ).append('<div class="date-selector"><div class="scrolling-day-box ' + (val['start']['date']).split('').reverse().join('').substring(0, 2).split('').reverse().join('') + '">' + (val['start']['date']).split('').reverse().join('').substring(0, 2).split('').reverse().join('') + '</div></div>')
-				}
-			});
-		});*/
+
+	$( '.gig-box' ).toggle(false);
+	$( '.gig-on-day-' + $( '#current-day' ).html() ).toggle(true);
 }
 
 $( document ).ready(load);
 
 var addClickListeners = function() {
+
 	for (var i = 0; i < months.length; i++) {
 		$( months[i] ).click( function() {
 			if ($( this ).hasClass( 'gig' ) == false) {
@@ -147,8 +81,12 @@ var addClickListeners = function() {
 			$( this ).addClass( 'today' );
 			$( '#current-day' ).html($( '.today > .calendar-circle > .calendar-text' ).html());
 			$( "." + $( '#current-day' ).html() ).parent().next().prevAll().toggle(false);
+			$( '.gig-box' ).toggle(false);
+			$( '.gig-on-day-' + $( '#current-day' ).html() ).toggle(true);
+			window.scrollTo(0, 0);
 		});
 	}
+	
 	$( '#search-button' ).click( function() {
 		if ($( '#filter-panel' ).is(':visible')) {
 			$( '#filter-panel').slideToggle(200, function() {
