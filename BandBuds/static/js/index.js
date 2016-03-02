@@ -83,7 +83,6 @@ var addClickListeners = function() {
 			$( "." + $( '#current-day' ).html() ).parent().next().prevAll().toggle(false);
 			$( '.gig-box' ).toggle(false);
 			$( '.gig-on-day-' + $( '#current-day' ).html() ).toggle(true);
-			window.scrollTo(0, 0);
 		});
 	}
 
