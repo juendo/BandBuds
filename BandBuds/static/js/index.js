@@ -86,6 +86,10 @@ var addClickListeners = function() {
 			window.scrollTo(0, 0);
 		});
 	}
+
+	$( '#next-day' ).click( function() {
+		$( '.today' ).next().click();
+	});
 	
 	$( '#search-button' ).click( function() {
 		if ($( '#filter-panel' ).is(':visible')) {
