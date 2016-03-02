@@ -60,11 +60,8 @@ class Buddy(models.Model):
 
 class Venue(models.Model):
     venue_id = models.IntegerField(default=0)
-    city = models.CharField(max_length=128)
-    country = models.CharField(max_length=128)
-    postcode = models.CharField(max_length=128)
-    building_No = models.IntegerField(default=128)
-    street = models.CharField(max_length=128)
+    name = models.CharField(max_length=128)
+    # latitude and logitude?
 
     def __unicode__(self):
         return self.city + ' ' + self.street

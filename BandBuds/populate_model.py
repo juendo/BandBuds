@@ -47,9 +47,9 @@ def add_user(username,email,password):
     return u
 
 # New venue for populate db with songkick
-def add_venue(venue_id, city, country, postcode, b_no, street):
+def add_venue(venue_id, name):
     print "venue entered"
-    v = Venue.objects.get_or_create(venue_id=venue_id, city=city, country=country, postcode=postcode, building_No=b_no, street=street)[0]
+    v = Venue.objects.get_or_create(venue_id=venue_id, name=name)[0]
     v.save()
     print "added venue"
     return v
@@ -83,7 +83,7 @@ def getSongkickGigs():
         print "next in loop " + artist_name
 
         b = add_band(artist_name, artist_image)
-        v = add_venue(gig['venue']['id'], 'Glasgow', 'Scotland', 'G1 1AA', 1, 'Glasgow Street')
+        v = add_venue(gig['venue']['id'], gig['venue']['displayName'])
         time = '' if gig['start']['time'] is None else gig['start']['time']
         date = '' if gig['start']['date'] is None else gig['start']['date']
         g = add_gig(date, time, gig['location']['city'], v, b)

@@ -103,7 +103,7 @@ var loadPrevMonth = function() {
 var load = function() {
 	setCalendarHeight();
 	   // get initial position of the element
-	fixme2 = $( '#calendar-grid' ).height() + 15; 
+	calendar_grid_height = $( '#calendar-grid' ).height() + 15; 
 	$( '#current-day' ).html($( '.today > .calendar-circle > .calendar-text' ).html());
 	currentDate = new Date();
 	loadMonth(
@@ -149,12 +149,6 @@ var addClickListeners = function() {
 			$( "." + $( '#current-day' ).html() ).parent().next().prevAll().toggle(false);
 		});
 	}
-	$( '.next-month' ).click( function() {
-		loadNextMonth();
-	})
-	$( '.prev-month' ).click( function() {
-		loadPrevMonth();
-	})
 	$( '#search-button' ).click( function() {
 		if ($( '#filter-panel' ).is(':visible')) {
 			$( '#filter-panel').slideToggle(200, function() {
@@ -177,7 +171,7 @@ var addClickListeners = function() {
 
 		var currentScroll = $(window).scrollTop(); 
 
-	    if (currentScroll >= fixme2) {
+	    if (currentScroll >= calendar_grid_height) {
 	        $('.day-selector').addClass('top-fixed');
 	    } else {
 	    	$('.day-selector').removeClass('top-fixed');
@@ -185,11 +179,11 @@ var addClickListeners = function() {
 	});
 }
 
-var fixme2;
+var calendar_grid_height;
 var setCalendarHeight = function() {
     var width = $( '#calendar-grid' ).width(); 
    	$( '.calendar-row' ).css('height', Math.floor(width * 0.14));
-   	fixme2 = $( '#calendar-grid' ).height() + 15; 
+   	calendar_grid_height = $( '#calendar-grid' ).height() + 15; 
 }
 
 window.onresize = function(event) {
