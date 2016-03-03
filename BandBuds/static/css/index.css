@@ -276,9 +276,11 @@ html, body {
 	background-color: #efefef;
 	width:100%;
 	min-height: 700px;
+	padding-bottom: 65px;
 }
 .gig-box, .gig-time-box {
 	height: 75px;
+	margin-top:25px;
 }
 .gig-box {
 	width: 100%;
@@ -290,6 +292,7 @@ html, body {
 	width: 20%;
 	position: relative;
 	display: table;
+	text-align:center;
 
 }
 .gig-time {
@@ -326,7 +329,14 @@ html, body {
 	z-index: 4;
 	position: relative;
 }
-
+.gig-image {
+	height:100%; 
+	border-radius:50%;
+	background-color: #efefef;
+	border: 2px;
+	border-style: solid;
+	border-color: #D30439;
+}
 
 
 

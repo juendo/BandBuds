@@ -27,15 +27,26 @@ var loadMonth = function(name, startDay, length, dayToSelect) {
 	for (var i = index + dayToSelect - 1; i < length + index; i++) {
 		$( months[i] + ' > .calendar-circle > .calendar-text').html(i - index + 1);
 		$( months[i] ).toggleClass( 'gig' );
-		if (i - index + 1 == dayToSelect) {
+		$( months[i] ).addClass( 'day-' + (i - index + 1));
+
+		if (i - index + 1 == dayToSelect) 
+		{
 			$( months[i] ).addClass( 'today' );
 			$( '#current-day' ).html($( '.today > .calendar-circle > .calendar-text' ).html());
 		}
 	}
 }
 
-function daysInMonth(month,year) {
+function daysInMonth(month,year) 
+{
     return new Date(year, month, 0).getDate();
+}
+
+// Set the current day for which to view gigs.
+// Act in the same way as if that day were clicked on the calendar.
+function setCurrentDay(day) 
+{
+	$( '.day-' + day ).trigger( 'click' );
 }
 
 /* LAYOUT */
@@ -64,7 +75,12 @@ var load = function() {
 	addClickListeners();
 
 	$( '.gig-box' ).toggle(false);
-	$( '.gig-on-day-' + $( '#current-day' ).html() ).toggle(true);
+	$( '.gig-on-day-' + getCurrentDay() ).toggle(true);
+}
+
+function getCurrentDay() 
+{
+	return parseInt($( '#current-day' ).html());
 }
 
 $( document ).ready(load);
@@ -76,18 +92,22 @@ var addClickListeners = function() {
 			if ($( this ).hasClass( 'gig' ) == false) {
 				return;
 			}
-			$( "." + $( '#current-day' ).html() ).parent().next().prevAll().toggle(true);
+			console.log($( this ).children().first().children().first().html());
+			$( "." + getCurrentDay() ).parent().next().prevAll().toggle(true);
 			$( '.today' ).removeClass( 'today' );
 			$( this ).addClass( 'today' );
 			$( '#current-day' ).html($( '.today > .calendar-circle > .calendar-text' ).html());
-			$( "." + $( '#current-day' ).html() ).parent().next().prevAll().toggle(false);
+			$( "." + getCurrentDay() ).parent().next().prevAll().toggle(false);
 			$( '.gig-box' ).toggle(false);
-			$( '.gig-on-day-' + $( '#current-day' ).html() ).toggle(true);
+			$( '.gig-on-day-' + getCurrentDay() ).toggle(true);
 		});
 	}
 
-	$( '#next-day' ).click( function() {
-		$( '.today' ).next().click();
+	$( '.next-day' ).click( function() {
+		setCurrentDay(getCurrentDay() + 1);
+	});
+	$( '.prev-day' ).click( function() {
+		setCurrentDay(getCurrentDay() - 1);
 	});
 	
 	$( '#search-button' ).click( function() {

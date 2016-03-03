@@ -4,21 +4,20 @@
       <div id="gig-list">
         <div class = "date-selector">
           <div class="day-selector d-s-bottom">
-            <div id="prev prev-day">
+            <div id="prev" class="prev-day">
               <img src="{% static 'bba/images/leftBlack.png' %}">
             </div>
             <div id="current-day">{{ day_string }}</div>
-            <div id="next next-day">
+            <div id="next" class="next-day">
               <img src="{% static 'bba/images/rightBlack.png' %}">
             </div>
           </div>
         </div>
-          <div id="filler">
+          <div id="filler" style="overflow:auto">
             {% if gigs %}
             {% for gig in gigs %}
             <div class="gig-box gig-on-day-{{ gig.date.day }}">
               <div class="gig-info-box">
-                <img style="height:100%; float: right" src='{{ gig.band.image_Ref }}'>
                 <div class="act-name-box">
                   <div class="act-name">
                     {{ gig.band.name }}
@@ -31,9 +30,7 @@
                 </div>
               </div>
               <div class="gig-time-box">
-                <div class="gig-time">
-                  {{ gig.time }}
-                </div>
+                <img class="gig-image" src='{{ gig.band.image_Ref }}'>
               </div>
             </div>
             
