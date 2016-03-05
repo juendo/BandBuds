@@ -277,6 +277,7 @@ html, body {
 	width:100%;
 	min-height: 700px;
 	padding-bottom: 65px;
+	overflow: auto;
 }
 .gig-box, .gig-time-box {
 	height: 75px;
@@ -348,7 +349,7 @@ html, body {
 #calendar {
 	width:100%;
 }
-#inner-calendar {
+#left-top-box {
 	width: 50%;
 	max-width: none;
 	position: fixed;
@@ -375,7 +376,7 @@ html, body {
 .month-selector {
 	width: 50%;
 }
-#gig-list {
+#right-bottom-box {
 	margin-top: 20px;
 	float: right;
 	max-width: none;
@@ -384,7 +385,7 @@ html, body {
 img {
 	z-index: 3;
 }
-#gig-list {
+#right-bottom-box {
 	margin-right: 0px;
 }
 

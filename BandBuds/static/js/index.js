@@ -144,7 +144,7 @@ var calendar_grid_height;
 var setCalendarHeight = function() {
     var width = $( '#calendar-grid' ).width(); 
    	$( '.calendar-row' ).css('height', Math.floor(width * 0.14));
-   	calendar_grid_height = $( '#calendar-grid' ).height() + 15; 
+   	calendar_grid_height = $( '#left-top-box' ).height() - 75; 
 }
 
 window.onresize = function(event) {

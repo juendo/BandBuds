@@ -1,0 +1,30 @@
+{% load staticfiles %}
+
+<!--Gig start -->
+<div id="filler">
+  {% if gigs %}
+  {% for gig in gigs %}
+  <a href="{% url 'gig' gig.gig_id %}">
+  <div class="gig-box gig-on-day-{{ gig.date.day }}">
+    <div class="gig-info-box">
+      <div class="act-name-box">
+        <div class="act-name">
+          {{ gig.band.name }}
+        </div>
+      </div>
+      <div class="venue-name-box">
+        <div class="venue-name">
+          {{ gig.venue.name }}
+        </div>
+      </div>
+    </div>
+    <div class="gig-time-box">
+      <img class="gig-image" src='{{ gig.band.image_Ref }}'>
+    </div>
+  </div>
+  </a>
+  
+  {% endfor %}
+  {% endif %}
+</div>
+<!--Gig end -->

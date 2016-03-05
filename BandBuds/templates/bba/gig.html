@@ -1,0 +1,19 @@
+{% extends 'bba/left_right.html' %}
+
+{% load staticfiles %}
+
+{% block top_left_header %}
+  {% include 'bba/gig/gig_name_header.html' %}
+{% endblock %}
+
+{% block top_left %}
+  {% include 'bba/gig/gig_profile.html' %}
+{% endblock %}
+
+{% block bottom_right_header %}
+  {% include 'bba/gig/gig_buds_header.html' %}
+{% endblock %}
+
+{% block bottom_right %}
+  {% include 'bba/gig/gig_buds_list.html' %}
+{% endblock %}

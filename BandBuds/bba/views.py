@@ -11,7 +11,7 @@ def index(request):
     context_dict = { 'gigs' : gigs }
 
     # Render the response and send it back!
-    return render(request, 'bba/index.html', context_dict)
+    return render(request, 'bba/left_right.html', context_dict)
 
 def calendar(request, month_string):
 
@@ -41,7 +41,7 @@ def calendar(request, month_string):
     context_dict = { 'gigs' : gigs , 'next_date' : next_date, 'prev_date' : prev_date, 'month_string' : month_string, 'day_string' : day_string.zfill(2) }
 
     # Render the response and send it back!
-    return render(request, 'bba/index.html', context_dict)
+    return render(request, 'bba/calendar.html', context_dict)
 
 def gig(request, gig_id):
     gig = Gig.objects.all().filter(gig_id=gig_id)[0]
@@ -53,7 +53,7 @@ def gig(request, gig_id):
         return g.user
     att = map(u, Gig_Attendance.objects.filter(gig=gig))[0]
     context_dict = { 'gig' : gig , 'going' : going, 'attending' : att }
-    return render(request, 'bba/gig/gig.html', context_dict)
+    return render(request, 'bba/gig.html', context_dict)
 
 def user(request,user_name_slug):
     try:
