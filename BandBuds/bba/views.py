@@ -1,9 +1,9 @@
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth import authenticate, login, logout
-from bba.models import Band, Gig, Venue, User_Profile
+from bba.models import Band, Gig, Venue, User_Profile, Gig_Attendance
 import datetime
-from bba.form import UserForm,User_ProfileForm
+from bba.forms import UserForm, User_ProfileForm
 
 def index(request):
     gigs = Gig.objects.all().order_by('date')
@@ -42,6 +42,18 @@ def calendar(request, month_string):
 
     # Render the response and send it back!
     return render(request, 'bba/index.html', context_dict)
+
+def gig(request, gig_id):
+    gig = Gig.objects.all().filter(gig_id=gig_id)[0]
+    
+    ga = Gig_Attendance.objects.get_or_create(user=User_Profile.objects.all()[0], gig=gig)[0]
+    ga.save()
+    going = len(Gig_Attendance.objects.filter(user=User_Profile.objects.all()[0], gig=gig)) > 0
+    def u(g):
+        return g.user
+    att = map(u, Gig_Attendance.objects.filter(gig=gig))[0]
+    context_dict = { 'gig' : gig , 'going' : going, 'attending' : att }
+    return render(request, 'bba/gig/gig.html', context_dict)
 
 def user(request,user_name_slug):
     try:
@@ -109,3 +121,5 @@ def register(request):
     print 'got to end'
     # Render the template depending on the context.
     return render(request,'bba/user/register.html',{'user_form': user_form, 'profile_form': profile_form, 'registered': registered})
+
+

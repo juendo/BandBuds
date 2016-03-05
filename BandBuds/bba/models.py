@@ -23,7 +23,7 @@ class User_Profile(models.Model):
          super(User_Profile, self).save(*args, **kwargs)
 
     def __unicode__(self):
-        return self.user
+        return self.user.username
 
 class Band(models.Model):
     name = models.CharField(max_length=128, unique=False)
@@ -68,6 +68,7 @@ class Venue(models.Model):
         return self.city + ' ' + self.street
 
 class Gig(models.Model):
+    gig_id = models.IntegerField(default=0)
     date = models.DateField()
     time = models.CharField(max_length=128)
     city = models.CharField(max_length=128)
@@ -75,7 +76,7 @@ class Gig(models.Model):
     band = models.ForeignKey(Band)
 
     def __unicode__(self):
-        return self.self.venue + ' ' + self.band
+        return self.venue.name + ' ' + self.band.name
 
 
 class Performing_Band(models.Model):
@@ -86,7 +87,7 @@ class Performing_Band(models.Model):
         return self.band + self.gig
 
 class Gig_Attendance(models.Model):
-    gig = models.CharField(Gig,max_length=30)
+    gig = models.ForeignKey(Gig)
     user = models.ForeignKey(User_Profile)
     slug = models.SlugField()
 
@@ -95,4 +96,4 @@ class Gig_Attendance(models.Model):
         super(Gig_Attendance, self).save(*args, **kwargs)
 
     def __unicode__(self):
-        return self.gig + ' ' + self.user
+        return self.gig.band.name + ' ' + self.user.user.username
