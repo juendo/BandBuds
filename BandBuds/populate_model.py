@@ -55,9 +55,9 @@ def add_venue(venue_id, name):
     return v
 
 # New gig for populate db with songkick
-def add_gig(date, time, city, venue, band):
+def add_gig(gig_id, date, time, city, venue, band):
     print "gig entered"
-    gig = Gig.objects.get_or_create(date=date, time=time, city=city, venue=venue, band=band)[0]
+    gig = Gig.objects.get_or_create(gig_id=gig_id, date=date, time=time, city=city, venue=venue, band=band)[0]
     gig.save()
     print "added gig"
     return gig
@@ -96,7 +96,7 @@ def getSongkickGigs():
             v = add_venue(0 if gig['venue']['id'] is None else gig['venue']['id'], gig['venue']['displayName'])
             time = '' if gig['start']['time'] is None else gig['start']['time']
             date = '' if gig['start']['date'] is None else gig['start']['date']
-            g = add_gig(date, time, gig['location']['city'], v, b)
+            g = add_gig(gig['id'], date, time, gig['location']['city'], v, b)
 
 # Start execution here!
 if __name__ == '__main__':

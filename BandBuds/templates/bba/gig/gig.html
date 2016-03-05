@@ -1,0 +1,13 @@
+{% extends 'bba/base.html' %}
+
+{% load staticfiles %}
+
+{%block body_block%}
+
+    <!--Gig start -->
+    {% include 'bba/gig/gig_profile.html' %}
+    <!--Gig end -->
+    <!-- Insert bud/bud_list.html -->
+    {% include 'bba/buds/bud_list.html' %}
+
+{% endblock %}
