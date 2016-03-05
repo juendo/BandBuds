@@ -2,9 +2,9 @@
 <div class="gig-profile">
 	<div class=" band-gig">
 		<!--band name-->
-		<h2>{{ band.name }}</h2>
+		<h2>{{ gig.band.name }}</h2>
 		<!--band image-->
-		<img src=" {{ band.image }} "/>
+		<img class="gig-image-profile" src='{{ gig.band.image_Ref }}'>
 	</div>
 
 	<!--gig buttons-->
@@ -16,7 +16,7 @@
 	</div>
 	<div class="venue-gig">
 		<!--venue name-->
-		<h2>{{ gig.name }}</h2>
+		<h2>{{ gig.venue.name }}</h2>
 		<!--venue location?? goggle maps
 		<div class=""></div>-->
 	</div>
