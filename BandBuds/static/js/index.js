@@ -74,7 +74,7 @@ var load = function() {
 	
 	addClickListeners();
 
-	$( '.gig-box' ).toggle(false);
+	$( '.gig-box-hide' ).toggle(false);
 	$( '.gig-on-day-' + getCurrentDay() ).toggle(true);
 }
 
@@ -98,7 +98,7 @@ var addClickListeners = function() {
 			$( this ).addClass( 'today' );
 			$( '#current-day' ).html($( '.today > .calendar-circle > .calendar-text' ).html());
 			$( "." + getCurrentDay() ).parent().next().prevAll().toggle(false);
-			$( '.gig-box' ).toggle(false);
+			$( '.gig-box-hide' ).toggle(false);
 			$( '.gig-on-day-' + getCurrentDay() ).toggle(true);
 		});
 	}

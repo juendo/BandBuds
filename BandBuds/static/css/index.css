@@ -272,7 +272,7 @@ html, body {
 	margin-top: 0px;
 	z-index: 2;
 }
-#filler {
+#list-box {
 	background-color: #efefef;
 	width:100%;
 	min-height: 700px;

@@ -45,14 +45,26 @@ def calendar(request, month_string):
 
 def gig(request, gig_id):
     gig = Gig.objects.all().filter(gig_id=gig_id)[0]
-    
-    ga = Gig_Attendance.objects.get_or_create(user=User_Profile.objects.all()[0], gig=gig)[0]
-    ga.save()
+    print gig
+    profiles = User_Profile.objects.all()
+    for profile in profiles.iterator():
+        ga = Gig_Attendance.objects.get_or_create(user=profile, gig=gig)[0]
+        ga.save()
+
     going = len(Gig_Attendance.objects.filter(user=User_Profile.objects.all()[0], gig=gig)) > 0
-    def u(g):
-        return g.user
-    att = map(u, Gig_Attendance.objects.filter(gig=gig))[0]
-    context_dict = { 'gig' : gig , 'going' : going, 'attending' : att }
+    
+    buds = map(helper_get_user, Gig_Attendance.objects.filter(gig=gig))
+    context_dict = { 'gig' : gig , 'going' : going, 'buds' : buds }
+    return render(request, 'bba/gig.html', context_dict)
+
+def helper_get_user(gig):
+        return gig.user
+
+def gig_bud(request, gig_id, bud_slug):
+    gig = Gig.objects.all().filter(gig_id=gig_id)[0]
+    buds = map(helper_get_user, Gig_Attendance.objects.filter(gig=gig))
+    bud = User_Profile.objects.filter(slug=bud_slug)[0]
+    context_dict = { 'bud_to_show' : bud, 'buds' : buds, 'gig' : gig }
     return render(request, 'bba/gig.html', context_dict)
 
 def user(request,user_name_slug):

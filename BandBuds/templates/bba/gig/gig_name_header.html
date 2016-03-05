@@ -2,6 +2,10 @@
 
 <div class="month-selector">
 	<div>
-		{{ gig.band.name }}
+		{% if bud_to_show %}
+			{{ bud_to_show.user.username }}
+		{% else %}
+			{{ gig.band.name }}
+		{% endif %}
 	</div>
 </div>
