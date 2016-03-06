@@ -1,0 +1,29 @@
+{% extends 'bba/base.html' %}
+
+{% load staticfiles %}
+
+{% block body_block %}
+{% if user.is_authenticated %}
+
+<h1>{{ user.username }}! Hey bud!<a href="calendar/{% now 'Y-m/'%}"></a></h1>
+
+{% else %}
+
+<h1>Hey bud! Join in and find your perfect gig mate.{% now 'Y-m/'%}</h1>
+<!--Login start -->
+<div class="">
+  {% include 'bba/login.html' %}
+     <!--Sign Up start -->
+  <a href="/user/register/">register here</a>
+</div>
+<!--Login end -->
+
+{% endif %}
+
+
+
+<!--Footer start -->
+{% include 'bba/main/main_bottom_panel.html' %}
+<!--Footer end -->
+
+{% endblock %}
