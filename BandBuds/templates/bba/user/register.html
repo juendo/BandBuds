@@ -1,17 +1,15 @@
-
+{% extends 'bba/user.html' %}
 
 {% load staticfiles %}
 
-
-
-<h1>Bands Bubs</h1>
+{% block top_left %}
 
 {% if registered %}
 Rango says: <strong>thank you for registering!</strong>
 <a href="">Return to the homepage.</a><br />
 {% else %}
 
-Rango says: <strong>register here!</strong><br />
+bandbuds says: <strong>register here!</strong><br />
 
 <form id="user_form" method="post" action=""
         enctype="multipart/form-data">
@@ -19,9 +17,42 @@ Rango says: <strong>register here!</strong><br />
     {% csrf_token %}
 
     {{ user_form.as_p }}
-    {{ profile_form.as_p }}
+
+    <!--user gig atributes form-->
+
+        <!--user smokes-->
+	<div class="form">
+		{{ profile_form.smokes.errors }}
+    	<label>Smokes:</label>
+    	{{ profile_form.smokes }}
+	</div>
+
+	<!--user gender-->
+	<div class="form">
+		{{ profile_form.gender.errors }}
+    	<label>Gender:</label>
+    	{{ profile_form.gender }}
+	</div>
+
+	<!--user drinks-->
+	<div class="form">
+		{{ profile_form.drinks.errors }}
+    	<label>Drinks:</label>
+    	{{ profile_form.drinks }}
+        <div class="large-2 columns">
+            <input id="slider1" type="range" min="0" max="50" step="5" onchange="printValue('slider1','rangeValue1')">
+        </div>
+        <div class="large-4 columns">
+            <input id="rangeValue1" type="text" size="2">
+        </div>
+	</div>
+
+    <!--images-->
+    {{ profile_form.images }}
 
     <!-- Provide a button to click to submit the form. -->
     <input type="submit" name="submit" value="Register" />
 </form>
 {% endif %}
+
+{% endblock %}

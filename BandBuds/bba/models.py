@@ -58,7 +58,6 @@ class Buddy(models.Model):
     def __unicode__(self):
         return self.User_Profile + ' buddied with ' + self.buddy
 
-
 class Venue(models.Model):
     venue_id = models.IntegerField(default=0)
     name = models.CharField(max_length=128)
@@ -77,7 +76,6 @@ class Gig(models.Model):
 
     def __unicode__(self):
         return self.venue.name + ' ' + self.band.name
-
 
 class Performing_Band(models.Model):
     band = models.ForeignKey(Band)

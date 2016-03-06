@@ -3,7 +3,6 @@ from __future__ import unicode_literals
 
 from django.db import models, migrations
 import datetime
-import bba.models
 from django.conf import settings
 
 
@@ -49,6 +48,7 @@ class Migration(migrations.Migration):
             name='Gig',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('gig_id', models.IntegerField(default=0)),
                 ('date', models.DateField()),
                 ('time', models.CharField(max_length=128)),
                 ('city', models.CharField(max_length=128)),
@@ -62,8 +62,8 @@ class Migration(migrations.Migration):
             name='Gig_Attendance',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('gig', models.CharField(max_length=30, verbose_name=bba.models.Gig)),
                 ('slug', models.SlugField()),
+                ('gig', models.ForeignKey(to='bba.Gig')),
             ],
             options={
             },
@@ -94,7 +94,7 @@ class Migration(migrations.Migration):
             name='User_Profile',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('dob', models.DateField(default=datetime.date(2016, 3, 2))),
+                ('dob', models.DateField(default=datetime.date(2016, 3, 6))),
                 ('smokes', models.BooleanField(default=None)),
                 ('gender', models.CharField(max_length=128)),
                 ('drinks', models.IntegerField(default=0)),

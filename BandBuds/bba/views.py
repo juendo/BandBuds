@@ -5,16 +5,24 @@ from django.contrib.auth import authenticate, login, logout
 from bba.models import Band, Gig, Venue, User_Profile, Gig_Attendance
 import datetime
 from bba.forms import UserForm, User_ProfileForm
+from django.contrib.auth.decorators import login_required
+
+print 'got here views'
 
 def index(request):
+
+    print 'got to index'
+
     gigs = Gig.objects.all().order_by('date')
     # date of gigs for day
     context_dict = { 'gigs' : gigs }
 
     # Render the response and send it back!
-    return render(request, 'bba/left_right.html', context_dict)
+    return render(request, 'bba/index.html', context_dict)
 
 def calendar(request, month_string):
+
+    print 'got to calendar'
 
     # extract date information
     requested_date = datetime.datetime.strptime(month_string, "%Y-%m")
@@ -80,6 +88,9 @@ def gig_bud(request, gig_id, bud_slug):
     return render(request, 'bba/gig.html', context_dict)
 
 def user(request,user_name_slug):
+
+    print 'got to user'
+
     try:
         user=User_Profile.objects.get(slug=user_name_slug)
         context_dict = {'user':user}
@@ -88,7 +99,7 @@ def user(request,user_name_slug):
         context_dict={}
 
     # Render the response and send it back!
-    return render(request, 'bba/user.html', context_dict)
+    return render(request, 'bba/user/user_profile.html', context_dict)
 
 def register(request):
 
@@ -146,4 +157,42 @@ def register(request):
     # Render the template depending on the context.
     return render(request,'bba/user/register.html',{'user_form': user_form, 'profile_form': profile_form, 'registered': registered})
 
+def user_login(request):
 
+    print 'got to user login'
+
+    # Gather username and password
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+
+        # Is the username and password valid
+        user = authenticate(username=username, password=password)
+        if datetime.datetime.now().month < 10:
+            month = str(0) + str(datetime.datetime.now().month)
+        else:
+            month = str(datetime.datetime.now().month)
+        dateString = '/calendar/' + str(datetime.datetime.now().year) + '-' + month
+
+        # If valid user
+        if user:
+            # has an activie account
+           if user.is_active:
+               login(request, user)
+               return HttpResponseRedirect(dateString)
+           else:
+               return HttpResponse("Your account for bandbuds has been disabled.")
+        else:
+            print "Invalid login details: {0}, {1}".format(username, password)
+            return HttpResponse("Sorry bud! Invalid login details supplied.")
+    else:
+        return render(request, 'bba/index.html',{})
+
+@login_required
+def restricted(request):
+    return HttpResponse("Since you're logged in, you can see this text!")
+
+@login_required
+def user_logout(request):
+    logout(request)
+    return HttpResponseRedirect('/')

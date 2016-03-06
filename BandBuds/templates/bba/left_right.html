@@ -4,6 +4,7 @@
 
 {% block body_block %}
 
+<<<<<<< HEAD
   <!--Login start -->
   <div class="hidden">
     {% include 'bba/login_reg/login_panel.html' %}
@@ -20,6 +21,9 @@
     {% include 'bba/user/user_profile.html' %}
   </div>
   <!--Sign Up end -->
+=======
+{% if user.is_authenticated %}
+>>>>>>> 215334cf86bdc4c587a135f32d07a8077d70334c
   <div id="calendar">
 
     <div id="left-top-box">
@@ -50,6 +54,12 @@
   <!--Filter panel start -->
   {% include 'bba/main/main_filter_panel.html' %}
   <!--Filter panel end -->
+
+{% else %}
+
+<h1>please login</h1>
+
+{% endif %}
 
   <!--Footer start -->
   {% include 'bba/main/main_bottom_panel.html' %}

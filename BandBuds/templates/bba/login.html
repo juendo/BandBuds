@@ -1,10 +1,11 @@
+
 <!-- login_panel
 	load to index.html as defualt-->
 	<!-- form login start -->
-	<form id="user_form" method="post" action="/bba/log_reg/" enctype="multipart/form-data">
+	<form id="user_form" method="post" action="/login/">
             {% csrf_token %}
             <!-- user name -->
-            Username: <input type="text" name="username" value="" size="50" />
+            StudentID: <input type="text" name="username" value="" size="50" />
             <br />
             <!-- password -->
             Password: <input type="password" name="password" value="" size="50" />
