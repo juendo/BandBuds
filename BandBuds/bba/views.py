@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.template.loader import render_to_string
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth import authenticate, login, logout
 from bba.models import Band, Gig, Venue, User_Profile, Gig_Attendance
@@ -20,9 +21,6 @@ def calendar(request, month_string):
     requested_month = requested_date.month
     requested_year = requested_date.year
 
-    # get gigs for month
-    gigs = Gig.objects.all().filter(date__month=requested_month).order_by('time')
-
     year = int(month_string.split('-')[0])
 
     # get next month details
@@ -38,10 +36,24 @@ def calendar(request, month_string):
         if requested_year == datetime.datetime.now().year:
             day_string = str(datetime.datetime.now().day)
 
+    # get gigs for month
+    gigs = Gig.objects.all().filter(date__month=requested_month, date__day=int(day_string))
+
     context_dict = { 'gigs' : gigs , 'next_date' : next_date, 'prev_date' : prev_date, 'month_string' : month_string, 'day_string' : day_string.zfill(2) }
 
     # Render the response and send it back!
     return render(request, 'bba/calendar.html', context_dict)
+
+# return the list of gigs on a given date
+def gigs_on_date(request, query):
+    query = query.split('-')
+    # get gigs on date
+    gigs = Gig.objects.filter(date__year=query[0], date__month=query[1], date__day=query[2])
+    context = {
+      'gigs' : gigs,
+    }
+    return render(request, "bba/calendar/calendar_gig_list.html", context)
+
 
 def gig(request, gig_id):
     gig = Gig.objects.all().filter(gig_id=gig_id)[0]

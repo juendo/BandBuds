@@ -1,31 +1,29 @@
 {% load staticfiles %}
 
 <!--Gig start -->
-<div id="list-box">
-  {% if buds %}
-  {% for bud in buds %}
-  <a href="{% url 'gig' gig.gig_id %}{{bud.slug}}">
-  <div class="gig-box bud-box">
-    <div class="gig-info-box">
-      <div class="act-name-box">
-        <div class="act-name">{{ bud.slug }}</div>
-      </div>
-      <div class="venue-name-box">
-        <div class="venue-name">
-          {{ bud.gender }}
-        </div>
-      </div>
+{% if buds %}
+{% for bud in buds %}
+<a href="{% url 'gig' gig.gig_id %}{{bud.slug}}">
+<div class="gig-box bud-box">
+  <div class="gig-info-box">
+    <div class="act-name-box">
+      <div class="act-name">{{ bud.slug }}</div>
     </div>
-    <div class="gig-time-box">
-      <img class="gig-image" src="/media/{{bud.image}}" alt="{{bud.slug}}">
+    <div class="venue-name-box">
+      <div class="venue-name">
+        {{ bud.gender }}
+      </div>
     </div>
   </div>
-  </a>
-  
-  {% endfor %}
-  
-  {% else %}
-  <div> NO BUDS </div>
-  {% endif %}
+  <div class="gig-time-box">
+    <img class="gig-image" src="/media/{{bud.image}}" alt="{{bud.slug}}">
+  </div>
 </div>
+</a>
+
+{% endfor %}
+
+{% else %}
+<div> NO BUDS </div>
+{% endif %}
 <!--Gig end -->

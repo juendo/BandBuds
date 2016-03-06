@@ -71,82 +71,63 @@ var load = function() {
 	if (currentDate.getMonth() == now.getMonth() && currentDate.getFullYear() == now.getFullYear()) {
 		$( '.prev-month > img' ).toggle(false);
 	}
-	
-	addClickListeners();
-
-	$( '.gig-box-hide' ).toggle(false);
-	$( '.gig-on-day-' + getCurrentDay() ).toggle(true);
-}
-
-function getCurrentDay() 
-{
-	return parseInt($( '#current-day' ).html());
 }
 
 $( document ).ready(load);
 
-var addClickListeners = function() {
+/**
+* Load the next month into the calendar.
+*/
+var loadNextMonth = function() {
 
-	for (var i = 0; i < months.length; i++) {
-		$( months[i] ).click( function() {
-			if ($( this ).hasClass( 'gig' ) == false) {
-				return;
-			}
-			console.log($( this ).children().first().children().first().html());
-			$( "." + getCurrentDay() ).parent().next().prevAll().toggle(true);
-			$( '.today' ).removeClass( 'today' );
-			$( this ).addClass( 'today' );
-			$( '#current-day' ).html($( '.today > .calendar-circle > .calendar-text' ).html());
-			$( "." + getCurrentDay() ).parent().next().prevAll().toggle(false);
-			$( '.gig-box-hide' ).toggle(false);
-			$( '.gig-on-day-' + getCurrentDay() ).toggle(true);
-		});
+	// get first of next month
+	$( '.prev-month > img' ).toggle(true);
+	var now = currentDate;
+	if (now.getMonth() == 11) {
+	    currentDate = new Date(now.getFullYear() + 1, 0, 1);
+	} else {
+	    currentDate = new Date(now.getFullYear(), now.getMonth() + 1, 1);
 	}
-
-	$( '.next-day' ).click( function() {
-		setCurrentDay(getCurrentDay() + 1);
-	});
-	$( '.prev-day' ).click( function() {
-		setCurrentDay(getCurrentDay() - 1);
-	});
-	
-	$( '#search-button' ).click( function() {
-		if ($( '#filter-panel' ).is(':visible')) {
-			$( '#filter-panel').slideToggle(200, function() {
-				$( '#search-panel' ).slideToggle(200);
-			});
-		} else {
-			$( '#search-panel' ).slideToggle(200);
-		}
-	});
-	$( '#filter-button' ).click( function() {
-		if ($( '#search-panel' ).is(':visible')) {
-			$( '#search-panel').slideToggle(200, function() {
-				$( '#filter-panel' ).slideToggle(200);
-			});
-		} else {
-			$( '#filter-panel' ).slideToggle(200);
-		}
-	});
-	$(window).scroll(function() {
-
-		var currentScroll = $(window).scrollTop(); 
-
-	    if (currentScroll >= calendar_grid_height) {
-	        $('.day-selector').addClass('top-fixed');
-	    } else {
-	    	$('.day-selector').removeClass('top-fixed');
-	    }
-	});
+	loadMonth(
+		monthNames[currentDate.getMonth()], 
+		dayNames[currentDate.getDay()], 
+		daysInMonth(currentDate.getMonth() + 1, currentDate.getFullYear()), 
+		1
+	);
 }
 
-var calendar_grid_height;
-var setCalendarHeight = function() {
-    var width = $( '#calendar-grid' ).width(); 
-   	$( '.calendar-row' ).css('height', Math.floor(width * 0.14));
-   	calendar_grid_height = $( '#left-top-box' ).height() - 75; 
+/**
+* Load the previous month into the calendar.
+*/
+var loadPrevMonth = function() {
+
+	// get first of next month
+	var now = currentDate;
+	var today = new Date();
+	if (currentDate.getFullYear() == today.getFullYear() && currentDate.getMonth() == today.getMonth()) {
+		return;
+	}
+	if (now.getMonth() == 0) {
+	    currentDate = new Date(now.getFullYear() - 1, 11, 1);
+	} else {
+	    currentDate = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+	}
+	if (currentDate.getFullYear() == today.getFullYear() && currentDate.getMonth() == today.getMonth()) {
+		currentDate = new Date();
+		loadMonth(
+			monthNames[currentDate.getMonth()], 
+			dayNames[new Date(currentDate.getFullYear(), currentDate.getMonth(), 1).getDay()], 
+			daysInMonth(currentDate.getMonth() + 1, currentDate.getFullYear()), 
+			currentDate.getDate()
+		);
+		$( '.prev-month > img' ).toggle(false);
+	} else {
+		loadMonth(
+			monthNames[currentDate.getMonth()], 
+			dayNames[currentDate.getDay()], 
+			daysInMonth(currentDate.getMonth() + 1, currentDate.getFullYear()), 
+			1
+		);
+	}
 }
 
-window.onresize = function(event) {
-    setCalendarHeight();
-};
