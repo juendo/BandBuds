@@ -6,49 +6,42 @@
 
 {% if registered %}
 Rango says: <strong>thank you for registering!</strong>
-<a href="">Return to the homepage.</a><br />
+<a href="{% url 'index' %}">Return to the homepage.</a><br />
 {% else %}
 
 bandbuds says: <strong>register here!</strong><br />
 
-<form id="user_form" method="post" action=""
+<form id="user_form" method="post" action="{% url 'register' %}"
         enctype="multipart/form-data">
 
     {% csrf_token %}
 
-    {{ user_form.as_p }}
+    {% for hidden in user_form.hidden_fields %}
+        {{ hidden }}
+    {% endfor %}
 
-    <!--user gig atributes form-->
+    {% for field in user_form.visible_fields %}
+    <div class="form">
+        {{ field.name }}
+        {{ field.errors }}
+        {{ field.help_text }}
+        {{ field }}
+    </div>
+    {% endfor %}
 
-        <!--user smokes-->
-	<div class="form">
-		{{ profile_form.smokes.errors }}
-    	<label>Smokes:</label>
-    	{{ profile_form.smokes }}
-	</div>
+    {% for hidden in profile_form.hidden_fields %}
+        {{ hidden }}
+    {% endfor %}
 
-	<!--user gender-->
-	<div class="form">
-		{{ profile_form.gender.errors }}
-    	<label>Gender:</label>
-    	{{ profile_form.gender }}
-	</div>
+    {% for field in profile_form.visible_fields %}
+    <div class="form">
+        {{ field.name }}
+        {{ field.errors }}
+        {{ field.help_text }}
+        {{ field }}
+    </div>
+    {% endfor %}
 
-	<!--user drinks-->
-	<div class="form">
-		{{ profile_form.drinks.errors }}
-    	<label>Drinks:</label>
-    	{{ profile_form.drinks }}
-        <div class="large-2 columns">
-            <input id="slider1" type="range" min="0" max="50" step="5" onchange="printValue('slider1','rangeValue1')">
-        </div>
-        <div class="large-4 columns">
-            <input id="rangeValue1" type="text" size="2">
-        </div>
-	</div>
-
-    <!--images-->
-    {{ profile_form.images }}
 
     <!-- Provide a button to click to submit the form. -->
     <input type="submit" name="submit" value="Register" />

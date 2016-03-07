@@ -1,11 +1,10 @@
 {% load staticfiles %}
 
-<div class="day-selector d-s-bottom">
-	<div id="prev" class="prev-day">
-	  <img src="{% static 'bba/images/leftBlack.png' %}">
-	</div>
-	<div id="current-day">{{ day_string }}</div>
-	<div id="next" class="next-day">
-	  <img src="{% static 'bba/images/rightBlack.png' %}">
-	</div>
+
+<div id="prev" class="prev-day">
+  <img src="{% static 'bba/images/leftBlack.png' %}">
+</div>
+<div id="current-day">{{ day_string }}</div>
+<div id="next" class="next-day">
+  <img src="{% static 'bba/images/rightBlack.png' %}">
 </div>

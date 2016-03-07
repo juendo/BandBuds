@@ -3,9 +3,9 @@ from bba import views
 #url patterns
 urlpatterns = patterns('',
     url(r'^$', views.index, name='index'),
-    url(r'^calendar/(?P<month_string>[0-9]{4}-[0-9]{2})/$', views.calendar, name='calendar'),
+    url(r'^calendar/$', views.calendar, name='calendar'),
     url(r'^user/(?P<user_name_slug>[\w\-]+)/$', views.user, name='user'),
-    url(r'^user/register/$', views.register, name='register'),
+    url(r'^register/$', views.register, name='register'),
     url(r'^login/$', views.user_login, name='login'),
     url(r'^restricted/$', views.restricted, name='restricted'),
     url(r'^logout/$', views.user_logout, name='logout'),

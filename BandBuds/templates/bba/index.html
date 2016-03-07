@@ -11,10 +11,10 @@
 
 <h1>Hey bud! Join in and find your perfect gig mate.{% now 'Y-m/'%}</h1>
 <!--Login start -->
-<div class="">
+<div>
   {% include 'bba/login.html' %}
      <!--Sign Up start -->
-  <a href="/user/register/">register here</a>
+  <a href="{% url 'register' %}">register here</a>
 </div>
 <!--Login end -->
 

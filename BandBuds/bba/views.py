@@ -20,34 +20,18 @@ def index(request):
     # Render the response and send it back!
     return render(request, 'bba/index.html', context_dict)
 
-def calendar(request, month_string):
+def calendar(request):
 
     print 'got to calendar'
 
-    # extract date information
-    requested_date = datetime.datetime.strptime(month_string, "%Y-%m")
-    requested_month = requested_date.month
-    requested_year = requested_date.year
-
-    year = int(month_string.split('-')[0])
-
-    # get next month details
-    next_month = (int(month_string.split('-')[1]) % 12) + 1
-    next_date = str(year if next_month != 1 else year + 1) + '-' + str(next_month).zfill(2)
-
-    # get previous month details
-    prev_month = ((int(month_string.split('-')[1]) + 10) % 12) + 1
-    prev_date = str(year if prev_month != 12 else year - 1) + '-' + str(prev_month).zfill(2)
-
-    day_string = "1"
-    if requested_month == datetime.datetime.now().month:
-        if requested_year == datetime.datetime.now().year:
-            day_string = str(datetime.datetime.now().day)
-
     # get gigs for month
-    gigs = Gig.objects.all().filter(date__month=requested_month, date__day=int(day_string))
+    gigs = Gig.objects.all().filter(date__month=datetime.datetime.now().month, date__day=datetime.datetime.now().day)
 
-    context_dict = { 'gigs' : gigs , 'next_date' : next_date, 'prev_date' : prev_date, 'month_string' : month_string, 'day_string' : day_string.zfill(2) }
+    context_dict = { 
+        'gigs' : gigs, 
+        'month_string' : datetime.datetime.strftime(datetime.datetime.now(), "%Y-%m"), 
+        'day_string' : datetime.datetime.now().day 
+    }
 
     # Render the response and send it back!
     return render(request, 'bba/calendar.html', context_dict)
@@ -168,18 +152,12 @@ def user_login(request):
 
         # Is the username and password valid
         user = authenticate(username=username, password=password)
-        if datetime.datetime.now().month < 10:
-            month = str(0) + str(datetime.datetime.now().month)
-        else:
-            month = str(datetime.datetime.now().month)
-        dateString = '/calendar/' + str(datetime.datetime.now().year) + '-' + month
-
         # If valid user
         if user:
             # has an activie account
            if user.is_active:
                login(request, user)
-               return HttpResponseRedirect(dateString)
+               return HttpResponseRedirect('../calendar')
            else:
                return HttpResponse("Your account for bandbuds has been disabled.")
         else:
