@@ -1,7 +1,9 @@
 <!--gig profile-->
-<div class="gig-profile black">
-	<img class="gig-profile-image" src='{{ gig.band.image_Ref }}'>
-	<div class="one-third-width">{{ gig.venue.name }}</div>
-	<div class="one-third-width">{{ gig.date|date:"M j" }}</div>
-	<div class="one-third-width black">{{ gig.time }}</div>
+<div class="gig-profile">
+	<div class="gig-profile-container">
+		<img class="gig-profile-image" src='{{ gig.band.image_Ref }}'>
+		<div class="one-third-width">{{ gig.venue.name }}</div>
+		<div class="one-third-width">{{ gig.date|date:"M j" }}</div>
+		<div class="one-third-width">{{ gig.time }}</div>
+	</div>
 </div>
