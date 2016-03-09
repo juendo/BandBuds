@@ -2,9 +2,9 @@ from django.shortcuts import render
 from django.template.loader import render_to_string
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth import authenticate, login, logout
-from bba.models import Band, Gig, Venue, User_Profile, Gig_Attendance
+from bba.models import Band, Gig, Venue, UserProfile, GigAttendance
 import datetime
-from bba.forms import UserForm, User_ProfileForm
+from bba.forms import UserForm, UserProfileForm
 from django.contrib.auth.decorators import login_required
 
 print 'got here views'
@@ -46,18 +46,17 @@ def gigs_on_date(request, query):
     }
     return render(request, "bba/calendar/calendar_gig_list.html", context)
 
-
 def gig(request, gig_id):
     gig = Gig.objects.all().filter(gig_id=gig_id)[0]
     print gig
-    profiles = User_Profile.objects.all()
+    profiles = UserProfile.objects.all()
     for profile in profiles.iterator():
-        ga = Gig_Attendance.objects.get_or_create(user=profile, gig=gig)[0]
+        ga = GigAttendance.objects.get_or_create(user=profile, gig=gig)[0]
         ga.save()
 
-    going = len(Gig_Attendance.objects.filter(user=User_Profile.objects.all()[0], gig=gig)) > 0
+    going = len(GigAttendance.objects.filter(user=UserProfile.objects.all()[0], gig=gig)) > 0
     
-    buds = map(helper_get_user, Gig_Attendance.objects.filter(gig=gig))
+    buds = map(helper_get_user, GigAttendance.objects.filter(gig=gig))
     context_dict = { 'gig' : gig , 'going' : going, 'buds' : buds }
     return render(request, 'bba/gig.html', context_dict)
 
@@ -66,8 +65,8 @@ def helper_get_user(gig):
 
 def gig_bud(request, gig_id, bud_slug):
     gig = Gig.objects.all().filter(gig_id=gig_id)[0]
-    buds = map(helper_get_user, Gig_Attendance.objects.filter(gig=gig))
-    bud = User_Profile.objects.filter(slug=bud_slug)[0]
+    buds = map(helper_get_user, GigAttendance.objects.filter(gig=gig))
+    bud = UserProfile.objects.filter(slug=bud_slug)[0]
     context_dict = { 'bud_to_show' : bud, 'buds' : buds, 'gig' : gig }
     return render(request, 'bba/gig.html', context_dict)
 
@@ -76,14 +75,14 @@ def user(request,user_name_slug):
     print 'got to user'
 
     try:
-        user=User_Profile.objects.get(slug=user_name_slug)
+        user=UserProfile.objects.get(slug=user_name_slug)
         context_dict = {'user':user}
 
-    except User_Profile.DoesNotExist:
+    except UserProfile.DoesNotExist:
         context_dict={}
 
     # Render the response and send it back!
-    return render(request, 'bba/user/user_profile.html', context_dict)
+    return render(request, 'bba/user/UserProfile.html', context_dict)
 
 def register(request):
 
@@ -96,7 +95,7 @@ def register(request):
         # Attempt to grab information from the raw form information.
         # Note that we make use of both UserForm and UserProfileForm.
         user_form = UserForm(data=request.POST)
-        profile_form = User_ProfileForm(data=request.POST)
+        profile_form = UserProfileForm(data=request.POST)
 
         # If the two forms are valid...
         if user_form.is_valid() and profile_form.is_valid():
@@ -135,7 +134,7 @@ def register(request):
     # These forms will be blank, ready for user input.
     else:
         user_form = UserForm()
-        profile_form = User_ProfileForm()
+        profile_form = UserProfileForm()
 
     print 'got to end'
     # Render the template depending on the context.
@@ -174,3 +173,20 @@ def restricted(request):
 def user_logout(request):
     logout(request)
     return HttpResponseRedirect('/')
+
+@login_required
+def like_band(request):
+
+    band_id = None
+    if request.method == 'GET':
+        band_id = request.GET['band_id']
+
+    likes = 0
+    if band_id:
+        band = Category.objects.get(id=int(band_id))
+        if band:
+            likes = band.likes + 1
+            band.likes =  likes
+            band.save()
+
+    return HttpResponse(likes)

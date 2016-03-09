@@ -8,7 +8,7 @@ from django.template.defaultfilters import slugify
 from datetime import date
 
 
-class User_Profile(models.Model):
+class UserProfile(models.Model):
 
     user = models.OneToOneField(User)
     dob = models.DateField(default=date.today())
@@ -20,7 +20,7 @@ class User_Profile(models.Model):
 
     def save(self, *args, **kwargs):
          self.slug = slugify(self.user)
-         super(User_Profile, self).save(*args, **kwargs)
+         super(UserProfile, self).save(*args, **kwargs)
 
     def __unicode__(self):
         return self.user.username
@@ -32,23 +32,23 @@ class Band(models.Model):
     def __unicode__(self):
         return self.name
 
-class Liked_Band(models.Model):
+class LikedBand(models.Model):
     band = models.ForeignKey(Band)
-    user = models.ForeignKey(User_Profile)
+    user = models.ForeignKey(UserProfile)
 
     def __unicode__(self):
         return str(self.band) + ' ' + str(self.user)
 
-class Disliked_Bands(models.Model):
+class DisLikedBands(models.Model):
     band = models.ForeignKey(Band)
-    user = models.ForeignKey(User_Profile)
+    user = models.ForeignKey(UserProfile)
 
     def __unicode__(self):
         return self.band + ' ' + self.user
 
 class Buddy(models.Model):
-    user = models.OneToOneField(User_Profile,related_name='+')
-    buddy = models.ForeignKey(User_Profile)
+    user = models.OneToOneField(UserProfile, related_name='+')
+    buddy = models.ForeignKey(UserProfile)
     slug = models.SlugField()
 
     def save(self, *args, **kwargs):
@@ -77,21 +77,21 @@ class Gig(models.Model):
     def __unicode__(self):
         return self.venue.name + ' ' + self.band.name
 
-class Performing_Band(models.Model):
+class PerformingBand(models.Model):
     band = models.ForeignKey(Band)
     gig = models.ForeignKey(Gig)
 
     def __unicode__(self):
         return self.band + self.gig
 
-class Gig_Attendance(models.Model):
+class GigAttendance(models.Model):
     gig = models.ForeignKey(Gig)
-    user = models.ForeignKey(User_Profile)
+    user = models.ForeignKey(UserProfile)
     slug = models.SlugField()
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.user)
-        super(Gig_Attendance, self).save(*args, **kwargs)
+        super(GigAttendance, self).save(*args, **kwargs)
 
     def __unicode__(self):
         return self.gig.band.name + ' ' + self.user.user.username

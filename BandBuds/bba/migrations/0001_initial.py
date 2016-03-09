@@ -91,7 +91,7 @@ class Migration(migrations.Migration):
             bases=(models.Model,),
         ),
         migrations.CreateModel(
-            name='User_Profile',
+            name='UserProfile',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('dob', models.DateField(default=datetime.date(2016, 3, 6))),
@@ -120,13 +120,13 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='liked_band',
             name='user',
-            field=models.ForeignKey(to='bba.User_Profile'),
+            field=models.ForeignKey(to='bba.UserProfile'),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='gig_attendance',
             name='user',
-            field=models.ForeignKey(to='bba.User_Profile'),
+            field=models.ForeignKey(to='bba.UserProfile'),
             preserve_default=True,
         ),
         migrations.AddField(
@@ -138,19 +138,19 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='disliked_bands',
             name='user',
-            field=models.ForeignKey(to='bba.User_Profile'),
+            field=models.ForeignKey(to='bba.UserProfile'),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='buddy',
             name='buddy',
-            field=models.ForeignKey(to='bba.User_Profile'),
+            field=models.ForeignKey(to='bba.UserProfile'),
             preserve_default=True,
         ),
         migrations.AddField(
             model_name='buddy',
             name='user',
-            field=models.OneToOneField(related_name=b'+', to='bba.User_Profile'),
+            field=models.OneToOneField(related_name=b'+', to='bba.UserProfile'),
             preserve_default=True,
         ),
     ]

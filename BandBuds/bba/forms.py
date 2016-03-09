@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.models import User
-from bba.models import User_Profile
+from bba.models import UserProfile
 
 class UserForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput())
@@ -9,7 +9,7 @@ class UserForm(forms.ModelForm):
         model = User
         fields = ('username', 'email', 'password')
 
-class User_ProfileForm(forms.ModelForm):
+class UserProfileForm(forms.ModelForm):
     class Meta:
-        model = User_Profile
+        model = UserProfile
         fields = ('dob','smokes','gender','drinks','image')

@@ -9,7 +9,7 @@ import django
 django.setup()
 from django.core.validators import validate_email
 
-from bba.models import Band, User_Profile, Liked_Band, Gig, Venue
+from bba.models import Band, UserProfile, LikedBand, Gig, Venue
 
 from django.contrib.auth.models import User
 
@@ -33,6 +33,7 @@ def populate():
     # Create profile
     stevo_profile = add_profile(stevo_user,date(1983,1,26),False,'Male', True)
     lewis_profile = add_profile(lewis_user,date(1990,1,14),False,'Male', True)
+    anaJ_profile = add_profile(anaJ_user,date(1950,2,26),False,'Female', True)
     gladis_profile = add_profile(gladis_user,date(1950,2,26),False,'Female', True)
     franis_profile = add_profile(franis_user,date(1993,1,15),False,'Female', True)
     lue_profile = add_profile(lue_user,date(1993,1,20),False,'Female', True)
@@ -54,12 +55,12 @@ def add_band(name,image_Ref):
     b = Band.objects.get_or_create(name=name,image_Ref=image_Ref)[0]
     return b
 
-def add_liked_band(b,u):
-    lb = Liked_Band.objects.get_or_create(band=b,user=u)[0]
+def add_LikedBand(b,u):
+    lb = LikedBand.objects.get_or_create(band=b,user=u)[0]
     return lb
 
 def add_profile(user, dob, smokes, gender, drinks):
-    u = User_Profile.objects.get_or_create(user=user, dob=dob, smokes=smokes, gender=gender, drinks=drinks)[0]
+    u = UserProfile.objects.get_or_create(user=user, dob=dob, smokes=smokes, gender=gender, drinks=drinks)[0]
     u.save()
     return u
 

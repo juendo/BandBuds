@@ -4,7 +4,10 @@
 	<!--artist image-->
 	<div class=""><img src=" " alt="artists-image"></div>
 	<!--artist name-->
-	<div class=""><h4>{{ gig.band.name }}</4></div>
+	<div class=""><h4>{{ band.name }}</h4></div>
+
+	<button id="likes" data-id="{{band}}" class="btn btn-primary" type="button"></button>
+	<button id="dislikes" data-id="{{band}}" class="btn btn-primary" type="button"></button>
 
 <form id="user_form" method="post" action=" ">
 	<!--bandlikes form -->
@@ -17,6 +20,7 @@
     {{ field.help_text }}
 
 	<!--like button-->
+
 	{{ form.like.errors }}
     	<input type="submit" name="like" value="like"/>
     {{ form.like }}
