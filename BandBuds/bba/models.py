@@ -56,7 +56,7 @@ class Buddy(models.Model):
          super(Buddy, self).save(*args, **kwargs)
 
     def __unicode__(self):
-        return self.User_Profile + ' buddied with ' + self.buddy
+        return self.UserProfile + ' buddied with ' + self.buddy
 
 class Venue(models.Model):
     venue_id = models.IntegerField(default=0)

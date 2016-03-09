@@ -12,6 +12,7 @@ urlpatterns = patterns('',
     url(r'^user/(?P<buddy_slug>[\w\-]+)/$', views.index, name='user_buddy'),
     url(r'^user/(?P<attended_gig_slug>[\w\-]+)/$', views.index, name='user_gig'),
     url(r'^gig/(?P<gig_id>[0-9]+)/$', views.gig, name='gig'),
-    url(r'^gig/(?P<gig_id>[0-9]+)/(?P<bud_slug>[\w\-]+)/$', views.gig_bud, name='gig_bud'),
     url(r'^load_gigs/(?P<query>[\w\-]+)/$', views.gigs_on_date, name='gigs_on_date'),
+    url(r'^im_going/(?P<gig_id>[0-9]+)/$', views.im_going, name='im_going'),
+    url(r'^bud_profile/(?P<budSlug>[\w\-]+)/$', views.bud_profile, name='bud_profile'),
 )

@@ -342,7 +342,70 @@ html, body {
 
 
 
-
+/* gig profile */
+.gig-profile {
+	height: 100%;
+	overflow: auto;
+}
+.not-going-button {
+	background-color: green;
+}
+.two-thirds-width {
+	min-width: 67%;
+	max-width: 67%;
+	float: left;
+	text-align: center;
+}
+.gig-profile-image {
+	width: 33%;
+	float: left;
+	border-radius: 50%;
+}
+#bud-image {
+	float:right;
+}
+.one-third-width-bud {
+	width: 67%;
+	float: left;
+	text-align: center;
+	font-size: 20px;
+	line-height: 75px;
+}
+.one-third-width {
+	width: 67%;
+	float: right;
+	text-align: center;
+	font-size: 20px;
+	line-height: 75px;
+}
+.gig-name-header, .gig-buds-header {
+	text-align: center;
+	margin: auto;
+}
+.header-button {
+	width: 100%;
+}
+.half-height {
+	height: 50%;
+}
+.half-text {
+	height: 100%;
+	line-height: 37px;
+}
+.black {
+	background-color: black;
+	color: white;
+}
+.red {
+	background-color: #D30439;
+	color: white;
+}
+.gig-venue-info {
+	line-height: 75px;
+	font-size: 20px;
+	width: 100%;
+	height: 75px;
+}
 
 /* screen wider */
 @media screen and (min-width: 800px) {

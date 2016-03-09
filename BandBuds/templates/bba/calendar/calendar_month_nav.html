@@ -1,11 +1,10 @@
 {% load staticfiles %}
 
-<div class="month-selector">
-	<div href='../{{ prv_date }}' id="prev" class="prev-month">
-	  <img src="{% static 'bba/images/left.png' %}">
-	</div>
-	<div id="month">{{ month_string }}</div>
-	<div href='../{{ net_date }}' id="next" class="next-month">
-	  <img src="{% static 'bba/images/right.png' %}">
-	</div>
+
+<div id="prev" class="prev-month">
+  <img src="{% static 'bba/images/left.png' %}">
+</div>
+<div id="month">{{ month_string }}</div>
+<div id="next" class="next-month">
+  <img src="{% static 'bba/images/right.png' %}">
 </div>

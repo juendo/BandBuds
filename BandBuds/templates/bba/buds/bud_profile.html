@@ -1,21 +1,20 @@
 <!--bud profile-->
-{% if bud_to_show %}
-<div class="bud-profile bud-{{bud_to_show.user.username}}">
-
-
-	<!--bud image-->
-	<div class=""><img src="/media/{{bud_to_show.image}}" alt="{{bud_to_show.slug}}"></div>
-
-
-
-	<div class="bud-attributes">
-		<!--bud gender-->
-		<div>{{ bud_to_show.gender }}</div>
-		<!--bud smokes-->
-		<div>{{ bud_to_show.smokes }}</div>
-		<!--bud drinks-->
-		<div>{{ bud_to_show.drinks }}</div>
+<div class="gig-profile red">
+		
+	<img id="bud-image" class="gig-profile-image" src='/media/{{bud_to_show.image}}' data-name="{{ bud_to_show.user.username }}">
+	<div class="one-third-width-bud">{{ bud_to_show.gender }}</div>
+	<div class="one-third-width-bud red">
+		{% if bud_to_show.smokes %}
+			Smokes
+		{% else %}
+			Non-smoker
+		{% endif %}
 	</div>
-
+	<div class="one-third-width-bud red">
+		{% if bud_to_show.smokes %}
+			Drinks
+		{% else %}
+			Non-drinker
+		{% endif %}
+	</div>
 </div>
-{% endif %}

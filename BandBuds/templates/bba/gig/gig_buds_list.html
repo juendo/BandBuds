@@ -1,13 +1,14 @@
 {% load staticfiles %}
-
+<!--bud profile-->
+<div id="bud-profile-box" hidden>
+</div>
 <!--Gig start -->
 {% if buds %}
 {% for bud in buds %}
-<a href="{% url 'gig' gig.gig_id %}{{bud.slug}}">
-<div class="gig-box bud-box">
+<div class="gig-box bud-box" data-user="{{ bud.slug }}">
   <div class="gig-info-box">
     <div class="act-name-box">
-      <div class="act-name">{{ bud.slug }}</div>
+      <div class="act-name">{{ bud.user.username }}</div>
     </div>
     <div class="venue-name-box">
       <div class="venue-name">
@@ -19,7 +20,7 @@
     <img class="gig-image" src="/media/{{bud.image}}" alt="{{bud.slug}}">
   </div>
 </div>
-</a>
+
 
 {% endfor %}
 

@@ -7,11 +7,7 @@
 {% endblock %}
 
 {% block top_left %}
-	{% if bud_to_show %}
-		{% include 'bba/buds/bud_profile.html' %}
-	{% else %}
-		{% include 'bba/gig/gig_profile.html' %}
-	{% endif %}
+	{% include 'bba/gig/gig_profile.html' %}
 {% endblock %}
 
 {% block bottom_right_header %}

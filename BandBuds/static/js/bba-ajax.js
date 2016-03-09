@@ -5,15 +5,20 @@ $( document ).ready( function() {
 	    setCalendarHeight();
 	});
 
-	// TODO: going button indicating user is going to a gig
-	$('#going-button').click(function(){
-	    var goingid;
-	    goingid = $(this).attr("data-goingid");
-	    $.get('/bba/gig_attending/', {gig_id: goingid}, function(data){
-	               $('#going').html(data);
-	               $('#going-button').hide();
+
+
+	// I'm Going button pressed 
+	$( '#going-button' ).click(function(){
+	    var gig_id = $( this ).data("goingid");
+	    $.get('../../im_going/' + gig_id, function(response) {
+	        $( '#going-button' ).html(response);
+	        $( '#going-button' ).toggleClass( 'not-going-button' );
 	    });
 	});
+
+
+
+
 
 	// when a cell in the calendar is clicked, load gigs for that day into
 	// the list of gigs, and update UI
@@ -27,6 +32,25 @@ $( document ).ready( function() {
 		$( '#current-day' ).html($( '.today > .calendar-circle > .calendar-text' ).html());
 		loadGigs();		
 	});
+
+	// Bud in bud list pressed
+	$( '.bud-box' ).click(function() {
+		var user = $( this ).data( 'user' );
+		$.get('../../bud_profile/' + user, function(response) {
+			$( '#bud-profile-box' ).html(response);
+			$( '#bud-profile-box' ).slideToggle(200);
+			$( '#bud-name' ).html( $( '#bud-image' ).data( 'name' ));
+		});
+	});
+
+
+
+
+
+
+
+
+
 
 	// when next day arrow pressed, set day to the next day
 	$( '.next-day' ).click( function() {

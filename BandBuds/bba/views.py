@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.template.loader import render_to_string
 from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth import authenticate, login, logout
-from bba.models import Band, Gig, Venue, UserProfile, GigAttendance
+from bba.models import Band, Gig, Venue, UserProfile, GigAttendance, User
 import datetime
 from bba.forms import UserForm, UserProfileForm
 from django.contrib.auth.decorators import login_required
@@ -46,19 +46,29 @@ def gigs_on_date(request, query):
     }
     return render(request, "bba/calendar/calendar_gig_list.html", context)
 
+@login_required
 def gig(request, gig_id):
     gig = Gig.objects.all().filter(gig_id=gig_id)[0]
     print gig
-    profiles = UserProfile.objects.all()
-    for profile in profiles.iterator():
-        ga = GigAttendance.objects.get_or_create(user=profile, gig=gig)[0]
-        ga.save()
-
-    going = len(GigAttendance.objects.filter(user=UserProfile.objects.all()[0], gig=gig)) > 0
+    #profiles = UserProfile.objects.all()
+    #for profile in profiles.iterator():
+    #    ga = GigAttendance.objects.get_or_create(user=profile, gig=gig)[0]
+    #    ga.save()
+    userProf = UserProfile.objects.filter(user=request.user)[0]
+    going = len(GigAttendance.objects.filter(user=userProf, gig=gig)) > 0
     
     buds = map(helper_get_user, GigAttendance.objects.filter(gig=gig))
-    context_dict = { 'gig' : gig , 'going' : going, 'buds' : buds }
+    if going:
+        notGoing = 'not-going-button'
+    else:
+        notGoing = ''
+    context_dict = { 'gig' : gig , 'going' : going, 'buds' : buds, 'notGoingButton' : notGoing }
     return render(request, 'bba/gig.html', context_dict)
+
+@login_required
+def bud_profile(request, budSlug):
+    bud = UserProfile.objects.filter(slug=budSlug)[0]
+    return render(request, 'bba/buds/bud_profile.html', { 'bud_to_show' : bud })
 
 def helper_get_user(gig):
         return gig.user
@@ -173,6 +183,31 @@ def restricted(request):
 def user_logout(request):
     logout(request)
     return HttpResponseRedirect('/')
+
+@login_required
+def im_going(request, gig_id):
+    print "im_going"
+    print gig_id
+    try:
+        gig = Gig.objects.filter(gig_id=gig_id)[0]
+        print gig
+        userProf = UserProfile.objects.filter(user=request.user)[0]
+        print userProf
+        # if user already going
+        if len(GigAttendance.objects.filter(gig=gig, user=userProf)) > 0:
+            print "going"
+            ga = GigAttendance.objects.filter(gig=gig, user=userProf)[0]
+            ga.delete()
+            context_dict = { 'gig' : gig, 'notGoingButton' : 'not-going-button' }
+        # if user not going
+        else:
+            print "not going"
+            attend = GigAttendance.objects.get_or_create(gig=gig, user=userProf)[0]
+            attend.save()
+            context_dict = { 'going' : True, 'gig' : gig }
+    except:
+        context_dict = { 'gig' : gig }
+    return render(request, 'bba/gig/gig_going_button.html', context_dict)
 
 @login_required
 def like_band(request):

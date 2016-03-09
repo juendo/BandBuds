@@ -1,11 +1,11 @@
 {% load staticfiles %}
 
-<div class="month-selector">
-	<div>
-		{% if bud_to_show %}
-			{{ bud_to_show.user.username }}
-		{% else %}
-			{{ gig.band.name }}
-		{% endif %}
-	</div>
+<div class="gig-name-header two-thirds-width">
+	{{ gig.band.name }}
+</div>
+<div id="going-info">
+
+	<button id="going-button" class="header-button {{ notGoingButton }}" name="going" value="going" data-goingid="{{ gig.gig_id }}">
+		{% include 'bba/gig/gig_going_button.html' %}
+	</button>
 </div>
