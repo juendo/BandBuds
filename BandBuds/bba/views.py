@@ -50,6 +50,8 @@ def gigs_on_date(request, query):
 def gig(request, gig_id):
     gig = Gig.objects.all().filter(gig_id=gig_id)[0]
     print gig
+    print 'who is the user?'
+    print request.user
     #profiles = UserProfile.objects.all()
     #for profile in profiles.iterator():
     #    ga = GigAttendance.objects.get_or_create(user=profile, gig=gig)[0]
@@ -95,20 +97,19 @@ def user(request,user_name_slug):
     return render(request, 'bba/user/UserProfile.html', context_dict)
 
 def register(request):
-
+    context_dict ={}
     # A boolean value for telling the template whether the registration was successful.
     # Set to False initially. Code changes value to True when registration succeeds.
-    registered = False
+    registering = True
 
     # If it's a HTTP POST, we're interested in processing form data.
     if request.method == 'POST':
         # Attempt to grab information from the raw form information.
         # Note that we make use of both UserForm and UserProfileForm.
         user_form = UserForm(data=request.POST)
-        profile_form = UserProfileForm(data=request.POST)
 
         # If the two forms are valid...
-        if user_form.is_valid() and profile_form.is_valid():
+        if user_form.is_valid():
             # Save the user's form data to the database.
             user = user_form.save()
 
@@ -117,9 +118,50 @@ def register(request):
             user.set_password(user.password)
             user.save()
 
-            # Now sort out the UserProfile instance.
-            # Since we need to set the user attribute ourselves, we set commit=False.
-            # This delays saving the model until we're ready to avoid integrity problems.
+            # logs in user
+            user = authenticate(username=user_form.cleaned_data['username'],
+                                password=user_form.cleaned_data['password'],
+                                )
+
+            if user.is_active:
+               login(request, user)
+
+            return HttpResponseRedirect('../profile')
+
+        # Invalid form or forms - mistakes or something else?
+        # Print problems to the terminal.
+        # They'll also be shown to the user.
+        else:
+            print user_form.errors
+
+    # Not a HTTP POST, so we render our form using two ModelForm instances.
+    # These forms will be blank, ready for user input.
+    else:
+        user_form = UserForm()
+        context_dict ={'user_form': user_form, 'registering': registering}
+
+    print 'got to end: reg'
+    # Render the template depending on the context.
+    return render(request,'bba/index.html',context_dict)
+
+    print 'got to end'
+    # Render the template depending on the context.
+    return render(request,'bba/user/register.html',{'user_form': user_form, 'profile_form': profile_form, 'registered': registered})
+
+def profile(request):
+
+    if request.user:
+        user = request.user
+        print "there is a user"
+    print user
+    print "hello"
+
+    # If it's a HTTP POST, we're interested in processing form data.
+    if request.method == 'POST':
+
+        profile_form = UserProfileForm(data=request.POST)
+        
+        if profile_form.is_valid():
             profile = profile_form.save(commit=False)
             profile.user = user
 
@@ -128,27 +170,20 @@ def register(request):
             if 'image' in request.FILES:
                 profile.image = request.FILES['image']
 
-            # Now we save the UserProfile model instance.
+           
             profile.save()
-
-            # Update our variable to tell the template registration was successful.
-            registered = True
-
-        # Invalid form or forms - mistakes or something else?
-        # Print problems to the terminal.
-        # They'll also be shown to the user.
         else:
-            print user_form.errors, profile_form.errors
+            print profile_form.errors
 
-    # Not a HTTP POST, so we render our form using two ModelForm instances.
-    # These forms will be blank, ready for user input.
     else:
-        user_form = UserForm()
         profile_form = UserProfileForm()
 
-    print 'got to end'
+    bands = Band.objects.all().order_by('name')
+    registered = True
+
+    print 'got to end: prof'
     # Render the template depending on the context.
-    return render(request,'bba/user/register.html',{'user_form': user_form, 'profile_form': profile_form, 'registered': registered})
+    return render(request,'bba/user/user_profile.html',{'user':user,'profile_form': profile_form, 'registered': registered, 'bands':bands})
 
 def user_login(request):
 
@@ -225,3 +260,9 @@ def like_band(request):
             band.save()
 
     return HttpResponse(likes)
+
+# Like buttons
+def add_liked_band(b,u):
+    lb = LikedBand.objects.get_or_create(band=b,user=u)[0]
+    lb.save()
+    return lb

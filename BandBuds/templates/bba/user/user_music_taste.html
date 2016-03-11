@@ -1,33 +1,19 @@
 <!-- user music preference
 	load to user_profile.html -->
 
+{% if bands %}
+{% for band in bands %}
+	{% if band.name %}
 	<!--artist image-->
-	<div class=""><img src=" " alt="artists-image"></div>
+	<div><img class="gig-image" src="{{band.image_Ref}}" alt="artists-image"></div>
 	<!--artist name-->
-	<div class=""><h4>{{ band.name }}</h4></div>
-
-	<button id="likes" data-id="{{band}}" class="btn btn-primary" type="button"></button>
-	<button id="dislikes" data-id="{{band}}" class="btn btn-primary" type="button"></button>
-
-<form id="user_form" method="post" action=" ">
-	<!--bandlikes form -->
-	{% csrf_token %}
-	{% for hidden in form.hidden_fields %}
-		{{ hidden }}
-    {% endfor %}
-
-    {{ field.non_field_errors }}
-    {{ field.help_text }}
-
+	<div class=""><h4>{{band.name}}</h4></div>
 	<!--like button-->
-
-	{{ form.like.errors }}
-    	<input type="submit" name="like" value="like"/>
-    {{ form.like }}
-
+	<button id="likes" data-id="{{band}}" class="btn btn-primary" type="button">Like</button>
 	<!--dislike button-->
-	{{ form.dislike.errors }}
-    	<input type="submit" name="dislike" value="dislike"/>
-    {{ form.dislike }}
-
-</form>
+	<button id="dislikes" data-id="{{band}}" class="btn btn-primary" type="button">Dislike</button>
+	{% endif %}
+{% endfor %}
+{% else %}
+<h2> nae bands ken!!</h2>
+{% endif %}

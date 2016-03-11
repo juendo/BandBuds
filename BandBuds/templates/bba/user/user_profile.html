@@ -1,4 +1,45 @@
-{% extends 'bba/base.html' %}
+{% extends 'bba/user.html' %}
+
 {% load staticfiles %}
-<h1> Welcome {{user.slug}}! </h1>
-<img src="/media/{{user.image}}" alt="{{user.slug}}">
+
+{% block top_left %}
+
+{% if user.is_authenticated %}
+
+<h1> Welcome {{ user.username }}! fill in your profile</h1>
+
+<form id="user_form" method="post" action="{% url 'register' %}"
+        enctype="multipart/form-data">
+
+    {% csrf_token %}
+
+    {% for hidden in profile_form.hidden_fields %}
+        {{ hidden }}
+    {% endfor %}
+
+    {% for field in profile_form.visible_fields %}
+    <div class="form">
+        {{ field.name }}
+        {{ field.errors }}
+        {{ field.help_text }}
+        {{ field }}
+    </div>
+    {% endfor %}
+
+    <!-- Provide a button to click to submit the form. -->
+    <input type="submit" name="submit" value="Register" />
+</form>
+<a href="calendar/{% now 'Y-m/'%}">go here</a>
+
+{% else %}
+
+        <!--Login start -->
+            <div>
+              {% include 'bba/login.html' %}
+                 <!--Register start -->
+              <a href="{% url 'register' %}">register here</a>
+            </div>
+        <!--Login end -->
+{% endif %}
+
+{% endblock %}

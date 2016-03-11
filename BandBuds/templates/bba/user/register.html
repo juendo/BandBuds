@@ -1,14 +1,3 @@
-{% extends 'bba/user.html' %}
-
-{% load staticfiles %}
-
-{% block top_left %}
-
-{% if registered %}
-Rango says: <strong>thank you for registering!</strong>
-<a href="{% url 'index' %}">Return to the homepage.</a><br />
-{% else %}
-
 bandbuds says: <strong>register here!</strong><br />
 
 <form id="user_form" method="post" action="{% url 'register' %}"
@@ -29,23 +18,6 @@ bandbuds says: <strong>register here!</strong><br />
     </div>
     {% endfor %}
 
-    {% for hidden in profile_form.hidden_fields %}
-        {{ hidden }}
-    {% endfor %}
-
-    {% for field in profile_form.visible_fields %}
-    <div class="form">
-        {{ field.name }}
-        {{ field.errors }}
-        {{ field.help_text }}
-        {{ field }}
-    </div>
-    {% endfor %}
-
-
     <!-- Provide a button to click to submit the form. -->
     <input type="submit" name="submit" value="Register" />
 </form>
-{% endif %}
-
-{% endblock %}

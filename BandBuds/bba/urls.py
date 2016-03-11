@@ -15,4 +15,5 @@ urlpatterns = patterns('',
     url(r'^load_gigs/(?P<query>[\w\-]+)/$', views.gigs_on_date, name='gigs_on_date'),
     url(r'^im_going/(?P<gig_id>[0-9]+)/$', views.im_going, name='im_going'),
     url(r'^bud_profile/(?P<budSlug>[\w\-]+)/$', views.bud_profile, name='bud_profile'),
+    url(r'^profile/$', views.profile, name='profile'),
 )
