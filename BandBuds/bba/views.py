@@ -123,6 +123,7 @@ def register(request):
             user.set_password(user.password)
             user.save()
 
+            # create user profile object with default fields
             add_profile(user)
 
             # logs in user
