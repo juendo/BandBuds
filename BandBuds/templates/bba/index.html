@@ -17,7 +17,7 @@
     {% else %}
         {% if user.is_authenticated %}
             <strong>{{ user.username }}check out calendar</strong>
-            <a href="../profile/{{ user.slug }}">or Fill in your profile</a><br />
+            <a href="../profile/{{ user }}">or Fill in your profile</a><br />
         {% else %}
         <!--Login start -->
             <div>

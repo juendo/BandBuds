@@ -124,17 +124,20 @@ def register(request):
             user.save()
 
             # create user profile object with default fields
-            add_profile(user)
+            userProfile = add_profile(user)
 
             # logs in user
-            user = authenticate(username=user_form.cleaned_data['username'],
+            userProfile.user = authenticate(username=user_form.cleaned_data['username'],
                                 password=user_form.cleaned_data['password'],
                                 )
 
-            if user.is_active:
-               login(request, user)
+            if userProfile.user.is_active:
+               login(request, userProfile.user)
 
-            return HttpResponseRedirect('../profile')
+            print "hello!! " + str(userProfile.user.is_authenticated())
+
+
+            return HttpResponseRedirect('../profile/'+userProfile.slug)
 
         # Invalid form or forms - mistakes or something else?
         # Print problems to the terminal.
@@ -156,13 +159,17 @@ def register(request):
     # Render the template depending on the context.
     return render(request,'bba/user/register.html',{'user_form': user_form, 'profile_form': profile_form, 'registered': registered})
 
-def profile(request):
+def profile(request,user_name_slug):
 
-    if request.user:
-        user = request.user
-        print "there is a user"
-    print user
-    print "hello"
+    slugUser=UserProfile.objects.get(slug=user_name_slug)
+
+    print "hello!! " + str(slugUser.user.is_authenticated())
+
+#    if request.user:
+#        user = request.user
+#        print "there is a user"
+#    print user
+#    print "hello"
 
     # If it's a HTTP POST, we're interested in processing form data.
     if request.method == 'POST':
@@ -170,16 +177,16 @@ def profile(request):
         profile_form = UserProfileForm(data=request.POST)
         
         if profile_form.is_valid():
-            profile = profile_form.save(commit=False)
-            profile.user = user
+            userProfile = profile_form.save(commit=False)
+
 
             # Did the user provide a profile picture?
             # If so, we need to get it from the input form and put it in the UserProfile model.
             if 'image' in request.FILES:
-                profile.image = request.FILES['image']
+                userProfile.image = request.FILES['image']
 
            
-            profile.save()
+            userProfile.save()
         else:
             print profile_form.errors
 
@@ -191,7 +198,7 @@ def profile(request):
 
     print 'got to end: prof'
     # Render the template depending on the context.
-    return render(request,'bba/user/user_profile.html',{'user':user,'profile_form': profile_form, 'registered': registered, 'bands':bands})
+    return render(request,'bba/user/user_profile.html',{'slugUser':slugUser,'profile_form': profile_form, 'registered': registered, 'bands':bands})
 
 def user_login(request):
 
@@ -253,7 +260,12 @@ def im_going(request, gig_id):
     return render(request, 'bba/gig/gig_going_button.html', context_dict)
 
 @login_required
-def like_band(request):
+def like_band(request,user_name_slug):
+
+    userProfile=UserProfile.objects.get(slug=user_name_slug)
+   # context_dict = {'user':user}
+
+
 
     band_id = None
     if request.method == 'GET':
@@ -261,15 +273,17 @@ def like_band(request):
 
     likes = 0
     if band_id:
-        band = Category.objects.get(id=int(band_id))
+        band = Band.objects.get(id=int(band_id))
         if band:
             likes = band.likes + 1
             band.likes =  likes
             band.save()
 
+    add_liked_band(band,userProfile)
+
     return HttpResponse(likes)
 
-# Like buttons
+# Like buttons helper function - to be refactored!!!
 def add_liked_band(b,u):
     lb = LikedBand.objects.get_or_create(band=b,user=u)[0]
     lb.save()

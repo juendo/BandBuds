@@ -4,9 +4,9 @@
 
 {% block top_left %}
 
-{% if user.is_authenticated %}
+{% if slugUser.user.is_authenticated %}
 
-<h1> Welcome {{ user.username }}! fill in your profile</h1>
+<h1> Welcome {{ slugUser.user.username }}! fill in your profile</h1>
 
 <form id="user_form" method="post" action="{% url 'register' %}"
         enctype="multipart/form-data">
