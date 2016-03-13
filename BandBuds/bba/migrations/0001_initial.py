@@ -35,7 +35,7 @@ class Migration(migrations.Migration):
             bases=(models.Model,),
         ),
         migrations.CreateModel(
-            name='Disliked_Bands',
+            name='DisLikedBands',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('band', models.ForeignKey(to='bba.Band')),
@@ -59,7 +59,7 @@ class Migration(migrations.Migration):
             bases=(models.Model,),
         ),
         migrations.CreateModel(
-            name='Gig_Attendance',
+            name='GigAttendance',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('slug', models.SlugField()),
@@ -70,7 +70,7 @@ class Migration(migrations.Migration):
             bases=(models.Model,),
         ),
         migrations.CreateModel(
-            name='Liked_Band',
+            name='LikedBand',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('band', models.ForeignKey(to='bba.Band')),
@@ -80,7 +80,7 @@ class Migration(migrations.Migration):
             bases=(models.Model,),
         ),
         migrations.CreateModel(
-            name='Performing_Band',
+            name='PerformingBand',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('band', models.ForeignKey(to='bba.Band')),
@@ -94,7 +94,7 @@ class Migration(migrations.Migration):
             name='UserProfile',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('dob', models.DateField(default=datetime.date(2016, 3, 6))),
+                ('dob', models.DateField(default=datetime.date(2016, 3, 13))),
                 ('smokes', models.BooleanField(default=None)),
                 ('gender', models.CharField(max_length=128)),
                 ('drinks', models.IntegerField(default=0)),
@@ -118,13 +118,13 @@ class Migration(migrations.Migration):
             bases=(models.Model,),
         ),
         migrations.AddField(
-            model_name='liked_band',
+            model_name='likedband',
             name='user',
             field=models.ForeignKey(to='bba.UserProfile'),
             preserve_default=True,
         ),
         migrations.AddField(
-            model_name='gig_attendance',
+            model_name='gigattendance',
             name='user',
             field=models.ForeignKey(to='bba.UserProfile'),
             preserve_default=True,
@@ -136,7 +136,7 @@ class Migration(migrations.Migration):
             preserve_default=True,
         ),
         migrations.AddField(
-            model_name='disliked_bands',
+            model_name='dislikedbands',
             name='user',
             field=models.ForeignKey(to='bba.UserProfile'),
             preserve_default=True,

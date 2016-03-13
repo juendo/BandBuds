@@ -12,8 +12,8 @@ class UserProfile(models.Model):
 
     user = models.OneToOneField(User)
     dob = models.DateField(default=date.today())
-    smokes = models.BooleanField(default=None)
-    gender = models.CharField(max_length=128, unique=False)
+    smokes = models.BooleanField(default=False)
+    gender = models.CharField(default="Undisclosed",max_length=128, unique=False)
     drinks = models.IntegerField(default=0)
     image = models.ImageField(upload_to='profile_images',blank=True,default='profile_images/default_image.png')
     slug = models.SlugField()

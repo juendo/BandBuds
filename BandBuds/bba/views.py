@@ -96,6 +96,11 @@ def user(request,user_name_slug):
     # Render the response and send it back!
     return render(request, 'bba/user/UserProfile.html', context_dict)
 
+def add_profile(user):
+    u = UserProfile.objects.get_or_create(user=user)[0]
+    u.save()
+    return u
+
 def register(request):
     context_dict ={}
     # A boolean value for telling the template whether the registration was successful.
@@ -117,6 +122,8 @@ def register(request):
             # Once hashed, we can update the user object.
             user.set_password(user.password)
             user.save()
+
+            add_profile(user)
 
             # logs in user
             user = authenticate(username=user_form.cleaned_data['username'],

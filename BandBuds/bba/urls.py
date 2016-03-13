@@ -3,6 +3,7 @@ from bba import views
 #url patterns
 urlpatterns = patterns('',
     url(r'^$', views.index, name='index'),
+    url(r'^index/$', views.index, name='index'),
     url(r'^calendar/$', views.calendar, name='calendar'),
     url(r'^user/(?P<user_name_slug>[\w\-]+)/$', views.user, name='user'),
     url(r'^register/$', views.register, name='register'),
