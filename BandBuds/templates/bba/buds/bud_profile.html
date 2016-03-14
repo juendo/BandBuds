@@ -1,16 +1,16 @@
 <!--bud profile-->
-<div class="gig-profile red">
+<div class="gig-profile">
 		
 	<img id="bud-image" class="gig-profile-image" src='/media/{{bud_to_show.image}}' data-name="{{ bud_to_show.user.username }}">
 	<div class="one-third-width-bud">{{ bud_to_show.gender }}</div>
-	<div class="one-third-width-bud red">
+	<div class="one-third-width-bud">
 		{% if bud_to_show.smokes %}
 			Smokes
 		{% else %}
 			Non-smoker
 		{% endif %}
 	</div>
-	<div class="one-third-width-bud red">
+	<div class="one-third-width-bud">
 		{% if bud_to_show.smokes %}
 			Drinks
 		{% else %}

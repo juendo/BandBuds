@@ -43,7 +43,10 @@ $( document ).ready( function() {
 		});
 	});
 
-
+	$( '#bud-me-up' ).click(function() {
+		$( '.bud-box' ).first().trigger( 'click' );
+		$('html, body').animate({scrollTop: $(document).height()}, 'slow');
+	});
 
 
 
@@ -91,9 +94,13 @@ $( document ).ready( function() {
 		var currentScroll = $(window).scrollTop(); 
 
 	    if (currentScroll >= calendar_grid_height) {
-	        $('.day-selector').addClass('top-fixed');
+	        $('.right-bottom-header-box-interior').addClass('top-fixed');
+	        $('#bud-nav').removeClass('bud-nav-normal');
+	        $('#bud-nav').addClass('bud-nav-fixed');
 	    } else {
-	    	$('.day-selector').removeClass('top-fixed');
+	    	$('.right-bottom-header-box-interior').removeClass('top-fixed');
+	    	$('#bud-nav').addClass('bud-nav-normal');
+	    	$('#bud-nav').removeClass('bud-nav-fixed');
 	    }
 	});
 

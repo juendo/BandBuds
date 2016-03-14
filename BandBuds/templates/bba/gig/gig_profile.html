@@ -1,9 +1,14 @@
 <!--gig profile-->
-<div class="gig-profile">
+<div class="gig-profile black">
 	<div class="gig-profile-container">
-		<img class="gig-profile-image" src='{{ gig.band.image_Ref }}'>
-		<div class="one-third-width">{{ gig.venue.name }}</div>
-		<div class="one-third-width">{{ gig.date|date:"M j" }}</div>
-		<div class="one-third-width">{{ gig.time }}</div>
+		<div class="gig-item black"><img id="gig-header-image" src='{{ gig.band.image_Ref }}'><div id="going-info" class="header-button-container">
+
+	<button id="going-button" class="header-button {{ notGoingButton }}" name="going" value="going" data-goingid="{{ gig.gig_id }}">
+		{% include 'bba/gig/gig_going_button.html' %}
+	</button>
+</div></div>
+		<div class="gig-item black">{{ gig.venue.name }}</div>
+		<div class="gig-item black">{{ gig.date|date:"M j" }}</div>
+		<div class="gig-item black">{{ gig.time }}</div>
 	</div>
 </div>
