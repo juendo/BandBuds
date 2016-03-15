@@ -80,6 +80,16 @@ class Migration(migrations.Migration):
             bases=(models.Model,),
         ),
         migrations.CreateModel(
+            name='Nudge',
+            fields=[
+                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('gig', models.ForeignKey(to='bba.Gig')),
+            ],
+            options={
+            },
+            bases=(models.Model,),
+        ),
+        migrations.CreateModel(
             name='PerformingBand',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
@@ -94,9 +104,9 @@ class Migration(migrations.Migration):
             name='UserProfile',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('dob', models.DateField(default=datetime.date(2016, 3, 13))),
-                ('smokes', models.BooleanField(default=None)),
-                ('gender', models.CharField(max_length=128)),
+                ('dob', models.DateField(default=datetime.date(2016, 3, 15))),
+                ('smokes', models.BooleanField(default=False)),
+                ('gender', models.CharField(default=b'Undisclosed', max_length=128)),
                 ('drinks', models.IntegerField(default=0)),
                 ('image', models.ImageField(default=b'profile_images/default_image.png', upload_to=b'profile_images', blank=True)),
                 ('slug', models.SlugField()),
@@ -116,6 +126,18 @@ class Migration(migrations.Migration):
             options={
             },
             bases=(models.Model,),
+        ),
+        migrations.AddField(
+            model_name='nudge',
+            name='nudgee',
+            field=models.ForeignKey(to='bba.UserProfile'),
+            preserve_default=True,
+        ),
+        migrations.AddField(
+            model_name='nudge',
+            name='nudger',
+            field=models.ForeignKey(to=settings.AUTH_USER_MODEL),
+            preserve_default=True,
         ),
         migrations.AddField(
             model_name='likedband',

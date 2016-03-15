@@ -1,8 +1,12 @@
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+
 import os
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'BandBuds.settings')
 
 import json
 import urllib
+import urllib2
 from datetime import date
 from django.core.validators import validate_email
 import django
@@ -98,9 +102,6 @@ def add_gig_attendance(gig, user):
 
 # New gig for populate db with songkick
 def getSongkickGigs():
-    url = 'http://api.songkick.com/api/3.0/metro_areas/24473-uk-glasgow/calendar.json?apikey=jwzmbEyCAIwD7HCy&page=1&per_page=50'
-    jsonurl = urllib.urlopen(url)
-    sk = json.loads(jsonurl.read())
 
     # get images off song kick
     url_start = 'http://images.sk-static.com/images/media/profile_images/artists/'
@@ -108,14 +109,15 @@ def getSongkickGigs():
 
     print "loaded sk"
     for i in range(1,16):
+        print i
 
         url = 'http://api.songkick.com/api/3.0/metro_areas/24473-uk-glasgow/calendar.json?apikey=jwzmbEyCAIwD7HCy&page=' + str(i) + '&per_page=50'
-        jsonurl = urllib.urlopen(url)
+        try:
+            jsonurl = urllib2.urlopen(url)
+        except IOError as (errno, strerror):
+            print "I/O error({0}): {1}".format(errno, strerror)
+            pass
         sk = json.loads(jsonurl.read())
-
-        # get images off song kick
-        url_start = 'http://images.sk-static.com/images/media/profile_images/artists/'
-        url_end = '/huge_avatar'
 
         for gig in sk['resultsPage']['results']['event']:
             
@@ -123,7 +125,7 @@ def getSongkickGigs():
             artistID = 0 if len(gig['performance']) == 0 else gig['performance'][0]['artist']['id']
             artist_image = url_start + str(artistID) + url_end
             artist_name= '' if len(gig['performance']) == 0 else gig['performance'][0]['artist']['displayName']
-            print "next in loop " + artist_name
+
 
             b = add_band(artist_name, artist_image)
             v = add_venue(0 if gig['venue']['id'] is None else gig['venue']['id'], gig['venue']['displayName'])
