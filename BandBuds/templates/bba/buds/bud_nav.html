@@ -1,14 +1,9 @@
-<!--bud_nav
-	Load to bud_profile.html
-	next needs to link to another bud-->
+{% load staticfiles %}
 
-<!--nudge -->
-	<div class="bud-nudge">
-		<button name="next-bud" value="">nudge</button>
-	</div>
-	<!--if this user has nudged this bud then show else hide-->
-	<div class="bud-nudge">notified</div>
-<!--next-->
-	<div class="bud-next">
-		<button name="next-bud" value="">next</button>
-	</div>
+<div id="prev" class="prev-month header-component-third-width">
+  <img src="{% static 'bba/images/left.png' %}" hidden>
+</div>
+<div id="month" class="header-component-third-width">{{ bud_to_show.user.username }}</div>
+<div id="next" class="next-month header-component-third-width">
+  <img src="{% static 'bba/images/right.png' %}">
+</div>

@@ -5,6 +5,26 @@
 {% if buds %}
 {% for bud in buds %}
 
+<a href="/gig/{{gig.gig_id}}/buds/{{ bud.slug }}/">
+<div class="gig-box">
+  <div class="gig-info-box">
+    <div class="act-name-box">
+      <div class="act-name">
+        {{ bud.user.username }}
+      </div>
+    </div>
+    <div class="venue-name-box">
+      <div class="venue-name">
+        Gender: {{ bud.gender }}
+      </div>
+    </div>
+  </div>
+  <div class="gig-time-box">
+    <img class="gig-image" src='/media/{{bud.image}}' alt="{{ bud.slug }}">
+  </div>
+</div>
+</a>
+<!--
 <div class='container-fluid bud-box'>
   <div class='row'>
     <div class='col-md-3'>
@@ -38,6 +58,7 @@
     </div>
   </div>
 </div>
+-->
 
 {% endfor %}
 

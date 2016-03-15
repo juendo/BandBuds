@@ -192,7 +192,7 @@ def gig_bud(request, gig_id, bud_slug):
     buds = map(helper_get_user, GigAttendance.objects.filter(gig=gig))
     bud = UserProfile.objects.filter(slug=bud_slug)[0]
     context_dict = { 'bud_to_show' : bud, 'buds' : buds, 'gig' : gig }
-    return render(request, 'bba/gig.html', context_dict)
+    return render(request, 'bba/gig_buds.html', context_dict)
 
 def user(request,user_name_slug):
 

@@ -73,10 +73,10 @@ $( document ).ready( function() {
 
 	$( '.nudge' ).click( function() {
 		var username = $( this ).data( 'user' );
-		var gigid = $( '#im-going' ).data( 'gigid' );
+		var gigid = $( this ).data( 'gigid' );
 		var button = $( this );
 		$.get(
-			'../../ajax/nudge/' + username + '/' + gigid,
+			'/ajax/nudge/' + username + '/' + gigid,
 			{},
 			function(data) {
 				button.html(data);

@@ -237,6 +237,7 @@ html, body {
 	float: left;
 	border: 0px;
 	color: #FFF;
+	font-size: 20px;
 }
 #search-button {
 	background-color: #000;
@@ -257,10 +258,13 @@ html, body {
 	height: 65px;
 	display: none;
 	z-index: 5;
+	font-size: 20px;
+	color: white;
 }
 #filter-panel {
 	background-color: #D30439;
 	height: 150px;
+	line-height: 150px;
 }
 .form-group {
 	margin: auto;
@@ -379,8 +383,8 @@ html, body {
 	height: 75px;
 	width:75px; 
 	border-radius:50%;
-	background-color: #efefef;
-	border: 2px;
+	background-color: #D30439;
+	border: 5px;
 	border-style: solid;
 	border-color: #D30439;
 }

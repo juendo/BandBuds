@@ -1,20 +1,30 @@
-<!--bud profile-->
-<div class="gig-profile">
-		
-	<img id="bud-image" class="gig-profile-image" src='/media/{{bud_to_show.image}}' data-name="{{ bud_to_show.user.username }}">
-	<div class="one-third-width-bud">{{ bud_to_show.gender }}</div>
-	<div class="one-third-width-bud">
-		{% if bud_to_show.smokes %}
-			Smokes
-		{% else %}
-			Non-smoker
-		{% endif %}
-	</div>
-	<div class="one-third-width-bud">
-		{% if bud_to_show.smokes %}
-			Drinks
-		{% else %}
-			Non-drinker
-		{% endif %}
-	</div>
+<div class='container-fluid bud-box'>
+  <div class='row'>
+    <div class='col-md-3'>
+      <img class='img-responsive img-circle' src="/media/{{bud_to_show.image}}" alt="{{ bud_to_show.slug }}">
+    </div>
+    <div class='col-md-9'>
+      <div class='row'>
+        <div class='col-md-8'>
+          <h6>
+            {{ bud_to_show.gender }}
+          </h6>
+        </div>
+        <div class='col-md-4'>
+          <button class='btn nudge' data-user='{{ bud_to_show.slug }}' data-gigid='{{ gig.gig_id }}'>
+            Nudge
+          </button>
+        </div>
+      </div>
+      <div class='row'>
+        <div class='col-md-8'>
+          <h6>
+            Smoker: {{ bud_to_show.smokes }}, Drinker: {{ bud_to_show.drinks }}
+          </h6>
+        </div>
+        <div class='col-md-4'>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
