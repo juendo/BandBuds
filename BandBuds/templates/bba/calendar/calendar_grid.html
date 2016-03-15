@@ -1,68 +1,32 @@
 {% load staticfiles %}
-<!--Calendar grid start -->
-<div id="calendar-grid">
-  <div class="calendar-row">
-    <a class = "calendar-cell-day"><div class="calendar-circle-day"><div class="calendar-text-day">M</div></div></a>
-    <a class = "calendar-cell-day"><div class="calendar-circle-day"><div class="calendar-text-day">T</div></div></a>
-    <a class = "calendar-cell-day"><div class="calendar-circle-day"><div class="calendar-text-day">W</div></div></a>
-    <a class = "calendar-cell-day"><div class="calendar-circle-day"><div class="calendar-text-day">Th</div></div></a>
-    <a class = "calendar-cell-day"><div class="calendar-circle-day"><div class="calendar-text-day">F</div></div></a>
-    <a class = "calendar-cell-day"><div class="calendar-circle-day"><div class="calendar-text-day">S</div></div></a>
-    <a class = "calendar-cell-day"><div class="calendar-circle-day"><div class="calendar-text-day">S</div></div></a>
-  </div>
-  <div class="calendar-row row1">
-    <a class = "calendar-cell mon"><div class="calendar-circle"><div class="calendar-text"></div></div></a>
-    <a class = "calendar-cell tue"><div class="calendar-circle"><div class="calendar-text"></div></div></a>
-    <a class = "calendar-cell wed"><div class="calendar-circle"><div class="calendar-text"></div></div></a>
-    <a class = "calendar-cell thu"><div class="calendar-circle"><div class="calendar-text"></div></div></a>
-    <a class = "calendar-cell fri"><div class="calendar-circle"><div class="calendar-text"></div></div></a>
-    <a class = "calendar-cell sat"><div class="calendar-circle"><div class="calendar-text"></div></div></a>
-    <a class = "calendar-cell sun"><div class="calendar-circle"><div class="calendar-text"></div></div></a>
-  </div>
-  <div class="calendar-row row2">
-    <a class = "calendar-cell mon"><div class="calendar-circle"><div class="calendar-text"></div></div></a>
-    <a class = "calendar-cell tue"><div class="calendar-circle"><div class="calendar-text"></div></div></a>
-    <a class = "calendar-cell wed"><div class="calendar-circle"><div class="calendar-text"></div></div></a>
-    <a class = "calendar-cell thu"><div class="calendar-circle"><div class="calendar-text"></div></div></a>
-    <a class = "calendar-cell fri"><div class="calendar-circle"><div class="calendar-text"></div></div></a>
-    <a class = "calendar-cell sat"><div class="calendar-circle"><div class="calendar-text"></div></div></a>
-    <a class = "calendar-cell sun"><div class="calendar-circle"><div class="calendar-text"></div></div></a>
-  </div>
-  <div class="calendar-row row3">
-    <a class = "calendar-cell mon"><div class="calendar-circle"><div class="calendar-text"></div></div></a>
-    <a class = "calendar-cell tue"><div class="calendar-circle"><div class="calendar-text"></div></div></a>
-    <a class = "calendar-cell wed"><div class="calendar-circle"><div class="calendar-text"></div></div></a>
-    <a class = "calendar-cell thu"><div class="calendar-circle"><div class="calendar-text"></div></div></a>
-    <a class = "calendar-cell fri"><div class="calendar-circle"><div class="calendar-text"></div></div></a>
-    <a class = "calendar-cell sat"><div class="calendar-circle"><div class="calendar-text"></div></div></a>
-    <a class = "calendar-cell sun"><div class="calendar-circle"><div class="calendar-text"></div></div></a>
-  </div>
-  <div class="calendar-row row4">
-    <a class = "calendar-cell mon"><div class="calendar-circle"><div class="calendar-text"></div></div></a>
-    <a class = "calendar-cell tue"><div class="calendar-circle"><div class="calendar-text"></div></div></a>
-    <a class = "calendar-cell wed"><div class="calendar-circle"><div class="calendar-text"></div></div></a>
-    <a class = "calendar-cell thu"><div class="calendar-circle"><div class="calendar-text"></div></div></a>
-    <a class = "calendar-cell fri"><div class="calendar-circle"><div class="calendar-text"></div></div></a>
-    <a class = "calendar-cell sat"><div class="calendar-circle"><div class="calendar-text"></div></div></a>
-    <a class = "calendar-cell sun"><div class="calendar-circle"><div class="calendar-text"></div></div></a>
-  </div>
-  <div class="calendar-row row5">
-    <a class = "calendar-cell mon"><div class="calendar-circle"><div class="calendar-text"></div></div></a>
-    <a class = "calendar-cell tue"><div class="calendar-circle"><div class="calendar-text"></div></div></a>
-    <a class = "calendar-cell wed"><div class="calendar-circle"><div class="calendar-text"></div></div></a>
-    <a class = "calendar-cell thu"><div class="calendar-circle"><div class="calendar-text"></div></div></a>
-    <a class = "calendar-cell fri"><div class="calendar-circle"><div class="calendar-text"></div></div></a>
-    <a class = "calendar-cell sat"><div class="calendar-circle"><div class="calendar-text"></div></div></a>
-    <a class = "calendar-cell sun"><div class="calendar-circle"><div class="calendar-text"></div></div></a>
-  </div>
-  <div class="calendar-row row6">
-    <a class = "calendar-cell mon"><div class="calendar-circle"><div class="calendar-text"></div></div></a>
-    <a class = "calendar-cell tue"><div class="calendar-circle"><div class="calendar-text"></div></div></a>
-    <a class = "calendar-cell wed"><div class="calendar-circle"><div class="calendar-text"></div></div></a>
-    <a class = "calendar-cell thu"><div class="calendar-circle"><div class="calendar-text"></div></div></a>
-    <a class = "calendar-cell fri"><div class="calendar-circle"><div class="calendar-text"></div></div></a>
-    <a class = "calendar-cell sat"><div class="calendar-circle"><div class="calendar-text"></div></div></a>
-    <a class = "calendar-cell sun"><div class="calendar-circle"><div class="calendar-text"></div></div></a>
-  </div>
+
+<!-- Calendar header row with day names -->
+<div id='calendar-info' class="calendar-row" data-month='{{ month_string }}'>
+  <a class = "calendar-cell-day"><div class="calendar-circle-day"><div class="calendar-text-day">M</div></div></a>
+  <a class = "calendar-cell-day"><div class="calendar-circle-day"><div class="calendar-text-day">T</div></div></a>
+  <a class = "calendar-cell-day"><div class="calendar-circle-day"><div class="calendar-text-day">W</div></div></a>
+  <a class = "calendar-cell-day"><div class="calendar-circle-day"><div class="calendar-text-day">Th</div></div></a>
+  <a class = "calendar-cell-day"><div class="calendar-circle-day"><div class="calendar-text-day">F</div></div></a>
+  <a class = "calendar-cell-day"><div class="calendar-circle-day"><div class="calendar-text-day">S</div></div></a>
+  <a class = "calendar-cell-day"><div class="calendar-circle-day"><div class="calendar-text-day">S</div></div></a>
 </div>
-<!--Clendar grid end -->
+<!-- Calendar header row end -->
+{% for week in month %}
+  <!-- Calendar days row -->
+  <div class="calendar-row">
+  {% for day in week %}
+      <!-- Calendar day cell -->
+      <a class="calendar-cell {% if day == today %}today{% endif %} {% if day > 0 %}gig{% endif %}" data-day='{{day}}'>
+        <div class="calendar-circle">
+          <div class="calendar-text">
+            {% if day > 0 %}
+              {{ day }}
+            {% endif %}
+          </div>
+        </div>
+      </a>
+      <!--Calendar day cell end -->
+  {% endfor %}
+  </div>
+  <!--Calendar days row end -->
+{% endfor %}

@@ -12,8 +12,13 @@ urlpatterns = patterns('',
     url(r'^user/(?P<buddy_slug>[\w\-]+)/$', views.index, name='user_buddy'),
     url(r'^user/(?P<attended_gig_slug>[\w\-]+)/$', views.index, name='user_gig'),
     url(r'^gig/(?P<gig_id>[0-9]+)/$', views.gig, name='gig'),
-    url(r'^load_gigs/(?P<query>[\w\-]+)/$', views.gigs_on_date, name='gigs_on_date'),
-    url(r'^im_going/(?P<gig_id>[0-9]+)/$', views.im_going, name='im_going'),
     url(r'^bud_profile/(?P<budSlug>[\w\-]+)/$', views.bud_profile, name='bud_profile'),
+    url(r'^profile/', views.my_profile, name='my_profile'),
     url(r'^profile/(?P<user_name_slug>[\w\-]+)/$', views.profile, name='profile'),
+
+    # ajax requests
+    url(r'^ajax/im_going/(?P<gig_id>[0-9]+)/$', views.im_going, name='im_going'),
+    url(r'^ajax/load_gigs/(?P<date_param>[\w\-]+)/(?P<with_buds>[tf]{1})/$', views.gigs_on_date, name='gigs_on_date'),
+    url(r'^ajax/reload_calendar/(?P<date_param>[0-9-]+)/(?P<with_buds>[tf]{1})/$', views.calendar_json, name='reload_calendar'),
+    url(r'^ajax/nudge/(?P<user_slug>[\w\-]+)/(?P<gig_id>[0-9]+)$', views.nudge, name='nudge'),
 )

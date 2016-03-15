@@ -16,13 +16,16 @@
     <!--Register end -->
     {% else %}
         {% if user.is_authenticated %}
-            <strong>{{ user.username }}check out calendar</strong>
-            <a href="../profile/{{ user }}">or Fill in your profile</a><br />
+            <strong>{{ user.username }} <a href="../calendar/">checkout the calendar</a></strong>
+            <a href="../profile/">or Fill in your profile</a><br />
+
+
         {% else %}
         <!--Login start -->
             <div>
-              <!--Login start
-                 <!--Register start -->
+              <!--Login start-->
+              {% include 'bba/login.html' %}
+                 <!-- Register start -->
               <a href="{% url 'register' %}">register here</a>
             </div>
         <!--Login end -->

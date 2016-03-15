@@ -4,18 +4,18 @@
 
 {% block body_block %}
 
-  
-  <!--Sign Up end -->
-
-  <div id="main-content">
-
+<!-- Main content -->
+<div id="main-content" class="container-fluid">
+  <!--Row to remove padding -->
+  <div class="row">
+    <!--Left hand heading box -->
     <div id="left-top-box">
-      <div class="header-box left-top-header-box">
+      <div id="left-top-header-box" class="header-box">
         <div class="left-top-header-box-interior">
           {% block top_left_header %}{% endblock %}
         </div>
       </div>
-      <!--Clendar start -->
+      
         {% block top_left %}{% endblock %}
     </div>
 
@@ -32,19 +32,22 @@
       </div>
       <!--Gig end -->
     </div>
-
+  <!-- Row end -->
   </div>
-  <!--Search panel start -->
-  {% include 'bba/main/main_search_panel.html' %}
-  <!--Search panel end -->
+<!-- Main content end -->
+</div>
 
-  <!--Filter panel start -->
-  {% include 'bba/main/main_filter_panel.html' %}
-  <!--Filter panel end -->
+<!--Search panel start -->
+{% include 'bba/main/main_search_panel.html' %}
+<!--Search panel end -->
+
+<!--Filter panel start -->
+{% include 'bba/main/main_filter_panel.html' %}
+<!--Filter panel end -->
 
 
-  <!--Footer start -->
-  {% include 'bba/main/main_bottom_panel.html' %}
-  <!--Footer end -->
+<!--Footer start -->
+{% include 'bba/main/main_bottom_panel.html' %}
+<!--Footer end -->
 
 {% endblock %}

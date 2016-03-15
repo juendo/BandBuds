@@ -4,30 +4,41 @@
 <!--Gig start -->
 {% if buds %}
 {% for bud in buds %}
-<div class="gig-box bud-box" data-user="{{ bud.slug }}">
-  <div class="gig-info-box">
-    <div class="act-name-box">
-      <div class="act-name">{{ bud.user.username }}</div>
+
+<div class='container-fluid bud-box'>
+  <div class='row'>
+    <div class='col-md-3'>
+      <img class='img-responsive img-circle' src="/media/{{bud.image}}" alt="{{ bud.slug }}">
     </div>
-    <div class="venue-name-box">
-      <div class="venue-name">
-        {{ bud.gender }}
+    <div class='col-md-9'>
+      <div class='row'>
+        <div class='col-md-8'>
+          <h3>
+            {{ bud.user.username }}
+          </h3>
+        </div>
+        <div class='col-md-4'>
+          <button class='btn nudge' data-user='{{ bud.slug }}'>
+            Nudge
+          </button>
+        </div>
+      </div>
+      <div class='row'>
+        <div class='col-md-8'>
+          <h6>
+            {{ bud.gender }}
+          </h6>
+        </div>
+        <div class='col-md-4'>
+          <button class='btn view-profile' data-user='{{ bud.slug }}'>
+            Profile
+          </button>
+        </div>
       </div>
     </div>
   </div>
-  <div class="gig-time-box">
-    <img class="gig-image" src="/media/{{bud.image}}" alt="{{bud.slug}}">
-  </div>
 </div>
-
 
 {% endfor %}
 
-{% else %}
-<div> NO BUDS </div>
 {% endif %}
-<!--Gig end -->
-<div id="bud-nav" class="bud-nav-normal">
-<div id="bud-profile-box" hidden>
-</div>
-</div>

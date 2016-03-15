@@ -9,7 +9,7 @@ import django
 django.setup()
 from django.core.validators import validate_email
 
-from bba.models import Band, UserProfile, LikedBand, Gig, Venue
+from bba.models import Band, UserProfile, LikedBand, Gig, Venue, GigAttendance
 
 from django.contrib.auth.models import User
 
@@ -45,10 +45,14 @@ def populate():
 
     # Print out what we have added to the user
     for m in User.objects.all():
-            print str(m)
+        print str(m)
 
     # populate gigs from songkick.com
     getSongkickGigs()
+    gigs = Gig.objects.all()[:20]
+    for u in UserProfile.objects.all():
+        for gig in gigs:
+            add_gig_attendance(gig, u)
 
 
 def add_band(name,image_Ref):
@@ -85,6 +89,12 @@ def add_gig(gig_id, date, time, city, venue, band):
     print "added gig"
     return gig
 
+def add_gig_attendance(gig, user):
+    print "gig att entered"
+    ga = GigAttendance.objects.get_or_create(gig=gig, user=user)[0]
+    ga.save()
+    print "added gig att"
+    return ga
 
 # New gig for populate db with songkick
 def getSongkickGigs():
@@ -97,7 +107,7 @@ def getSongkickGigs():
     url_end = '/huge_avatar'
 
     print "loaded sk"
-    for i in range(1,11):
+    for i in range(1,16):
 
         url = 'http://api.songkick.com/api/3.0/metro_areas/24473-uk-glasgow/calendar.json?apikey=jwzmbEyCAIwD7HCy&page=' + str(i) + '&per_page=50'
         jsonurl = urllib.urlopen(url)

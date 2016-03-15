@@ -1,14 +1,38 @@
-<!--gig profile-->
-<div class="gig-profile black">
-	<div class="gig-profile-container">
-		<div class="gig-item black"><img id="gig-header-image" src='{{ gig.band.image_Ref }}'><div id="going-info" class="header-button-container">
-
-	<button id="going-button" class="header-button {{ notGoingButton }}" name="going" value="going" data-goingid="{{ gig.gig_id }}">
-		{% include 'bba/gig/gig_going_button.html' %}
-	</button>
-</div></div>
-		<div class="gig-item black">{{ gig.venue.name }}</div>
-		<div class="gig-item black">{{ gig.date|date:"M j" }}</div>
-		<div class="gig-item black">{{ gig.time }}</div>
-	</div>
+<div class='container-fluid bud-box'>
+  <div class='row'>
+    <div class='col-md-3'>
+      <img class='img-responsive img-circle' src="{{ gig.band.image_Ref }}" alt="{{bud.slug}}">
+    </div>
+    <div class='col-md-9'>
+      <div class='row'>
+        <div class='col-md-8'>
+          <h3>
+            {{ gig.venue }}
+          </h3>
+        </div>
+        <div class='col-md-4'>
+          <button id='im-going' class='btn {{ notGoingButton }}' data-gigid='{{ gig.gig_id }}'>
+            I'm Going
+          </button>
+        </div>
+      </div>
+      <div class='row'>
+        <div class='col-md-8'>
+          <h6>
+            on {{ gig.date }} at {{ gig.time }}
+          </h6>
+        </div>
+        <div class='col-md-4'>
+        </div>
+      </div>
+    </div>
+  </div>
+  <h1>
+    NUDGE LIST (ONLY FOR TEST)
+  </h1>
+  {% for nudge in nudges %}
+      <strong>
+          {{ nudge.nudger.username }} wants to go to {{ nudge.gig.band.name }} on {{ nudge.gig.date }} with you!
+      </strong><br/>
+  {% endfor %}
 </div>

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from bba.models import Band, UserProfile, LikedBand, Buddy, GigAttendance
+from bba.models import Band, UserProfile, LikedBand, Buddy, GigAttendance, Gig
 
 class BandAdmin(admin.ModelAdmin):
     list_display = ('name', 'city','country','formed','genre')
@@ -16,7 +16,10 @@ class GigAdmin(admin.ModelAdmin):
 class LikedBandAdmin(admin.ModelAdmin):
     list_display = ('band','user')
 
+class GigAdmin(admin.ModelAdmin):
+    list_display = ('band','date')
 
+admin.site.register(Gig)
 admin.site.register(Band)
 admin.site.register(UserProfile)
 admin.site.register(LikedBand)

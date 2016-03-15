@@ -64,7 +64,7 @@ class Venue(models.Model):
     # latitude and logitude?
 
     def __unicode__(self):
-        return self.city + ' ' + self.street
+        return self.name
 
 class Gig(models.Model):
     gig_id = models.IntegerField(default=0)
@@ -95,3 +95,11 @@ class GigAttendance(models.Model):
 
     def __unicode__(self):
         return self.gig.band.name + ' ' + self.user.user.username
+
+class Nudge(models.Model):
+    nudger = models.ForeignKey(User)
+    nudgee = models.ForeignKey(UserProfile)
+    gig = models.ForeignKey(Gig)
+
+    def __unicode__(self):
+        return nudger.user.username + ' nudged ' + nudgee.user.username + ' about ' + gig 
