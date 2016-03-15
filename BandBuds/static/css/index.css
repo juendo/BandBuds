@@ -261,6 +261,9 @@ html, body {
 	font-size: 20px;
 	color: white;
 }
+#search-panel .search-gig{
+	padding-top: 2%;
+}
 #filter-panel {
 	background-color: #D30439;
 	height: 150px;
@@ -274,6 +277,10 @@ html, body {
 	-webkit-transform: translateY(-50%);
 	-ms-transform: translateY(-50%);
 	transform: translateY(-50%);
+}
+
+.login{
+	padding-top: 15%;
 }
 
 

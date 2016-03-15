@@ -281,11 +281,6 @@ def profile(request, user_name_slug):
 
     print "hello!! " + str(slugUser.user.is_authenticated())
 
-#    if request.user:
-#        user = request.user
-#        print "there is a user"
-#    print user
-#    print "hello"
 
     # If it's a HTTP POST, we're interested in processing form data.
     if request.method == 'POST':

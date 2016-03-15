@@ -18,13 +18,20 @@
     {% endfor %}
 
     {% for field in profile_form.visible_fields %}
-    <div class="form">
-        {{ field.name }}
-        {{ field.errors }}
-        {{ field.help_text }}
-        {{ field }}
-    </div>
+        <div class="form">
+            <div class="form form-group">
+                <div class="col-sm-2 control-label" for="{{ field.id_for_label }}">{{ field.label_tag }}
+                </div>
+                <div class="col-sm-10">
+                   {{ field }}
+                 <small>{{ field.errors }}{{ field.help_text }}</small>
+                </div>
+            </div>
+            <br/>
+        </div>
+
     {% endfor %}
+    <div> Dancing </div>
 
     <!-- Provide a button to click to submit the form. -->
     <input type="submit" name="submit" value="Register" />
