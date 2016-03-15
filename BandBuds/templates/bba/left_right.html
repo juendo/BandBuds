@@ -8,46 +8,41 @@
 <div id="main-content" class="container-fluid">
   <!--Row to remove padding -->
   <div class="row">
-    <!--Left hand heading box -->
+
+    <!--Left bock -->
     <div id="left-top-box">
       <div id="left-top-header-box" class="header-box">
         <div class="left-top-header-box-interior">
+          <!--Left header -->
           {% block top_left_header %}{% endblock %}
         </div>
       </div>
-      
+        <!--Left main body -->
         {% block top_left %}{% endblock %}
     </div>
+    <!--Left end -->
 
-    <!--Clendar end -->
+    <!--Right bock -->
     <div id="right-bottom-box">
       <div class="header-box">
         <div class="right-bottom-header-box-interior">
+          <!--Right header -->
           {% block bottom_right_header %}{% endblock %}
         </div>
       </div>
-      <!--Gig start -->
       <div id="list-box">
+        <!--Right List -->
         {% block bottom_right %}{% endblock %}
       </div>
-      <!--Gig end -->
+      <!--Right end -->
     </div>
   <!-- Row end -->
   </div>
 <!-- Main content end -->
 </div>
 
-<!--Search panel start -->
-{% include 'bba/main/main_search_panel.html' %}
-<!--Search panel end -->
-
-<!--Filter panel start -->
-{% include 'bba/main/main_filter_panel.html' %}
-<!--Filter panel end -->
-
-
-<!--Footer start -->
-{% include 'bba/main/main_bottom_panel.html' %}
-<!--Footer end -->
+<!--Footer-->
+{% block footer %}{% endblock %}
 
 {% endblock %}
+

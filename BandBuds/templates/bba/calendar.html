@@ -19,3 +19,13 @@
 {% block bottom_right %}
 	{% include 'bba/calendar/calendar_gig_list.html' %}
 {% endblock %}
+
+<!--Footer-->
+{% block footer %}
+<!--Search panel-->
+{% include 'bba/main/main_search_panel.html' %}
+<!--Filter panel-->
+{% include 'bba/main/main_filter_panel.html' %}
+<!--Footer Nav -->
+{% include 'bba/main/main_bottom_panel.html' %}
+{% endblock %}
