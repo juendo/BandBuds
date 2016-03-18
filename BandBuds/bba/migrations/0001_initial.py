@@ -104,7 +104,7 @@ class Migration(migrations.Migration):
             name='UserProfile',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('dob', models.DateField(default=datetime.date(2016, 3, 15))),
+                ('dob', models.DateField(default=datetime.date(2016, 3, 18))),
                 ('smokes', models.BooleanField(default=False)),
                 ('gender', models.CharField(default=b'Undisclosed', max_length=128)),
                 ('drinks', models.IntegerField(default=0)),
