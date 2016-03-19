@@ -13,26 +13,18 @@ GENDER_CHOICES = (
     ('M', 'Male'),
 )
 
-DRINKS_CHOICES = (
-    ('U', 'Undisclosed'),
-    ('A', 'I do not Drink'),
-    ('P', 'I like to party'),
-    ('Z', 'I like to party alot'),
-)
 
-SMOKES_CHOICES = (
-    ('1', 'Undisclosed'),
-    ('2', 'I do not smoke'),
-    ('3', 'I am partial to a smoke'),
-    ('4', 'I like to smoke alot')
-)
 class UserProfile(models.Model):
 
     user = models.OneToOneField(User)
     dob = models.DateField(default=date.today())
-    smokes = models.BooleanField(default=False, choices=SMOKES_CHOICES)
     gender = models.CharField(default="U", max_length=1, choices=GENDER_CHOICES)
-    drinks = models.CharField(default="U", max_length=1, choices=DRINKS_CHOICES)
+
+    smokes = models.IntegerField(default=0)
+    drinks = models.IntegerField(default=0)
+    dances = models.IntegerField(default=0)
+    involvement = models.IntegerField(default=0)
+
     image = models.ImageField(upload_to='profile_images',blank=True,default='profile_images/default_image.png')
     slug = models.SlugField()
 

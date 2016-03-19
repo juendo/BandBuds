@@ -35,17 +35,17 @@ def populate():
     boramas_user = add_user('Boramas','bor@hotmail.com','123')
 
     # Create profile
-    stevo_profile = add_profile(stevo_user,date(1983,1,26),False,'Male', True)
-    lewis_profile = add_profile(lewis_user,date(1990,1,14),False,'Male', True)
-    anaJ_profile = add_profile(anaJ_user,date(1950,2,26),False,'Female', True)
-    gladis_profile = add_profile(gladis_user,date(1950,2,26),False,'Female', True)
-    franis_profile = add_profile(franis_user,date(1993,1,15),False,'Female', True)
-    lue_profile = add_profile(lue_user,date(1993,1,20),False,'Female', True)
-    mario_profile = add_profile(mario_user,date(1984,3,26),False,'Male', True)
-    polly_profile = add_profile(polly_user,date(1982,5,26),False,'Female', True)
-    abdul_profile = add_profile(abdul_user,date(1985,7,26),False,'Male', True)
-    tugce_profile = add_profile(tugce_user,date(1988,8,26),False,'Female', True)
-    boramas_profile = add_profile(boramas_user,date(1989,9,26),False,'Male', True)
+    stevo_profile = add_profile(stevo_user,date(1983,1,26),'Male',0,0,0,0)
+    lewis_profile = add_profile(lewis_user,date(1990,1,14),'Male',0,0,1,1)
+    anaJ_profile = add_profile(anaJ_user,date(1950,2,26),'Male',0,1,1,0)
+    gladis_profile = add_profile(gladis_user,date(1950,2,26),'Female',1,1,0,0)
+    franis_profile = add_profile(franis_user,date(1993,1,15),'Male',0,0,0,0)
+    lue_profile = add_profile(lue_user,date(1993,1,20),'Male',0,0,0,0)
+    mario_profile = add_profile(mario_user,date(1984,3,26),'Male',0,0,0,0)
+    polly_profile = add_profile(polly_user,date(1982,5,26),'Female',0,0,0,0)
+    abdul_profile = add_profile(abdul_user,date(1985,7,26),'Male',0,0,0,0)
+    tugce_profile = add_profile(tugce_user,date(1988,8,26),'Male',0,0,0,0)
+    boramas_profile = add_profile(boramas_user,date(1989,9,26),'Male',0,0,0,0)
 
     # Print out what we have added to the user
     for m in User.objects.all():
@@ -67,8 +67,9 @@ def add_LikedBand(b,u):
     lb = LikedBand.objects.get_or_create(band=b,user=u)[0]
     return lb
 
-def add_profile(user, dob, smokes, gender, drinks):
-    u = UserProfile.objects.get_or_create(user=user, dob=dob, smokes=smokes, gender=gender, drinks=drinks)[0]
+def add_profile(user, dob, gender, smokes, drinks, dances, involvement):
+    u = UserProfile.objects.get_or_create(user=user, dob=dob, gender=gender,
+            smokes=smokes, drinks=drinks,dances=dances,involvement=involvement)[0]
     u.save()
     return u
 
