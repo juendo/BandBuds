@@ -8,7 +8,7 @@
 
 <h1> Welcome {{ user_profile.user.username }}! fill in your profile</h1>
 
-<form id="user_form" method="post" action="{% url 'register' %}"
+<form id="profile_form" method="post" action="/profile/{{ user.slug }}"
         enctype="multipart/form-data">
 
     {% csrf_token %}
@@ -31,12 +31,16 @@
         </div>
 
     {% endfor %}
-    <div> Dancing </div>
 
     <!-- Provide a button to click to submit the form. -->
     <input type="submit" name="submit" value="Register" />
 </form>
 <a href="calendar/{% now 'Y-m/'%}">go here</a>
+
+<div> <h5>type of dancer?</h5>
+    <div class="ex1Slider"><small>toe tap'n</small></div><div class="ex1Slider"></label><input id="ex1" data-slider-id='ex1Slider' type="text" data-slider-min="0" data-slider-max="4" data-slider-step="1" data-slider-value="2"/></div><div class="ex1Slider"><small>get down</small></div><br />
+    <span id="ex1CurrentSliderValLabel">Dance Value: <span id="ex1SliderVal">3</span></span><br/>
+</div>
 
 {% else %}
 

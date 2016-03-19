@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.template.loader import render_to_string
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.contrib.auth import authenticate, login, logout
-from bba.models import Band, Gig, Venue, UserProfile, GigAttendance, User, Nudge, LikedBand,DisLikedBands
+from bba.models import Band, Gig, Venue, UserProfile, GigAttendance, User, Nudge
 from datetime import date, datetime
 from calendar import monthrange
 from bba.forms import UserForm, UserProfileForm
@@ -224,9 +224,12 @@ def register(request):
         # Attempt to grab information from the raw form information.
         # Note that we make use of both UserForm and UserProfileForm.
         user_form = UserForm(data=request.POST)
+        print " is it valid?"
 
         # If the two forms are valid...
         if user_form.is_valid():
+
+            print "yes valid"
             # Save the user's form data to the database.
             user = user_form.save()
 
@@ -256,6 +259,7 @@ def register(request):
         # They'll also be shown to the user.
         else:
             print user_form.errors
+            return render(request,'bba/index.html',{'user_form': user_form, 'errors': user_form.errors, 'registering': registering})
 
     # Not a HTTP POST, so we render our form using two ModelForm instances.
     # These forms will be blank, ready for user input.
@@ -267,34 +271,39 @@ def register(request):
     # Render the template depending on the context.
     return render(request,'bba/index.html',context_dict)
 
-    print 'got to end'
-    # Render the template depending on the context.
-    return render(request,'bba/user/register.html',{'user_form': user_form, 'profile_form': profile_form, 'registered': registered})
-
 def my_profile(request):
     userProf = UserProfile.objects.get(user=request.user)
     return profile(request, userProf.slug)
 
 def profile(request, user_name_slug):
 
-    user_profile = UserProfile.objects.get(slug=user_name_slug)
+    slug_user = UserProfile.objects.get(slug=user_name_slug)
+
+    print "hello!! " + str(slug_user.user.is_authenticated()), slug_user.user.username
+
 
     # If it's a HTTP POST, we're interested in processing form data.
     if request.method == 'POST':
+        print '**************** is posted!!'
 
         profile_form = UserProfileForm(data=request.POST)
-        
+
         if profile_form.is_valid():
             user_profile = profile_form.save(commit=False)
-
+            print '******************* is prof valid'
 
             # Did the user provide a profile picture?
             # If so, we need to get it from the input form and put it in the UserProfile model.
             if 'image' in request.FILES:
                 user_profile.image = request.FILES['image']
 
-           
-            user_profile.save()
+                print '******************* about to save'
+                user_profile.save()
+            print "got to this user profile"
+            registered = False
+
+            return render(request,'bba/user/user_profile.html',{'slugUser':slug_user,'profile': user_profile, 'registered': registered})
+
         else:
             print profile_form.errors
 
@@ -306,7 +315,7 @@ def profile(request, user_name_slug):
 
     print 'got to end: prof'
     # Render the template depending on the context.
-    return render(request,'bba/user/user_profile.html',{'user_profile':user_profile,'profile_form': profile_form, 'registered': registered, 'bands':bands})
+    return render(request,'bba/user/user_profile.html',{'slugUser':slug_user,'profile_form': profile_form, 'registered': registered, 'bands':bands})
 
 def user_login(request):
 
