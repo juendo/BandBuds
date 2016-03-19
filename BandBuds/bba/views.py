@@ -224,9 +224,12 @@ def register(request):
         # Attempt to grab information from the raw form information.
         # Note that we make use of both UserForm and UserProfileForm.
         user_form = UserForm(data=request.POST)
+        print " is it valid?"
 
         # If the two forms are valid...
         if user_form.is_valid():
+
+            print "yes valid"
             # Save the user's form data to the database.
             user = user_form.save()
 
@@ -256,6 +259,7 @@ def register(request):
         # They'll also be shown to the user.
         else:
             print user_form.errors
+            return render(request,'bba/index.html',{'user_form': user_form, 'errors': user_form.errors, 'registering': registering})
 
     # Not a HTTP POST, so we render our form using two ModelForm instances.
     # These forms will be blank, ready for user input.
@@ -267,9 +271,6 @@ def register(request):
     # Render the template depending on the context.
     return render(request,'bba/index.html',context_dict)
 
-    print 'got to end'
-    # Render the template depending on the context.
-    return render(request,'bba/user/register.html',{'user_form': user_form, 'profile_form': profile_form, 'registered': registered})
 
 def my_profile(request):
     userProf = UserProfile.objects.get(user=request.user)
@@ -284,20 +285,24 @@ def profile(request, user_name_slug):
 
     # If it's a HTTP POST, we're interested in processing form data.
     if request.method == 'POST':
+        print '**************** is posted!!'
 
         profile_form = UserProfileForm(data=request.POST)
         
         if profile_form.is_valid():
             userProfile = profile_form.save(commit=False)
-
+            print '******************* is prof valid'
 
             # Did the user provide a profile picture?
             # If so, we need to get it from the input form and put it in the UserProfile model.
             if 'image' in request.FILES:
                 userProfile.image = request.FILES['image']
 
-           
             userProfile.save()
+            print "got to this user profile"
+
+            return render(request,'bba/user/user_profile.html',{'slugUser':slugUser,'profile': userProfile, 'registered': registered, 'bands':bands})
+
         else:
             print profile_form.errors
 

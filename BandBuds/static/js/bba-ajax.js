@@ -85,6 +85,27 @@ $( document ).ready( function() {
 	});
 
 	$('.search').click()
+
+    // Tool tip, Hover over button with dataitoggle att. to show what link/button dose
+    $('[data-toggle="tooltip"]').tooltip();
+
+    /*Sliders*/
+    $("#ex1").slider();
+    $("#ex1").on("slide", function(slideEvt) {
+        $("#ex1SliderVal").text(slideEvt.value);
+    });
+    // With JQuery
+    $("#ex14").slider({
+        ticks: [0, 100, 200, 300, 400],
+        ticks_positions: [0, 30, 60, 70, 90, 100],
+        ticks_labels: ['$0', '$100', '$200', '$300', '$400'],
+        ticks_snap_bounds: 30
+    });
+
+   // With JQuery
+    $("#ex4").slider({
+        reversed : true
+    });
 });
 
 

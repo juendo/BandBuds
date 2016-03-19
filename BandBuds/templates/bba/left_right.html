@@ -4,6 +4,10 @@
 
 {% block body_block %}
 
+{% if errors %}
+<div>{{errors}}</div>
+{% endif %}
+
 {% if user.is_authenticated %}
 <!-- Main content -->
 <div id="main-content" class="container-fluid">
