@@ -271,16 +271,15 @@ def register(request):
     # Render the template depending on the context.
     return render(request,'bba/index.html',context_dict)
 
-
 def my_profile(request):
     userProf = UserProfile.objects.get(user=request.user)
     return profile(request, userProf.slug)
 
 def profile(request, user_name_slug):
 
-    slugUser = UserProfile.objects.get(slug=user_name_slug)
+    slug_user = UserProfile.objects.get(slug=user_name_slug)
 
-    print "hello!! " + str(slugUser.user.is_authenticated())
+    print "hello!! " + str(slug_user.user.is_authenticated()), slug_user.user.username
 
 
     # If it's a HTTP POST, we're interested in processing form data.
@@ -288,20 +287,22 @@ def profile(request, user_name_slug):
         print '**************** is posted!!'
 
         profile_form = UserProfileForm(data=request.POST)
-        
+
         if profile_form.is_valid():
-            userProfile = profile_form.save(commit=False)
+            user_profile = profile_form.save(commit=False)
             print '******************* is prof valid'
 
             # Did the user provide a profile picture?
             # If so, we need to get it from the input form and put it in the UserProfile model.
             if 'image' in request.FILES:
-                userProfile.image = request.FILES['image']
+                user_profile.image = request.FILES['image']
 
-            userProfile.save()
+                print '******************* about to save'
+                user_profile.save()
             print "got to this user profile"
+            registered = False
 
-            return render(request,'bba/user/user_profile.html',{'slugUser':slugUser,'profile': userProfile, 'registered': registered, 'bands':bands})
+            return render(request,'bba/user/user_profile.html',{'slugUser':slug_user,'profile': user_profile, 'registered': registered})
 
         else:
             print profile_form.errors
@@ -314,7 +315,7 @@ def profile(request, user_name_slug):
 
     print 'got to end: prof'
     # Render the template depending on the context.
-    return render(request,'bba/user/user_profile.html',{'slugUser':slugUser,'profile_form': profile_form, 'registered': registered, 'bands':bands})
+    return render(request,'bba/user/user_profile.html',{'slugUser':slug_user,'profile_form': profile_form, 'registered': registered, 'bands':bands})
 
 def user_login(request):
 
