@@ -38,6 +38,11 @@ class UserProfile(models.Model):
 class Band(models.Model):
     name = models.CharField(max_length=128, unique=False)
     image_Ref = models.CharField(max_length=128, unique=False)
+    slug = models.SlugField()
+
+    def save(self, *args, **kwargs):
+         self.slug = slugify(self.name)
+         super(Band, self).save(*args, **kwargs)
 
     def __unicode__(self):
         return self.name
@@ -45,6 +50,8 @@ class Band(models.Model):
 class LikedBand(models.Model):
     band = models.ForeignKey(Band)
     user = models.ForeignKey(UserProfile)
+
+
 
     def __unicode__(self):
         return str(self.band) + ' ' + str(self.user)

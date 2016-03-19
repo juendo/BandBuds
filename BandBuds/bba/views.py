@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.template.loader import render_to_string
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.contrib.auth import authenticate, login, logout
-from bba.models import Band, Gig, Venue, UserProfile, GigAttendance, User, Nudge
+from bba.models import Band, Gig, Venue, UserProfile, GigAttendance, User, Nudge, LikedBand,DisLikedBands
 from datetime import date, datetime
 from calendar import monthrange
 from bba.forms import UserForm, UserProfileForm
@@ -277,10 +277,7 @@ def my_profile(request):
 
 def profile(request, user_name_slug):
 
-    slugUser = UserProfile.objects.get(slug=user_name_slug)
-
-    print "hello!! " + str(slugUser.user.is_authenticated())
-
+    user_profile = UserProfile.objects.get(slug=user_name_slug)
 
     # If it's a HTTP POST, we're interested in processing form data.
     if request.method == 'POST':
@@ -288,16 +285,16 @@ def profile(request, user_name_slug):
         profile_form = UserProfileForm(data=request.POST)
         
         if profile_form.is_valid():
-            userProfile = profile_form.save(commit=False)
+            user_profile = profile_form.save(commit=False)
 
 
             # Did the user provide a profile picture?
             # If so, we need to get it from the input form and put it in the UserProfile model.
             if 'image' in request.FILES:
-                userProfile.image = request.FILES['image']
+                user_profile.image = request.FILES['image']
 
            
-            userProfile.save()
+            user_profile.save()
         else:
             print profile_form.errors
 
@@ -309,7 +306,7 @@ def profile(request, user_name_slug):
 
     print 'got to end: prof'
     # Render the template depending on the context.
-    return render(request,'bba/user/user_profile.html',{'slugUser':slugUser,'profile_form': profile_form, 'registered': registered, 'bands':bands})
+    return render(request,'bba/user/user_profile.html',{'user_profile':user_profile,'profile_form': profile_form, 'registered': registered, 'bands':bands})
 
 def user_login(request):
 
@@ -383,31 +380,39 @@ def nudge(request, user_slug, gig_id):
     return HttpResponse("Nudged")
 
 @login_required
-def like_band(request,user_name_slug):
+def like_band(request):
 
-    userProfile=UserProfile.objects.get(slug=user_name_slug)
-   # context_dict = {'user':user}
-
-
-
+    print 'LIKING THIS!'
     band_id = None
     if request.method == 'GET':
         band_id = request.GET['band_id']
+        user_id = request.GET['user_id']
 
-    likes = 0
-    if band_id:
-        band = Band.objects.get(id=int(band_id))
-        if band:
-            likes = band.likes + 1
-            band.likes =  likes
-            band.save()
+        print '***band',band_id,'***user',user_id
 
-    add_liked_band(band,userProfile)
+    if band_id and user_id:
 
-    return HttpResponse(likes)
+        user_profile=UserProfile.objects.get(slug=user_id)
+        print 'gotta get'
+        band = Band.objects.get(name=band_id)
+        print 'gotta get thru this'
+        add_liked_band(band,user_profile)
+        print 'gotta go'
+
+
+    return HttpResponse("")
 
 # Like buttons helper function - to be refactored!!!
 def add_liked_band(b,u):
     lb = LikedBand.objects.get_or_create(band=b,user=u)[0]
-    lb.save()
+    print 'gotta go again',b,u,lb
+    try:
+        lb.save()
+    except Exception as inst:
+        print 'error'
+        print type(inst)     # the exception instance
+        print inst.args      # arguments stored in .args
+        print inst
+
+    print 'here?'
     return lb
