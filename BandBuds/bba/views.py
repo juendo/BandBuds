@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.template.loader import render_to_string
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.contrib.auth import authenticate, login, logout
-from bba.models import Band, Gig, Venue, UserProfile, GigAttendance, User, Nudge
+from bba.models import Band, Gig, Venue, UserProfile, GigAttendance, User, Nudge, LikedBand,DisLikedBands
 from datetime import date, datetime
 from calendar import monthrange
 from bba.forms import UserForm, UserProfileForm
@@ -33,10 +33,10 @@ def calendar(request):
     # get all the gigs on today
     gigs = Gig.objects.filter(date__year=today.year, date__month=today.month, date__day=today.day)
 
-    
 
-    context_dict = { 
-        'gigs' : gigs, 
+
+    context_dict = {
+        'gigs' : gigs,
         'month_string' : date.strftime(today, "%Y-%m"),
         'today' : today.day,
         'month' : create_calendar(today.year, today.month, today.day, 'f')
@@ -49,7 +49,7 @@ def create_calendar(year, month, day, with_buds):
 
     # get today's date
     today = date(year, month, day)
-    # get gigs 
+    # get gigs
     if with_buds == 't':
         att = GigAttendance.objects.filter(gig__date__year=today.year, gig__date__month=today.month)
         gigs = Set()
@@ -114,7 +114,7 @@ def create_calendar(year, month, day, with_buds):
 # return json for reloading the calendar
 def calendar_json(request, date_param, with_buds):
 
-    params = date_param.split('-')    
+    params = date_param.split('-')
     year = int(params[0])
     month = int(params[1])
     day = int(params[2])
@@ -127,7 +127,7 @@ def calendar_json(request, date_param, with_buds):
         day = today.day
         is_today = True
 
-    data = { 
+    data = {
         'calendar' : create_calendar(year, month, day, with_buds),
         'month_string' : str(year) + '-' + str(month).zfill(2),
         'day_string' : str(day),
@@ -170,7 +170,7 @@ def gig(request, gig_id):
     going = len(GigAttendance.objects.filter(user=userProf, gig=gig)) > 0
 
     nudges = Nudge.objects.filter(nudgee=userProf)
-    
+
     buds = map(helper_get_user, GigAttendance.objects.filter(gig=gig))
     if going:
         notGoing = 'not-going-button'
@@ -212,6 +212,7 @@ def add_profile(user):
     u = UserProfile.objects.get_or_create(user=user)[0]
     u.save()
     return u
+
 
 def register(request):
     context_dict ={}
@@ -259,7 +260,7 @@ def register(request):
         # They'll also be shown to the user.
         else:
             print user_form.errors
-            return render(request,'bba/index.html',{'user_form': user_form, 'errors': user_form.errors, 'registering': registering})
+            return render(request,'bba/index.html',{'user_form': user_form, 'errors': user_form.errors})
 
     # Not a HTTP POST, so we render our form using two ModelForm instances.
     # These forms will be blank, ready for user input.
@@ -277,14 +278,11 @@ def my_profile(request):
 
 def profile(request, user_name_slug):
 
-    slug_user = UserProfile.objects.get(slug=user_name_slug)
-
-    print "hello!! " + str(slug_user.user.is_authenticated()), slug_user.user.username
-
+    user_profile = UserProfile.objects.get(slug=user_name_slug)
 
     # If it's a HTTP POST, we're interested in processing form data.
     if request.method == 'POST':
-        print '**************** is posted!!'
+        print 'yo stevo', user_profile.user.is_authenticated
 
         profile_form = UserProfileForm(data=request.POST)
 
@@ -300,9 +298,9 @@ def profile(request, user_name_slug):
                 print '******************* about to save'
                 user_profile.save()
             print "got to this user profile"
-            registered = False
+            registered = True
 
-            return render(request,'bba/user/user_profile.html',{'slugUser':slug_user,'profile': user_profile, 'registered': registered})
+            return render(request,'bba/user/user_profile.html',{'profile': user_profile, 'registered': registered})
 
         else:
             print profile_form.errors
@@ -315,7 +313,10 @@ def profile(request, user_name_slug):
 
     print 'got to end: prof'
     # Render the template depending on the context.
-    return render(request,'bba/user/user_profile.html',{'slugUser':slug_user,'profile_form': profile_form, 'registered': registered, 'bands':bands})
+    return render(request,'bba/user/user_profile.html',{'profile':user_profile,'profile_form': profile_form, 'registered': registered, 'bands':bands})
+
+
+
 
 def user_login(request):
 

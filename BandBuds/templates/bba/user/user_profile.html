@@ -4,7 +4,7 @@
 
 {% block top_left %}
 
-{% if user_profile.user.is_authenticated %}
+{% if user.is_authenticated %}
 
 <h1> Welcome {{ user_profile.user.username }}! fill in your profile</h1>
 

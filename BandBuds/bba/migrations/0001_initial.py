@@ -19,6 +19,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('name', models.CharField(max_length=128)),
                 ('image_Ref', models.CharField(max_length=128)),
+                ('slug', models.SlugField()),
             ],
             options={
             },

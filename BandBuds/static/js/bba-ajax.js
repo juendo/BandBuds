@@ -106,6 +106,21 @@ $( document ).ready( function() {
     $("#ex4").slider({
         reversed : true
     });
+
+
+	$('.btn').click(function(){
+    var bandid;
+	var userid;
+    bandid = $(this).attr("data-bandid");
+	bandslug = $(this).attr("data-bandslug")
+    userid= $(this).attr("data-user");
+	console.log(bandslug)
+	$.get('/profile/like_band/', {user_id:userid,band_id: bandid}, function(data){
+		$('.'+bandslug).hide();
+    });
+});
+
+
 });
 
 
