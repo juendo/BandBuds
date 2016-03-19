@@ -6,7 +6,7 @@
 
 {% if user.is_authenticated %}
 
-<h1> Welcome {{ user_profile.user.username }}! fill in your profile</h1>
+<h1> Welcome {{ profile.user.username }}! fill in your profile</h1>
 
 <form id="profile_form" method="post" action="/profile/{{ user.slug }}"
         enctype="multipart/form-data">
