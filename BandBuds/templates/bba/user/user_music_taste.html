@@ -4,17 +4,18 @@
 {% if bands %}
 {% for band in bands %}
 	{% if band.name %}
-	<div class = "{{ band.slug }}" >
-	<!--artist image-->
-	<div><img class="gig-image" src="{{ band.image_Ref }}" alt="artists-image"></div>
-	<!--artist name-->
-	<div class=""><h4>{{band.name}}</h4></div>
-	<!--like button-->
-	<button class="btn btn-primary band {{ band.slug }}" id="like" data-bandslug={{ band.slug }} data-bandid="{{ band.name }}" data-user="{{ user_profile.user.username}}"  type="button">Like</button>
-	<!--dislike button-->
-	<button class="btn btn-primary band {{ band.slug }}" id="dislike" data-bandslug={{ band.slug }} data-bandid="{{ band.name }}" data-user="{{ user_profile.user.username}}"  type="button">Dislike</button>
+	<div class="col-sx-6 col-sm-4 col-lg-3">
+		<div class = "{{ band.slug }}" >
+		<!--artist image-->
+		<div><img class="gig-image" src="{{ band.image_Ref }}" alt="artists-image"></div>
+		<!--artist name-->
+		<div class=""><h4>{{band.name}}</h4></div>
+		<!--like button-->
+		<button class="btn btn-primary band {{ band.slug }}" id="like" data-bandslug={{ band.slug }} data-bandid="{{ band.name }}" data-user="{{ user_profile.user.username}}"  type="button">Like</button>
+		<!--dislike button-->
+		<button class="btn btn-primary band {{ band.slug }}" id="dislike" data-bandslug={{ band.slug }} data-bandid="{{ band.name }}" data-user="{{ user_profile.user.username}}"  type="button">Dislike</button>
+		</div>
 	</div>
-
 	{% endif %}
 {% endfor %}
 {% else %}

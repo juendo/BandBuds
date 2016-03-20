@@ -3,11 +3,13 @@
 {% load staticfiles %}
 
 {% block top_left_header %}
-    <div>User Profile</div>
+    <div class="prof-from"><h3> Yo {{ user_profile.user.username }}!</h3></div>
 {% endblock %}
 
-{% block top_left %}
-{% endblock %}
+<div class="col-sm-10 col-sm-offset-1 prof">
+    {% block top_left %}
+    {% endblock %}
+</div>
 
 {% block bottom_right_header %}
 

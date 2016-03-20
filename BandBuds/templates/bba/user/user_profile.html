@@ -5,9 +5,7 @@
 {% block top_left %}
 
 {% if user_profile.user.is_authenticated %}
-<div class="prof">
     <div class="prof-from">
-        <h3> Yo {{ user_profile.user.username }}!</h3>
         <p>like some bands so other buds can what music you like</p>
     </div>
     <div class="prof-from">
@@ -23,7 +21,7 @@
                 {{ profile_form.image }}
 
                 <!--Dob slider -->
-                <div class=" ">
+                <div class="col-sx-6 col-sm-6 col-lg-6">
                     <div class=" " for="{{ profile_form.dob.id_for_label }}">{{ profile_form.dob.label_tag }}
                     </div>
                     <div class=" ">
@@ -34,7 +32,7 @@
 
                 <!--Gender slider -->
                 <div class=" ">
-                    <div class=" " for="{{ profile_form.gender.id_for_label }}">
+                    <div class="col-sm-12" for="{{ profile_form.gender.id_for_label }}">
                         {{ profile_form.gender.label_tag }}
                     </div>
                     <div class="">
@@ -44,19 +42,19 @@
                 </div>
 
                 <!--Smokes slider -->
-                <div class=" ">
-                    <div class="col-sm-12 prof-in" for="{{ profile_form.smokes.id_for_label }}">
+                <div class="col-sx-6 col-sm-6 col-lg-6">
+                    <div class="col-sm-12" for="{{ profile_form.smokes.id_for_label }}">
                         {{ profile_form.smokes.label_tag }}<span id="smkSliderVal"></span>
                     </div>
                     <div class="prof-slider">
-                        <input type="range" name="{{ profile_form.smokes.name }}" id="{{ profile_form.smokes.id_for_label }}"  data-slider-id="ex1Slider" data-slider-min="0" data-slider-max="4" data-slider-step="1" data-slider-value="2" data-slider-tooltip="hide">
+                        <input type="range" name="{{ profile_form.smokes.name }}" id="{{ profile_form.smokes.id_for_label }}" data-slider-id="ex1Slider" data-slider-min="0" data-slider-max="4" data-slider-step="1" data-slider-value="2" data-slider-tooltip="hide">
                         <small>{{ profile_form.smokes.errors }}{{ profile_form.smokes.help_text }}</small>
                     </div>
                 </div>
 
                 <!--Dances slider -->
-                <div class=" ">
-                    <div class="col-sm-12 prof-in" for="{{ profile_form.dances.id_for_label }}">
+                <div class="col-sx-6 col-sm-6 col-lg-6">
+                    <div class="col-sm-12" for="{{ profile_form.dances.id_for_label }}">
                         {{ profile_form.dances.label_tag }}<span id="ex1SliderVal"></span>
                     </div>
                     <div class="prof-slider">
@@ -66,7 +64,7 @@
                 </div>
 
                 <!--Involvment slider -->
-                <div class=" ">
+                <div class="col-sx-6 col-sm-6 col-lg-6">
                     <div class="col-sm-12" for="{{ profile_form.involvement.id_for_label }}">
                         {{ profile_form.involvement.label_tag }}<span id="invSliderVal"></span>
                     </div>
@@ -77,12 +75,12 @@
                 </div>
 
                 <!--Drinks slider -->
-                <div class=" ">
+                <div class="col-sx-6 col-sm-6  col-lg-6">
                     <div class="col-sm-12" for="{{ profile_form.drinks.id_for_label }}">
-                        {{ profile_form.drinks.label_tag }}<span id="dnkSliderVal" class="col-sm-2"></span>
+                        {{ profile_form.drinks.label_tag }}<span id="dnkSliderVal"></span>
                     </div>
                     <div class="prof-slider">
-                        <input type="range" name="{{ profile_form.drinks.name }}" id="{{ profile_form.drinks.id_for_label }}"  data-slider-id="ex1Slider" data-slider-min="0" data-slider-max="4" data-slider-step="1" data-slider-value="2" data-slider-tooltip="hide">
+                        <input type="range" name="{{ profile_form.drinks.name }}" id="{{ profile_form.drinks.id_for_label }}" data-slider-id="ex1Slider" data-slider-min="0" data-slider-max="4" data-slider-step="1" data-slider-value="2" data-slider-tooltip="hide">
                         <small>{{ profile_form.drinks.errors }}{{ profile_form.drinks.help_text }}</small>
                     </div>
                 </div>
@@ -93,9 +91,11 @@
                 <input class="btn btn-default" type="submit" name="submit" value="Submit" />
                 </div>
             </div>
+
             </div>
     </form>
-        <div>
+        <!--Liked and disliked bands-->
+        <div class="prof-form">
         {% include 'bba/user/likedbands.html' %}
         </div>
     </div>
@@ -107,5 +107,4 @@
       {% include 'bba/login.html' %}
     </div>
 {% endif %}
-</div>
 {% endblock %}
