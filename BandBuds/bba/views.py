@@ -433,7 +433,7 @@ def nudge(request):
 
     if request.method == 'GET':
 
-        print 'and again..'
+        print 'nudging..'
 
         user_id = request.GET['user_id']
         bud_id = request.GET['bud_id']
@@ -441,11 +441,21 @@ def nudge(request):
 
         user=User.objects.get(username=user_id)
         user_profile=UserProfile.objects.get(user=user)
-        bud=User.objects.get(username=bud_id)
-        bud_profile=UserProfile.objects.get(user=bud)
+
+        print 'step1..'
+
+#        bud=User.objects.get(username=bud_id)
+        bud_profile=UserProfile.objects.get(slug=bud_id)
+
+        print 'step2..'
+
         gig = Gig.objects.get(gig_id=gig_id)
 
+        print 'step3..'
+
         add_buddy_request(user_profile,bud_profile,gig)
+
+        print 'saving..'
 
     return HttpResponse("Nudged")
 #    return render("Nudged", 'bba/bud/bud_profile.html', context_dict)
