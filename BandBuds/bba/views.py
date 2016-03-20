@@ -351,7 +351,7 @@ def profile(request, user_name_slug):
     newbies=list(set(bands)-set(prefSet))
 
     # data for buddy request notifications
-    nudge=Buddy.objects.filter(user=user_profile)
+    nudge=Buddy.objects.filter(buddy=user_profile)
     nudgeList=[]
     for i in range(len(nudge)):
         if nudge[i].accept==False:
