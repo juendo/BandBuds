@@ -21,6 +21,7 @@ API_KEY = "jwzmbEyCAIwD7HCy"
 
 def populate():
 
+    #added in users for presentation
     # Creating mock users
     stevo_user = add_user('steve','e@m.ail','sesame')
     anaJ_user = add_user('Ana Jahnke','ana_jahnke@hotmail.com','123')
