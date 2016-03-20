@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.template.loader import render_to_string
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.contrib.auth import authenticate, login, logout
-from bba.models import Band, Gig, Venue, UserProfile, GigAttendance, User, Nudge
+from bba.models import Band, Gig, Venue, UserProfile, GigAttendance, User, Nudge, LikedBand,DisLikedBand
 from datetime import date, datetime
 from calendar import monthrange
 from bba.forms import UserForm, UserProfileForm
@@ -33,10 +33,10 @@ def calendar(request):
     # get all the gigs on today
     gigs = Gig.objects.filter(date__year=today.year, date__month=today.month, date__day=today.day)
 
-    
 
-    context_dict = { 
-        'gigs' : gigs, 
+
+    context_dict = {
+        'gigs' : gigs,
         'month_string' : date.strftime(today, "%Y-%m"),
         'today' : today.day,
         'month' : create_calendar(
@@ -111,7 +111,7 @@ def create_calendar(year, month, day, gigs):
 # return json for reloading the calendar
 def calendar_json(request, date_param, with_buds):
 
-    params = date_param.split('-')    
+    params = date_param.split('-')
     year = int(params[0])
     month = int(params[1])
     day = int(params[2])
@@ -187,7 +187,7 @@ def gig(request, gig_id):
     going = len(GigAttendance.objects.filter(user=userProf, gig=gig)) > 0
 
     nudges = Nudge.objects.filter(nudgee=userProf)
-    
+
     buds = map(helper_get_user, GigAttendance.objects.filter(gig=gig))
     if going:
         notGoing = 'not-going-button'
@@ -216,8 +216,8 @@ def user(request,user_name_slug):
     print 'got to user'
 
     try:
-        user=UserProfile.objects.get(slug=user_name_slug)
-        context_dict = {'user':user}
+        user_profile=UserProfile.objects.get(slug=user_name_slug)
+        context_dict = {'user_profile':user_profile}
 
     except UserProfile.DoesNotExist:
         context_dict={}
@@ -230,6 +230,7 @@ def add_profile(user):
     u.save()
     return u
 
+
 def register(request):
     context_dict ={}
     # A boolean value for telling the template whether the registration was successful.
@@ -241,9 +242,12 @@ def register(request):
         # Attempt to grab information from the raw form information.
         # Note that we make use of both UserForm and UserProfileForm.
         user_form = UserForm(data=request.POST)
+        print " is it valid?"
 
         # If the two forms are valid...
         if user_form.is_valid():
+
+            print "yes valid"
             # Save the user's form data to the database.
             user = user_form.save()
 
@@ -273,6 +277,7 @@ def register(request):
         # They'll also be shown to the user.
         else:
             print user_form.errors
+            return render(request,'bba/index.html',{'user_form': user_form, 'errors': user_form.errors})
 
     # Not a HTTP POST, so we render our form using two ModelForm instances.
     # These forms will be blank, ready for user input.
@@ -284,54 +289,60 @@ def register(request):
     # Render the template depending on the context.
     return render(request,'bba/index.html',context_dict)
 
-    print 'got to end'
-    # Render the template depending on the context.
-    return render(request,'bba/user/register.html',{'user_form': user_form, 'profile_form': profile_form, 'registered': registered})
-
 def my_profile(request):
     userProf = UserProfile.objects.get(user=request.user)
     return profile(request, userProf.slug)
 
 def profile(request, user_name_slug):
 
-    slugUser = UserProfile.objects.get(slug=user_name_slug)
-
-    print "hello!! " + str(slugUser.user.is_authenticated())
-
-#    if request.user:
-#        user = request.user
-#        print "there is a user"
-#    print user
-#    print "hello"
+    user_profile = UserProfile.objects.get(slug=user_name_slug)
+    print "hello!! " + str(user_profile.user.is_authenticated()), user_profile.user.username
 
     # If it's a HTTP POST, we're interested in processing form data.
     if request.method == 'POST':
+        print 'yo stevo', user_profile.user.is_authenticated
 
         profile_form = UserProfileForm(data=request.POST)
-        
-        if profile_form.is_valid():
-            userProfile = profile_form.save(commit=False)
 
+        if profile_form.is_valid():
+            user_profile = profile_form.save(commit=False)
+            print '******************* is prof valid'
 
             # Did the user provide a profile picture?
             # If so, we need to get it from the input form and put it in the UserProfile model.
             if 'image' in request.FILES:
-                userProfile.image = request.FILES['image']
+                user_profile.image = request.FILES['image']
 
-           
-            userProfile.save()
+                print '****************** about to save'
+                user_profile.save()
+            print "got to this user profile"
+            registered = True
+
+            return render(request,'bba/user/user_profile.html',{'user_profile': user_profile, 'registered': registered})
+
         else:
             print profile_form.errors
 
     else:
         profile_form = UserProfileForm()
 
-    bands = Band.objects.all().order_by('name')
+    liked_bands=LikedBand.objects.filter(user=user_profile)
+
+    likes=[]
+    for i in range(len(liked_bands)):
+        likes.append(liked_bands[i].band)
+    bands=Band.objects.all()
+    newbies=list(set(bands)-set(likes))
+
+
     registered = True
 
     print 'got to end: prof'
     # Render the template depending on the context.
-    return render(request,'bba/user/user_profile.html',{'slugUser':slugUser,'profile_form': profile_form, 'registered': registered, 'bands':bands})
+    return render(request,'bba/user/user_profile.html',{'user_profile':user_profile,'profile_form': profile_form, 'registered': registered, 'bands':newbies[:10],'liked_bands':liked_bands[:5]})
+
+
+
 
 def user_login(request):
 
@@ -405,31 +416,72 @@ def nudge(request, user_slug, gig_id):
     return HttpResponse("Nudged")
 
 @login_required
-def like_band(request,user_name_slug):
-
-    userProfile=UserProfile.objects.get(slug=user_name_slug)
-   # context_dict = {'user':user}
-
-
+def like_band(request):
 
     band_id = None
     if request.method == 'GET':
+
         band_id = request.GET['band_id']
+        user_id = request.GET['user_id']
 
-    likes = 0
-    if band_id:
-        band = Band.objects.get(id=int(band_id))
-        if band:
-            likes = band.likes + 1
-            band.likes =  likes
-            band.save()
+        user=User.objects.get(username=user_id)
+        user_profile=UserProfile.objects.get(user=user)
 
-    add_liked_band(band,userProfile)
+        band = Band.objects.get(name=band_id)
+        add_liked_band(band,user_profile)
 
-    return HttpResponse(likes)
+
+    return HttpResponse("")
 
 # Like buttons helper function - to be refactored!!!
 def add_liked_band(b,u):
     lb = LikedBand.objects.get_or_create(band=b,user=u)[0]
-    lb.save()
+    print 'gotta go again',b,u,lb
+    try:
+        lb.save()
+    except :
+        print 'error'
+
+    print 'here?'
     return lb
+
+
+
+@login_required
+def dislike_band(request):
+    band_id = None
+    if request.method == 'GET':
+
+        band_id = request.GET['band_id']
+        user_id = request.GET['user_id']
+
+        user=User.objects.get(username=user_id)
+        user_profile=UserProfile.objects.get(user=user)
+        band = Band.objects.get(name=band_id)
+
+        add_disliked_band(band,user_profile)
+
+    print 'disliked band!!!!'
+    return HttpResponse("")
+
+# Like buttons helper function - to be refactored!!!
+def add_liked_band(b,u):
+    lb = LikedBand.objects.get_or_create(band=b,user=u)[0]
+    try:
+        lb.save()
+    except :
+        print 'error'
+
+    return lb
+
+# Like buttons helper function - to be refactored!!!
+def add_disliked_band(b,u):
+    print 'step 4!!'
+
+    dlb = DisLikedBand.objects.get_or_create(band=b,user=u)[0]
+    try:
+        dlb.save()
+    except :
+        print 'error'
+    print 'step 5!!'
+    return dlb

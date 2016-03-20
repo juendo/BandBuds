@@ -14,8 +14,10 @@ urlpatterns = patterns('',
     url(r'^gig/(?P<gig_id>[0-9]+)/$', views.gig, name='gig'),
     url(r'^gig/(?P<gig_id>[0-9]+)/buds/(?P<bud_slug>[\w\-]+)/$', views.gig_bud, name='gig_buds'),
     url(r'^bud_profile/(?P<budSlug>[\w\-]+)/$', views.bud_profile, name='bud_profile'),
-    url(r'^profile/', views.my_profile, name='my_profile'),
+    url(r'^profile/like_band/$', views.like_band, name='like_band'),
+    url(r'^profile/dislike_band/$', views.dislike_band, name='dislike_band'),
     url(r'^profile/(?P<user_name_slug>[\w\-]+)/$', views.profile, name='profile'),
+    url(r'^profile/', views.my_profile, name='my_profile'),
 
     # ajax requests
     url(r'^ajax/im_going/(?P<gig_id>[0-9]+)/$', views.im_going, name='im_going'),

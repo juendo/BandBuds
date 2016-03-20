@@ -21,31 +21,32 @@ API_KEY = "jwzmbEyCAIwD7HCy"
 
 def populate():
 
+    #added in users for presentation
     # Creating mock users
     stevo_user = add_user('steve','e@m.ail','sesame')
     anaJ_user = add_user('Ana Jahnke','ana_jahnke@hotmail.com','123')
     lewis_user = add_user('Lewis','l@hotmail.com','123')
     gladis_user = add_user('Gladis','glad@hotmail.com','123')
-    franis_user = add_user('Francis','fran@hotmail.com','123')
-    lue_user = add_user('Lue Wang','lu@hotmail.com','123')
+    joel_user = add_user('Joel','joel@me.com','123')
+    rob_user = add_user('Rob','Rob@hotmail.com','123')
     mario_user = add_user('Mario','mario@hotmail.com','123')
     polly_user = add_user('Polly','poll@hotmail.com','123')
-    abdul_user = add_user('Abdul','abd@hotmail.com','123')
-    tugce_user = add_user('Tugce','tg@hotmail.com','123')
-    boramas_user = add_user('Boramas','bor@hotmail.com','123')
+    david_user = add_user('david','david@hotmail.com','123')
+    laura_user = add_user('laura','laura@hotmail.com','123')
+    leifos_user = add_user('leifos','leifos@hotmail.com','123')
 
     # Create profile
-    stevo_profile = add_profile(stevo_user,date(1983,1,26),False,'Male', True)
-    lewis_profile = add_profile(lewis_user,date(1990,1,14),False,'Male', True)
-    anaJ_profile = add_profile(anaJ_user,date(1950,2,26),False,'Female', True)
-    gladis_profile = add_profile(gladis_user,date(1950,2,26),False,'Female', True)
-    franis_profile = add_profile(franis_user,date(1993,1,15),False,'Female', True)
-    lue_profile = add_profile(lue_user,date(1993,1,20),False,'Female', True)
-    mario_profile = add_profile(mario_user,date(1984,3,26),False,'Male', True)
-    polly_profile = add_profile(polly_user,date(1982,5,26),False,'Female', True)
-    abdul_profile = add_profile(abdul_user,date(1985,7,26),False,'Male', True)
-    tugce_profile = add_profile(tugce_user,date(1988,8,26),False,'Female', True)
-    boramas_profile = add_profile(boramas_user,date(1989,9,26),False,'Male', True)
+    stevo_profile = add_profile(stevo_user,date(1983,1,26),'Male',0,0,0,0)
+    lewis_profile = add_profile(lewis_user,date(1990,1,14),'Male',0,0,1,1)
+    anaJ_profile = add_profile(anaJ_user,date(1950,2,26),'Male',0,1,1,0)
+    gladis_profile = add_profile(gladis_user,date(1950,2,26),'Female',1,1,0,0)
+    joel_profile = add_profile(joel_user,date(1993,1,15),'Male',0,0,0,0)
+    rob_profile = add_profile(rob_user,date(1993,1,20),'Male',0,0,0,0)
+    mario_profile = add_profile(mario_user,date(1984,3,26),'Male',0,0,0,0)
+    polly_profile = add_profile(polly_user,date(1982,5,26),'Female',0,0,0,0)
+    david_profile = add_profile(david_user,date(1985,7,26),'Male',0,0,0,0)
+    laura_profile = add_profile(laura_user,date(1988,8,26),'Male',0,0,0,0)
+    leifos_profile = add_profile(leifos_user,date(1989,9,26),'Male',0,0,0,0)
 
     # Print out what we have added to the user
     for m in User.objects.all():
@@ -61,14 +62,12 @@ def populate():
 
 def add_band(name,image_Ref):
     b = Band.objects.get_or_create(name=name,image_Ref=image_Ref)[0]
+    b.save()
     return b
 
-def add_LikedBand(b,u):
-    lb = LikedBand.objects.get_or_create(band=b,user=u)[0]
-    return lb
-
-def add_profile(user, dob, smokes, gender, drinks):
-    u = UserProfile.objects.get_or_create(user=user, dob=dob, smokes=smokes, gender=gender, drinks=drinks)[0]
+def add_profile(user, dob, gender, smokes, drinks, dances, involvement):
+    u = UserProfile.objects.get_or_create(user=user, dob=dob, gender=gender,
+            smokes=smokes, drinks=drinks,dances=dances,involvement=involvement)[0]
     u.save()
     return u
 

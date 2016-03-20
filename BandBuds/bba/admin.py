@@ -2,7 +2,8 @@ from django.contrib import admin
 from bba.models import Band, UserProfile, LikedBand, Buddy, GigAttendance, Gig
 
 class BandAdmin(admin.ModelAdmin):
-    list_display = ('name', 'city','country','formed','genre')
+    prepopulated_fields = {'slug' : ('name',)}
+    #list_display = ('name', 'city','country','formed','genre')
 
 class UserAdmin(admin.ModelAdmin):
     prepopulated_fields = {'slug' : ('user',)}

@@ -19,6 +19,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('name', models.CharField(max_length=128)),
                 ('image_Ref', models.CharField(max_length=128)),
+                ('slug', models.SlugField()),
             ],
             options={
             },
@@ -35,7 +36,7 @@ class Migration(migrations.Migration):
             bases=(models.Model,),
         ),
         migrations.CreateModel(
-            name='DisLikedBands',
+            name='DisLikedBand',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('band', models.ForeignKey(to='bba.Band')),
@@ -104,10 +105,12 @@ class Migration(migrations.Migration):
             name='UserProfile',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('dob', models.DateField(default=datetime.date(2016, 3, 15))),
-                ('smokes', models.BooleanField(default=False)),
-                ('gender', models.CharField(default=b'Undisclosed', max_length=128)),
+                ('dob', models.DateField(default=datetime.date(2016, 3, 20))),
+                ('gender', models.CharField(default=b'U', max_length=1, choices=[(b'U', b'Undisclosed'), (b'F', b'Female'), (b'M', b'Male')])),
+                ('smokes', models.IntegerField(default=0)),
                 ('drinks', models.IntegerField(default=0)),
+                ('dances', models.IntegerField(default=0)),
+                ('involvement', models.IntegerField(default=0)),
                 ('image', models.ImageField(default=b'profile_images/default_image.png', upload_to=b'profile_images', blank=True)),
                 ('slug', models.SlugField()),
                 ('user', models.OneToOneField(to=settings.AUTH_USER_MODEL)),
@@ -158,7 +161,7 @@ class Migration(migrations.Migration):
             preserve_default=True,
         ),
         migrations.AddField(
-            model_name='dislikedbands',
+            model_name='dislikedband',
             name='user',
             field=models.ForeignKey(to='bba.UserProfile'),
             preserve_default=True,

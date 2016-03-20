@@ -5,36 +5,20 @@
 {% load staticfiles %}
 
 {% block body_block %}
-
-
-    <h1>Hey bud! Join in and find your perfect gig mate.</h1>
+<div class="col-xs-10 col-xs-offset-1 col-md-8 col-md-offset-2 login">
     {% if registering %}
-    <!--Register start -->
-        <div>
-          {% include 'bba/user/register.html' %}
-        </div>
-    <!--Register end -->
+    <!--Register -->
+    {% include 'bba/user/register.html' %}
     {% else %}
         {% if user.is_authenticated %}
-            <strong>{{ user.username }} <a href="../calendar/">checkout the calendar</a></strong>
-            <a href="../profile/">or Fill in your profile</a><br />
-
-
+        <!--Already Logged in-->
+        <strong>{{ user.username }}<a href="../calendar/"> checkout the calendar</a></strong>
+        <a href="../profile/">or fill in your profile</a><br />
         {% else %}
-        <!--Login start -->
-            <div>
-              <!--Login start-->
-              {% include 'bba/login.html' %}
-                 <!-- Register start -->
-              <a href="{% url 'register' %}">register here</a>
-            </div>
-        <!--Login end -->
+        <!--Login-->
+        {% include 'bba/login.html' %}
         {% endif %}
     {% endif %}
-
-
-<!--Footer start -->
-{% include 'bba/main/main_bottom_panel.html' %}
-<!--Footer end -->
+</div>
 
 {% endblock %}

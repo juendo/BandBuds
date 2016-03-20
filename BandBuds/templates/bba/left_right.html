@@ -4,6 +4,11 @@
 
 {% block body_block %}
 
+{% if errors %}
+<div>{{errors}}</div>
+{% endif %}
+
+{% if user.is_authenticated %}
 <!-- Main content -->
 <div id="main-content" class="container-fluid">
   <!--Row to remove padding -->
@@ -41,8 +46,17 @@
 <!-- Main content end -->
 </div>
 
+{% else %}
+    <div class="col-md-8 col-md-offset-2 login">
+        <h2>Join in </h2>
+        <!-- Register start -->
+        <a href="{% url 'register' %}">register here</a>
+    </div>
+{% endif %}
+
 <!--Footer-->
 {% block footer %}{% endblock %}
+
 
 {% endblock %}
 

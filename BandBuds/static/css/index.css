@@ -89,7 +89,6 @@ html, body {
 
 /* calendar */
 
-
 #calendar-grid {
 	max-width: 400px;
 	margin: auto;
@@ -198,7 +197,7 @@ html, body {
 	font-size: 16px;
     text-align: center;
 }
-.calendar-circle-day > .calendar-text-day, 
+.calendar-circle-day > .calendar-text-day,
 .calendar-circle > .calendar-text {
 	display: table-cell;
     vertical-align: middle;
@@ -261,19 +260,25 @@ html, body {
 	font-size: 20px;
 	color: white;
 }
+#search-panel .search-gig{
+	padding-top: 2%;
+}
 #filter-panel {
 	background-color: #D30439;
 	height: 150px;
 	line-height: 150px;
 }
 .form-group {
-	margin: auto;
+	margin: 1%;
 	width: 74%;
 	height: 50%;
 	top: 50%;
 	-webkit-transform: translateY(-50%);
 	-ms-transform: translateY(-50%);
 	transform: translateY(-50%);
+}
+.login{
+	padding-top: 15%;
 }
 
 
@@ -381,7 +386,7 @@ html, body {
 }
 .gig-image {
 	height: 75px;
-	width:75px; 
+	width:75px;
 	border-radius:50%;
 	background-color: #D30439;
 	border: 5px;
@@ -397,7 +402,7 @@ html, body {
 	overflow: auto;
 }
 .not-going-button {
-	background-color: green;
+	background-color: #6fb900;
 	color: white;
 }
 .two-thirds-width {
@@ -463,7 +468,7 @@ html, body {
 }
 #gig-header-image {
 	width: 67%;
-	margin-top: -15%; 
+	margin-top: -15%;
 	float: left;
 }
 .gig-item {
@@ -555,4 +560,4 @@ img {
 
 }
 
-}
+}	

@@ -7,14 +7,24 @@ from django.core.validators import validate_email
 from django.template.defaultfilters import slugify
 from datetime import date
 
+GENDER_CHOICES = (
+    ('U', 'Undisclosed'),
+    ('F', 'Female'),
+    ('M', 'Male'),
+)
+
 
 class UserProfile(models.Model):
 
     user = models.OneToOneField(User)
     dob = models.DateField(default=date.today())
-    smokes = models.BooleanField(default=False)
-    gender = models.CharField(default="Undisclosed",max_length=128, unique=False)
+    gender = models.CharField(default="U", max_length=1, choices=GENDER_CHOICES)
+
+    smokes = models.IntegerField(default=0)
     drinks = models.IntegerField(default=0)
+    dances = models.IntegerField(default=0)
+    involvement = models.IntegerField(default=0)
+
     image = models.ImageField(upload_to='profile_images',blank=True,default='profile_images/default_image.png')
     slug = models.SlugField()
 
@@ -28,6 +38,11 @@ class UserProfile(models.Model):
 class Band(models.Model):
     name = models.CharField(max_length=128, unique=False)
     image_Ref = models.CharField(max_length=128, unique=False)
+    slug = models.SlugField()
+
+    def save(self, *args, **kwargs):
+         self.slug = slugify(self.name)
+         super(Band, self).save(*args, **kwargs)
 
     def __unicode__(self):
         return self.name
@@ -39,7 +54,7 @@ class LikedBand(models.Model):
     def __unicode__(self):
         return str(self.band) + ' ' + str(self.user)
 
-class DisLikedBands(models.Model):
+class DisLikedBand(models.Model):
     band = models.ForeignKey(Band)
     user = models.ForeignKey(UserProfile)
 
