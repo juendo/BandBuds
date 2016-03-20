@@ -295,7 +295,7 @@ def profile(request, user_name_slug):
             if 'image' in request.FILES:
                 user_profile.image = request.FILES['image']
 
-                print '******************* about to save'
+                print '****************** about to save'
                 user_profile.save()
             print "got to this user profile"
             registered = True
