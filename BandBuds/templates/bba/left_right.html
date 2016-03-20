@@ -46,8 +46,6 @@
 <!-- Main content end -->
 </div>
 
-<!--Footer-->
-{% block footer %}{% endblock %}
 {% else %}
     <div class="col-md-8 col-md-offset-2 login">
         <h2>Join in </h2>
@@ -55,6 +53,10 @@
         <a href="{% url 'register' %}">register here</a>
     </div>
 {% endif %}
+
+<!--Footer-->
+{% block footer %}{% endblock %}
+
 
 {% endblock %}
 

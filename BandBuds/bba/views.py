@@ -279,6 +279,7 @@ def my_profile(request):
 def profile(request, user_name_slug):
 
     user_profile = UserProfile.objects.get(slug=user_name_slug)
+    print "hello!! " + str(user_profile.user.is_authenticated()), user_profile.user.username
 
     # If it's a HTTP POST, we're interested in processing form data.
     if request.method == 'POST':

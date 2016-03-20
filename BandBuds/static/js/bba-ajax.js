@@ -107,7 +107,7 @@ $( document ).ready( function() {
         reversed : true
     });
 
-
+    // Likes
 	$('.btn').click(function(){
     var bandid;
 	var userid;
