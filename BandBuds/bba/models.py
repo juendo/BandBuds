@@ -80,24 +80,6 @@ class Gig(models.Model):
     def __unicode__(self):
         return self.venue.name + ' ' + self.band.name
 
-class Buddy(models.Model):
-    user = models.OneToOneField(UserProfile, related_name='+')
-    buddy = models.ForeignKey(UserProfile)
-    gig = models.ForeignKey(Gig)
-    accept=models.BooleanField(default=False)
-    slug = models.SlugField()
-
-    def save(self, *args, **kwargs):
-         self.slug = slugify(self.user)
-         super(Buddy, self).save(*args, **kwargs)
-
-    def __unicode__(self):
-        return self.user + ' ' + self.buddy + ' ' + self.gig + ' request accepted: ' + self.accept
-
-
-
-
-
 class PerformingBand(models.Model):
     band = models.ForeignKey(Band)
     gig = models.ForeignKey(Gig)
@@ -116,6 +98,27 @@ class GigAttendance(models.Model):
 
     def __unicode__(self):
         return self.gig.band.name + ' ' + self.user.user.username
+
+
+class Buddy(models.Model):
+    user = models.ForeignKey(UserProfile)
+    buddy = models.ForeignKey(UserProfile, related_name='+')
+    gig=models.ForeignKey(Gig)
+    accept=models.BooleanField(default=False)
+    slug = models.SlugField()
+
+    def save(self, *args, **kwargs):
+         self.slug = slugify(self.user)
+         super(Buddy, self).save(*args, **kwargs)
+
+    def __unicode__(self):
+        return self.user + ' ' + self.buddy + ' ' + self.gig.band + ' request accepted: ' + self.accept
+
+
+
+
+
+
 
 class Nudge(models.Model):
     nudger = models.ForeignKey(User)

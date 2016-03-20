@@ -439,23 +439,24 @@ def nudge(request):
         bud_id = request.GET['bud_id']
         gig_id = request.GET['gig_id']
 
-        user=User.objects.get(username=user_id)
-        user_profile=UserProfile.objects.get(user=user)
+        try:
+            user=User.objects.get(username=user_id)
+            user_profile=UserProfile.objects.get(user=user)
 
-        print 'step1..'
+            bud_profile=UserProfile.objects.get(slug=bud_id)
 
-#        bud=User.objects.get(username=bud_id)
-        bud_profile=UserProfile.objects.get(slug=bud_id)
+            gig = Gig.objects.get(gig_id=gig_id)
 
-        print 'step2..'
+        except Exception as exp:
+            print exp
+            return HttpResponse("Error")
 
-        gig = Gig.objects.get(gig_id=gig_id)
-
-        print 'step3..'
+        print 'saving..'
 
         add_buddy_request(user_profile,bud_profile,gig)
 
-        print 'saving..'
+        print 'saved.'
+
 
     return HttpResponse("Nudged")
 #    return render("Nudged", 'bba/bud/bud_profile.html', context_dict)
@@ -531,11 +532,13 @@ def add_disliked_band(b,u):
     print 'step 5!!'
     return dlb
 
+# helper function - to be refactored!!!
 def add_buddy_request(user,buddy,gig):
-    bud_req = Buddy.objects.get_or_create(user=user,buddy=buddy,gig=gig)[0]
     try:
+        bud_req = Buddy.objects.get_or_create(user=user,buddy=buddy,gig=gig)
         bud_req.save()
-    except :
+    except Exception as exp:
         print 'error'
-    print 'step 5!!'
+        print exp
+
     return bud_req
