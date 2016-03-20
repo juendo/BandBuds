@@ -6,6 +6,8 @@
 
 {% if user_profile.user.is_authenticated %}
 
+{% include 'bba/user/bud_requests.html' %}
+
 <h3> Welcome {{ user_profile.user.username }}! fill in your profile</h3>
 
 <form id=" " method="post" action="/profile/{{ user.slug }}"

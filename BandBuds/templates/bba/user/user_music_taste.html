@@ -10,9 +10,9 @@
 	<!--artist name-->
 	<div class=""><h4>{{band.name}}</h4></div>
 	<!--like button-->
-	<button class="btn btn-primary {{ band.slug }}" id="like" data-bandslug={{ band.slug }} data-bandid="{{ band.name }}" data-user="{{ user_profile.user.username}}"  type="button">Like</button>
+	<button class="btn btn-primary band {{ band.slug }}" id="like" data-bandslug={{ band.slug }} data-bandid="{{ band.name }}" data-user="{{ user_profile.user.username}}"  type="button">Like</button>
 	<!--dislike button-->
-	<button class="btn btn-primary {{ band.slug }}" id="dislike" data-bandslug={{ band.slug }} data-bandid="{{ band.name }}" data-user="{{ user_profile.user.username}}"  type="button">Dislike</button>
+	<button class="btn btn-primary band {{ band.slug }}" id="dislike" data-bandslug={{ band.slug }} data-bandid="{{ band.name }}" data-user="{{ user_profile.user.username}}"  type="button">Dislike</button>
 	</div>
 
 	{% endif %}

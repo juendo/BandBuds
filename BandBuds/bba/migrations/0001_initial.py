@@ -29,6 +29,7 @@ class Migration(migrations.Migration):
             name='Buddy',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
+                ('accept', models.BooleanField(default=False)),
                 ('slug', models.SlugField()),
             ],
             options={
@@ -170,6 +171,12 @@ class Migration(migrations.Migration):
             model_name='buddy',
             name='buddy',
             field=models.ForeignKey(to='bba.UserProfile'),
+            preserve_default=True,
+        ),
+        migrations.AddField(
+            model_name='buddy',
+            name='gig',
+            field=models.ForeignKey(to='bba.Gig'),
             preserve_default=True,
         ),
         migrations.AddField(

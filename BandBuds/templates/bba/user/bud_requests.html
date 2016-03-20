@@ -1,0 +1,19 @@
+<!-- user liked bands
+	load to user_profile.html -->
+
+<div>
+
+<h2> Nudge requests </h2>
+
+    {% if nudges %}
+		{% for nudge in nudges %}
+
+            <p>{{nudge.buddy.user.username}}</p>
+            <br/>
+
+		{% endfor %}
+
+    {% endif %}
+
+
+</div>

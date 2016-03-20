@@ -21,8 +21,12 @@ urlpatterns = patterns('',
     url(r'^profile/', views.my_profile, name='my_profile'),
 
     # ajax requests
+    url(r'^ajax/nudge/$', views.nudge, name='nudge'),
+
     url(r'^ajax/im_going/(?P<gig_id>[0-9]+)/$', views.im_going, name='im_going'),
     url(r'^ajax/load_gigs/(?P<date_param>[\w\-]+)/(?P<with_buds>[tf]{1})/$', views.gigs_on_date, name='gigs_on_date'),
     url(r'^ajax/reload_calendar/(?P<date_param>[0-9-]+)/(?P<with_buds>[tf]{1})/$', views.calendar_json, name='reload_calendar'),
-    url(r'^ajax/nudge/(?P<user_slug>[\w\-]+)/(?P<gig_id>[0-9]+)$', views.nudge, name='nudge'),
+
+#    url(r'^ajax/nudge/(?P<user_slug>[\w\-]+)/(?P<gig_id>[0-9]+)$', views.nudge, name='nudge'),
+
 )

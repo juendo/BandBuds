@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.template.loader import render_to_string
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.contrib.auth import authenticate, login, logout
-from bba.models import Band, Gig, Venue, UserProfile, GigAttendance, User, Nudge, LikedBand,DisLikedBand
+from bba.models import Band, Gig, Venue, UserProfile, GigAttendance, User, Nudge, LikedBand,DisLikedBand, Buddy
 from datetime import date, datetime
 from calendar import monthrange
 from bba.forms import UserForm, UserProfileForm
@@ -180,19 +180,44 @@ def gig(request, gig_id):
     return render(request, 'bba/gig.html', context_dict)
 
 @login_required
-def bud_profile(request, budSlug):
-    bud = UserProfile.objects.filter(slug=budSlug)[0]
-    return render(request, 'bba/buds/bud_profile.html', { 'bud_to_show' : bud })
+def bud_profile(request, bud_slug):
+
+    bud = UserProfile.objects.get(slug=bud_slug)
+    #user = request.user
+
+    #nudge = Buddy.objects.get_or_create(user=user, bud=bud, gig=gig)[0]
+    #nudge.save()
+
+
+    return render(request, 'bba/buds/bud_profile.html', { 'bud' : bud})
 
 def helper_get_user(gig):
         return gig.user
 
+# highlights given bud in context of bud_slug relating to gig gig_id
+# displays other buds attending as well
 def gig_bud(request, gig_id, bud_slug):
-    gig = Gig.objects.all().filter(gig_id=gig_id)[0]
+
+
+#    gig = Gig.objects.all().filter(gig_id=gig_id)[0]
+    gig = Gig.objects.get(gig_id=gig_id)
     buds = map(helper_get_user, GigAttendance.objects.filter(gig=gig))
-    bud = UserProfile.objects.filter(slug=bud_slug)[0]
-    context_dict = { 'bud_to_show' : bud, 'buds' : buds, 'gig' : gig }
+    bud_to_show = UserProfile.objects.get(slug=bud_slug)
+
+
+# user = UserProfile.objects.get(username=username)
+#    user_profile = UserProfile.objects.get(user=user)
+
+    # check to see if nudge button clicked via ajax button
+  #  if request.method == 'GET':
+
+ #       nudge = Buddy.objects.get_or_create(user=userProfile, bud=bud_to_show, gig=gig)[0]
+#        nudge.save()
+
+    context_dict = { 'bud_to_show' : bud_to_show, 'buds' : buds, 'gig' : gig}
+
     return render(request, 'bba/gig_buds.html', context_dict)
+
 
 def user(request,user_name_slug):
 
@@ -309,20 +334,33 @@ def profile(request, user_name_slug):
     else:
         profile_form = UserProfileForm()
 
+    # data for liked bands of a user
     liked_bands=LikedBand.objects.filter(user=user_profile)
-
-    likes=[]
+    prefSet=[]
     for i in range(len(liked_bands)):
-        likes.append(liked_bands[i].band)
+        prefSet.append(liked_bands[i].band)
     bands=Band.objects.all()
-    newbies=list(set(bands)-set(likes))
+    newbies=list(set(bands)-set(prefSet))
 
+    # data for disliked bands of a user
+    disliked_bands=DisLikedBand.objects.filter(user=user_profile)
+    prefSet=[]
+    for i in range(len(disliked_bands)):
+        prefSet.append(disliked_bands[i].band)
+    bands=Band.objects.all()
+    newbies=list(set(bands)-set(prefSet))
+
+    # data for buddy request notifications
+    nudge=Buddy.objects.filter(user=user_profile)
+    nudgeList=[]
+    for i in range(len(nudge)):
+        if nudge[i].accept==False:
+            nudgeList.append(nudge[i])
 
     registered = True
 
-    print 'got to end: prof'
     # Render the template depending on the context.
-    return render(request,'bba/user/user_profile.html',{'user_profile':user_profile,'profile_form': profile_form, 'registered': registered, 'bands':newbies[:10],'liked_bands':liked_bands[:5]})
+    return render(request,'bba/user/user_profile.html',{'user_profile':user_profile,'profile_form': profile_form, 'registered': registered, 'bands':newbies[:10],'liked_bands':liked_bands[:5],'disliked_bands':disliked_bands[:5],'nudges':nudgeList[:5]})
 
 
 
@@ -343,6 +381,7 @@ def user_login(request):
             # has an activie account
            if user.is_active:
                login(request, user)
+
                return HttpResponseRedirect('../calendar')
            else:
                return HttpResponse("Your account for bandbuds has been disabled.")
@@ -388,15 +427,28 @@ def im_going(request, gig_id):
 
 
 
-# for a user nuding another
+# for a user nudging another
 @login_required
-def nudge(request, user_slug, gig_id):
-    nudgee = UserProfile.objects.get(slug=user_slug)
-    nudger = request.user
-    gig = Gig.objects.get(gig_id=gig_id)
-    nudge = Nudge.objects.get_or_create(nudger=nudger, nudgee=nudgee, gig=gig)[0]
-    nudge.save()
+def nudge(request):
+
+    if request.method == 'GET':
+
+        print 'and again..'
+
+        user_id = request.GET['user_id']
+        bud_id = request.GET['bud_id']
+        gig_id = request.GET['gig_id']
+
+        user=User.objects.get(username=user_id)
+        user_profile=UserProfile.objects.get(user=user)
+        bud=User.objects.get(username=bud_id)
+        bud_profile=UserProfile.objects.get(user=bud)
+        gig = Gig.objects.get(gig_id=gig_id)
+
+        add_buddy_request(user_profile,bud_profile,gig)
+
     return HttpResponse("Nudged")
+#    return render("Nudged", 'bba/bud/bud_profile.html', context_dict)
 
 @login_required
 def like_band(request):
@@ -468,3 +520,12 @@ def add_disliked_band(b,u):
         print 'error'
     print 'step 5!!'
     return dlb
+
+def add_buddy_request(user,buddy,gig):
+    bud_req = Buddy.objects.get_or_create(user=user,buddy=buddy,gig=gig)[0]
+    try:
+        bud_req.save()
+    except :
+        print 'error'
+    print 'step 5!!'
+    return bud_req
