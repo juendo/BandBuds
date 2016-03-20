@@ -39,24 +39,21 @@ def calendar(request):
         'gigs' : gigs, 
         'month_string' : date.strftime(today, "%Y-%m"),
         'today' : today.day,
-        'month' : create_calendar(today.year, today.month, today.day, 'f')
+        'month' : create_calendar(
+                    today.year, 
+                    today.month, 
+                    today.day, 
+                    list(Gig.objects.filter(date__year=today.year, date__month=today.month))
+                )
     }
 
     # Render the response and send it back!
     return render(request, 'bba/calendar.html', context_dict)
 
-def create_calendar(year, month, day, with_buds):
+def create_calendar(year, month, day, gigs):
 
     # get today's date
     today = date(year, month, day)
-    # get gigs 
-    if with_buds == 't':
-        att = GigAttendance.objects.filter(gig__date__year=today.year, gig__date__month=today.month)
-        gigs = Set()
-        for a in att:
-            gigs.add(a.gig)
-    else:
-        gigs = list(Gig.objects.filter(date__year=today.year, date__month=today.month))
     # get the first day of this month
     first_weekday = monthrange(today.year, today.month)[0]
     # get the length of this month
@@ -127,10 +124,25 @@ def calendar_json(request, date_param, with_buds):
         day = today.day
         is_today = True
 
+    search = request.GET['search']
+
+    if search != '':
+        gigs = Gig.objects.filter(date__year=year, date__month=month, band__name=search) | \
+                Gig.objects.filter(date__year=year, date__month=month, venue__name=search)
+    elif with_buds == 't':
+        att = GigAttendance.objects.filter(gig__date__year=year, gig__date__month=month)
+        gigs = Set()
+        for a in att:
+            gigs.add(a.gig)
+    else: 
+        gigs = Gig.objects.filter(date__year=year, date__month=month)
+
+    cal = create_calendar(year, month, day, gigs)
+
     data = { 
-        'calendar' : create_calendar(year, month, day, with_buds),
+        'calendar' : cal,
         'month_string' : str(year) + '-' + str(month).zfill(2),
-        'day_string' : str(day),
+        'day_string' : str(next((x for i, x in enumerate(sum(cal, [])) if x != 0), 'No Gigs!')),
         'prev_hidden' : is_today,
     }
 
@@ -141,8 +153,13 @@ def gigs_on_date(request, date_param, with_buds):
 
     # extract the date fields
     date_param = date_param.split('-')
+
+    search = request.GET['search']
+    if search != '':
+        gigs = Gig.objects.filter(date__year=date_param[0], date__month=date_param[1], date__day=date_param[2], band__name=search) | \
+                Gig.objects.filter(date__year=date_param[0], date__month=date_param[1], date__day=date_param[2], venue__name=search)
     # if getting only gigs which are being attended
-    if with_buds == 't':
+    elif with_buds == 't':
         # get all gig attendance objects for the date in question
         att = GigAttendance.objects.filter(gig__date__year=date_param[0], gig__date__month=date_param[1], gig__date__day=date_param[2])
         gigs = Set()
@@ -153,7 +170,7 @@ def gigs_on_date(request, date_param, with_buds):
     else:
         gigs = Gig.objects.filter(date__year=date_param[0], date__month=date_param[1], date__day=date_param[2])
 
-    return render(request, "bba/calendar/calendar_gig_list.html", { 'gigs' : gigs })
+    return render(request, "bba/calendar/calendar_gig_list.html", { 'gigs' : gigs })    
 
 @login_required
 def gig(request, gig_id):

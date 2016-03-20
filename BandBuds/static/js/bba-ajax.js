@@ -71,6 +71,14 @@ $( document ).ready( function() {
 		loadCalendar(year, month);
 	});
 
+	$( '#search-text' ).keyup( function() {
+		var params = $( '#calendar-info' ).attr( 'data-month' ).split('-');
+		var year = params[0];
+		var month = params[1];
+		var search = $( '#search-text' ).val();
+		loadCalendar(year, month);
+	});
+
 	$( '.nudge' ).click( function() {
 		var username = $( this ).data( 'user' );
 		var gigid = $( this ).data( 'gigid' );
@@ -94,17 +102,30 @@ $( document ).ready( function() {
 // load the gigs for the current day
 function loadGigs() {
 
+	console.log()
+
 	var with_buds = $( '#bud-filter' ).is( ':checked' ) ? 't' : 'f';
 
+	var search = $( '#search-text' ).val();
+
+	var month = $( '#calendar-info' ).attr( 'data-month' );
+
+	var day = $( '.today' ).attr( 'data-day' );
+
+	if (!day) {
+		day = '1';
+	}
+
 	// send the ajax request
-	$.get(
-		'/ajax/load_gigs/' + $( '#calendar-info' ).attr( 'data-month' ) + '-' + $( '.today' ).attr( 'data-day' ) + '/' + with_buds, 
-		{}, 
+	$.ajax({
+		type: 'GET',
+		url: '/ajax/load_gigs/' + month+ '-' + day + '/' + with_buds,
+		data: { 'search' :  search },
 		// load the response html into the list of gigs
-		function(data) {
-	        $( '#list-box' ).html(data);
-	   	}
-	);
+		success: function(data) {
+			$( '#list-box' ).html(data);
+		}
+	});
 }
 
 // reload the calendar for a given year and month
@@ -112,11 +133,14 @@ function loadCalendar(year, month) {
 
 	var with_buds = $( '#bud-filter' ).is( ':checked' ) ? 't' : 'f';
 
+	var search = $( '#search-text' ).val();
+
 	// send ajax request to get json for reloading calendar
-	$.get(
-		'../../ajax/reload_calendar/' + year + '-' + month + '-1/' + with_buds, 
-		{}, 
-		function(data) {
+	$.ajax({
+		type: 'GET',
+		url: '../../ajax/reload_calendar/' + year + '-' + month + '-1/' + with_buds,
+		data: { 'search' : search },
+		success: function(data) {
 			// load new calendar details
 	        loadCalendarFromJson(data.calendar);
 
@@ -132,8 +156,8 @@ function loadCalendar(year, month) {
 
 	        // load gigs for new date
 	        loadGigs();
-	   	}
-	);
+		}
+	})
 }
 
 // load a 2D array of day numbers into the calendar
