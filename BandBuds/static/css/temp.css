@@ -1,0 +1,22 @@
+/*Profile form*/
+
+.prof{
+    display: block;
+    width: 96%;
+    margin: auto;
+    padding: 5px;
+}
+
+.prof-in{
+    display: block;
+    width: 100%;
+    margin: 5px;
+    padding: 5px;
+    font-size: 1em;
+    line-height: 1.5;
+    color: #22030A;
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #A00010;
+    border-radius: 4px;
+}
