@@ -359,7 +359,7 @@ def profile(request, user_name_slug):
 
     registered = True
 
-    # Render the template depending on the context.
+    # Render the template depending on the context
     return render(request,'bba/user/user_profile.html',{'user_profile':user_profile,'profile_form': profile_form, 'registered': registered, 'bands':newbies[:10],'liked_bands':liked_bands[:5],'disliked_bands':disliked_bands[:5],'nudges':nudgeList[:5]})
 
 
