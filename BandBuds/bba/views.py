@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.template.loader import render_to_string
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.contrib.auth import authenticate, login, logout
-from bba.models import Band, Gig, Venue, UserProfile, GigAttendance, User, Nudge, LikedBand,DisLikedBands
+from bba.models import Band, Gig, Venue, UserProfile, GigAttendance, User, Nudge, LikedBand,DisLikedBand
 from datetime import date, datetime
 from calendar import monthrange
 from bba.forms import UserForm, UserProfileForm
@@ -404,11 +404,7 @@ def like_band(request):
     band_id = None
     if request.method == 'GET':
 
-        print 'this far'
-
         band_id = request.GET['band_id']
-        print 'no this far'
-
         user_id = request.GET['user_id']
 
         user=User.objects.get(username=user_id)
@@ -416,8 +412,6 @@ def like_band(request):
 
         band = Band.objects.get(name=band_id)
         add_liked_band(band,user_profile)
-
-
 
 
     return HttpResponse("")
@@ -433,3 +427,44 @@ def add_liked_band(b,u):
 
     print 'here?'
     return lb
+
+
+
+@login_required
+def dislike_band(request):
+    band_id = None
+    if request.method == 'GET':
+
+        band_id = request.GET['band_id']
+        user_id = request.GET['user_id']
+
+        user=User.objects.get(username=user_id)
+        user_profile=UserProfile.objects.get(user=user)
+        band = Band.objects.get(name=band_id)
+
+        add_disliked_band(band,user_profile)
+
+    print 'disliked band!!!!'
+    return HttpResponse("")
+
+# Like buttons helper function - to be refactored!!!
+def add_liked_band(b,u):
+    lb = LikedBand.objects.get_or_create(band=b,user=u)[0]
+    try:
+        lb.save()
+    except :
+        print 'error'
+
+    return lb
+
+# Like buttons helper function - to be refactored!!!
+def add_disliked_band(b,u):
+    print 'step 4!!'
+
+    dlb = DisLikedBand.objects.get_or_create(band=b,user=u)[0]
+    try:
+        dlb.save()
+    except :
+        print 'error'
+    print 'step 5!!'
+    return dlb

@@ -51,12 +51,10 @@ class LikedBand(models.Model):
     band = models.ForeignKey(Band)
     user = models.ForeignKey(UserProfile)
 
-
-
     def __unicode__(self):
         return str(self.band) + ' ' + str(self.user)
 
-class DisLikedBands(models.Model):
+class DisLikedBand(models.Model):
     band = models.ForeignKey(Band)
     user = models.ForeignKey(UserProfile)
 

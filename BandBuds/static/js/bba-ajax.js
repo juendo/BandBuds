@@ -111,13 +111,16 @@ $( document ).ready( function() {
 	$('.btn').click(function(){
     var bandid;
 	var userid;
+	var bandslug;
+	var opinion;
     bandid = $(this).attr("data-bandid");
 	bandslug = $(this).attr("data-bandslug")
     userid= $(this).attr("data-user");
-	console.log(bandslug+' and '+ userid);
-	$.get('/profile/like_band/', {user_id:userid,band_id: bandid}, function(data){
-		$('.'+bandslug).hide();
-    });
+	opinion=$(this).attr("id");
+	console.log(bandslug+' and '+ userid + ' '+ opinion);
+	$.get('/profile/'+opinion+'_band/', {user_id: userid, band_id: bandid}, function (data) {
+		$('.' + bandslug).hide();
+	});
 });
 
 

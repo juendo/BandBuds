@@ -16,6 +16,7 @@ urlpatterns = patterns('',
     url(r'^bud_profile/(?P<budSlug>[\w\-]+)/$', views.bud_profile, name='bud_profile'),
     #url(r'^profile/(?P<user_name_slug>[\w\-]+)/like_band/$', views.like_band, name='like_band'),
     url(r'^profile/like_band/$', views.like_band, name='like_band'),
+    url(r'^profile/dislike_band/$', views.dislike_band, name='dislike_band'),
     url(r'^profile/(?P<user_name_slug>[\w\-]+)/$', views.profile, name='profile'),
     url(r'^profile/', views.my_profile, name='my_profile'),
 

@@ -18,4 +18,17 @@
       </tr></table>
     {% endif %}
 
+    {% if disliked_bands %}
+        <table><tr>
+		{% for dlb in disliked_bands %}
+
+            <th>
+			<div><img class="gig-image" src="{{ dlb.band.image_Ref }}" alt="artists-image"></div>
+            </th>
+
+		{% endfor %}
+
+      </tr></table>
+    {% endif %}
+
 </div>

@@ -36,7 +36,7 @@ class Migration(migrations.Migration):
             bases=(models.Model,),
         ),
         migrations.CreateModel(
-            name='DisLikedBands',
+            name='DisLikedBand',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
                 ('band', models.ForeignKey(to='bba.Band')),
@@ -105,7 +105,7 @@ class Migration(migrations.Migration):
             name='UserProfile',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('dob', models.DateField(default=datetime.date(2016, 3, 19))),
+                ('dob', models.DateField(default=datetime.date(2016, 3, 20))),
                 ('gender', models.CharField(default=b'U', max_length=1, choices=[(b'U', b'Undisclosed'), (b'F', b'Female'), (b'M', b'Male')])),
                 ('smokes', models.IntegerField(default=0)),
                 ('drinks', models.IntegerField(default=0)),
@@ -161,7 +161,7 @@ class Migration(migrations.Migration):
             preserve_default=True,
         ),
         migrations.AddField(
-            model_name='dislikedbands',
+            model_name='dislikedband',
             name='user',
             field=models.ForeignKey(to='bba.UserProfile'),
             preserve_default=True,
