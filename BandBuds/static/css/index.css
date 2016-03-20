@@ -14,29 +14,6 @@ html, body {
     height: 100%;
 }
 
-/* Profile sliders and forms */
-#ex1Slider .slider-selection {
-	background: #A00010;
-}
-
-#ex1Slider .slider-track {
-	background: #22030A;
-}
-
-#ex1Slider .slider-handle {
-	background: #D30439;
-	opacity: 1;
-}
-.ex1Slider{
-	display: inline-block;
-	float: right;
-	margin: 10px 10px 10px 10px;
-}
-
-.sub-btn{
-	margin-top: 20px;
-}
-
 /* nav */
 .navbar {
 	background: #D30439;

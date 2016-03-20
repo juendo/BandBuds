@@ -5,110 +5,101 @@
 {% block top_left %}
 
 {% if user_profile.user.is_authenticated %}
+<div class="prof">
+    <div class="prof-from">
+        <h3> Yo {{ user_profile.user.username }}!</h3>
+        <p>like some bands so other buds can what music you like</p>
+    </div>
+    <div class="prof-from">
+    <form id="id_profile_form" method="post" action="/profile/{{ user.slug }}" enctype="multipart/form-data">
 
-<h3> Welcome {{ user_profile.user.username }}! fill in your profile</h3>
+        {% csrf_token %}
 
-<form id=" " method="post" action="/profile/{{ user.slug }}"
-        enctype="multipart/form-data">
+        {% for hidden in profile_form.hidden_fields %}
+            {{ hidden }}
+        {% endfor %}
 
-    {% csrf_token %}
-
-    {% for hidden in profile_form.hidden_fields %}
-        {{ hidden }}
-    {% endfor %}
-
-
-        <div class=" ">
-            {{ profile_form.image }}
-            <br/>
-
-            <!--Dob slider -->
             <div class=" ">
-                <div class="col-sm-2 control-label" for="{{ profile_form.dob.id_for_label }}">{{ profile_form.dob.label_tag }}
-                </div>
-                <div class="col-sm-10">
-                    {{ profile_form.dob }}
-                   <input type="text" class=" " name="{{ profile_form.dob.name }}" id="{{ profile_form.dob.id_for_label }}" value ="{{ profile_form.dob.value }}">
-                    <small>{{ profile_form.dob.errors }}{{ profile_form.dob.help_text }}</small>
-                </div>
-            </div>
-            <br>
+                {{ profile_form.image }}
 
-            <!--Gender slider -->
-            <div class=" ">
-                <div class="col-sm-2 control-label" for="{{ profile_form.gender.id_for_label }}">
-                    {{ profile_form.gender.label_tag }}
+                <!--Dob slider -->
+                <div class=" ">
+                    <div class=" " for="{{ profile_form.dob.id_for_label }}">{{ profile_form.dob.label_tag }}
+                    </div>
+                    <div class=" ">
+                        {{ profile_form.dob }}
+                        <small>{{ profile_form.dob.errors }}{{ profile_form.dob.help_text }}</small>
+                    </div>
                 </div>
-                <div class="col-sm-10">
-                   <select class="form-control" name="{{ profile_form.gender.name }}" id="{{ profile_form.gender.dob.id_for_label }}">
-                       {% for value in profile_form.gender.value %}
-                       <option value ="{{ value }}" selected="selected">{{ value }}</option>
-                       {% endfor %}
-                   </select>
-                </div>
-            </div>
-            <br>
 
-            <!--Smokes slider -->
-            <div class=" ">
-                <div class="col-sm-2 control-label" for="{{ profile_form.smokes.id_for_label }}">
-                    {{ profile_form.smokes.label_tag }}
+                <!--Gender slider -->
+                <div class=" ">
+                    <div class=" " for="{{ profile_form.gender.id_for_label }}">
+                        {{ profile_form.gender.label_tag }}
+                    </div>
+                    <div class="">
+                       {{ profile_form.gender }}
+                       <small>{{ profile_form.gender.errors }}{{ profile_form.gender.help_text }}</small>
+                    </div>
                 </div>
-                <div class="col-sm-10 ex1Slider">
-                    <input type="number" class="form-control" name="{{ profile_form.smokes.name }}" id="{{ profile_form.smokes.id_for_label }}"  data-slider-id="ex1Slider" data-slider-min="0" data-slider-max="4" data-slider-step="1" data-slider-value="2" data-slider-tooltip="hide">
-                    <span id="smkSliderVal"></span>
-                    <small>{{ profile_form.smokes.errors }}{{ profile_form.smokes.help_text }}</small>
-                </div>
-            </div>
-            <br>
 
-            <!--Dances slider -->
-            <div class=" ">
-                <div class="col-sm-2 control-label" for="{{ profile_form.dances.id_for_label }}">{{ profile_form.dances.label_tag }}
+                <!--Smokes slider -->
+                <div class=" ">
+                    <div class="col-sm-12 prof-in" for="{{ profile_form.smokes.id_for_label }}">
+                        {{ profile_form.smokes.label_tag }}<span id="smkSliderVal"></span>
+                    </div>
+                    <div class="prof-slider">
+                        <input type="range" name="{{ profile_form.smokes.name }}" id="{{ profile_form.smokes.id_for_label }}"  data-slider-id="ex1Slider" data-slider-min="0" data-slider-max="4" data-slider-step="1" data-slider-value="2" data-slider-tooltip="hide">
+                        <small>{{ profile_form.smokes.errors }}{{ profile_form.smokes.help_text }}</small>
+                    </div>
                 </div>
-                <div class="col-sm-10 ex1Slider">
-                    <input type="number" class="form-control" name="{{ profile_form.dances.name }}" id="{{ profile_form.dances.id_for_label }}"  data-slider-id="ex1Slider" data-slider-min="0" data-slider-max="4" data-slider-step="1" data-slider-value="2" data-slider-tooltip="hide">
-                    <span id="ex1SliderVal"></span>
-                    <small>{{ profile_form.dances.errors }}{{ profile_form.dances.help_text }}</small>
-                </div>
-            </div>
-            <br>
 
-            <!--Involvment slider -->
-            <div class=" ">
-                <div class="col-sm-2 control-label" for="{{ profile_form.involvement.id_for_label }}">{{ profile_form.involvement.label_tag }}
+                <!--Dances slider -->
+                <div class=" ">
+                    <div class="col-sm-12 prof-in" for="{{ profile_form.dances.id_for_label }}">
+                        {{ profile_form.dances.label_tag }}<span id="ex1SliderVal"></span>
+                    </div>
+                    <div class="prof-slider">
+                        <input type="range" name="{{ profile_form.dances.name }}" id="{{ profile_form.dances.id_for_label }}"  data-slider-id="ex1Slider" data-slider-min="0" data-slider-max="4" data-slider-step="1" data-slider-value="2" data-slider-tooltip="hide">
+                        <small>{{ profile_form.dances.errors }}{{ profile_form.dances.help_text }}</small>
+                    </div>
                 </div>
-                <div class="col-sm-10 ex1Slider">
-                    <input type="number" class="form-control" name="{{ profile_form.involvement.name }}" id="{{ profile_form.involvement.id_for_label }}"  data-slider-id="ex1Slider" data-slider-min="0" data-slider-max="4" data-slider-step="1" data-slider-value="2" data-slider-tooltip="hide">
-                    <span id="invSliderVal"></span>
-                    <small>{{ profile_form.involvement.errors }}{{ profile_form.involvement.help_text }}</small>
-                </div>
-            </div>
-            <br>
 
-            <!--Drinks slider -->
-            <div class=" ">
-                <div class="col-sm-2 control-label" for="{{ profile_form.drinks.id_for_label }}">{{ profile_form.drinks.label_tag }}
+                <!--Involvment slider -->
+                <div class=" ">
+                    <div class="col-sm-12" for="{{ profile_form.involvement.id_for_label }}">
+                        {{ profile_form.involvement.label_tag }}<span id="invSliderVal"></span>
+                    </div>
+                    <div class="prof-slider">
+                        <input type="range" name="{{ profile_form.involvement.name }}" id="{{ profile_form.involvement.id_for_label }}"  data-slider-id="ex1Slider" data-slider-min="0" data-slider-max="4" data-slider-step="1" data-slider-value="2" data-slider-tooltip="hide">
+                        <small>{{ profile_form.involvement.errors }}{{ profile_form.involvement.help_text }}</small>
+                    </div>
                 </div>
-                <div class="col-sm-8 ex1Slider">
-                    <input type="number" class="form-control" name="{{ profile_form.drinks.name }}" id="{{ profile_form.drinks.id_for_label }}"  data-slider-id="ex1Slider" data-slider-min="0" data-slider-max="4" data-slider-step="1" data-slider-value="2" data-slider-tooltip="hide">
-                    <div id="dnkSliderVal" class="col-sm-2">{% if slug_user %}hello{{slug_user.drinks}}{% else %}?{% endif %}</div>
-                    <small>{{ profile_form.drinks.errors }}{{ profile_form.drinks.help_text }}</small>
-                </div>
-            </div>
 
-       <br>
-        <div class="  sub-btn">
-            <div class="col-sm-8">
-            <!-- Provide a button to click to submit the form. -->
-            <input class="btn btn-default" type="submit" name="submit" value="Register" />
+                <!--Drinks slider -->
+                <div class=" ">
+                    <div class="col-sm-12" for="{{ profile_form.drinks.id_for_label }}">
+                        {{ profile_form.drinks.label_tag }}<span id="dnkSliderVal" class="col-sm-2"></span>
+                    </div>
+                    <div class="prof-slider">
+                        <input type="range" name="{{ profile_form.drinks.name }}" id="{{ profile_form.drinks.id_for_label }}"  data-slider-id="ex1Slider" data-slider-min="0" data-slider-max="4" data-slider-step="1" data-slider-value="2" data-slider-tooltip="hide">
+                        <small>{{ profile_form.drinks.errors }}{{ profile_form.drinks.help_text }}</small>
+                    </div>
+                </div>
+
+            <div class=" sub-btn">
+                <div class="col-sm-8">
+                <!-- Provide a button to click to submit the form. -->
+                <input class="btn btn-default" type="submit" name="submit" value="Submit" />
+                </div>
             </div>
-            <div class="col-sm-4">
-                <a href="calendar/{% now 'Y-m/'%}">check out gigs</a>
             </div>
+    </form>
+        <div>
+        {% include 'bba/user/likedbands.html' %}
         </div>
-        </div>
-</form>
+    </div>
+
 
 {% else %}
     <!--Login start -->
@@ -116,5 +107,5 @@
       {% include 'bba/login.html' %}
     </div>
 {% endif %}
-
+</div>
 {% endblock %}
