@@ -4,11 +4,13 @@
 
 {% block top_left %}
 
+{% include 'bba/user/likedbands.html' %}
+
 {% if user.is_authenticated %}
 
-<h1> Welcome {{ profile.user.username }}! fill in your profile</h1>
+<h1> Welcome {{ user_profile.user.username }}! fill in your profile</h1>
 
-<form id="profile_form" method="post" action="/profile/{{ user.slug }}"
+<form id="profile_form" method="post" action="/profile/{{ user_profile.slug }}"
         enctype="multipart/form-data">
 
     {% csrf_token %}
@@ -42,6 +44,7 @@
     <span id="ex1CurrentSliderValLabel">Dance Value: <span id="ex1SliderVal">3</span></span><br/>
 </div>
 
+
 {% else %}
 
         <!--Login start -->
@@ -52,5 +55,8 @@
             </div>
         <!--Login end -->
 {% endif %}
+
+
+
 
 {% endblock %}

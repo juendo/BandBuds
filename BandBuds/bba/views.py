@@ -199,8 +199,8 @@ def user(request,user_name_slug):
     print 'got to user'
 
     try:
-        user=UserProfile.objects.get(slug=user_name_slug)
-        context_dict = {'user':user}
+        user_profile=UserProfile.objects.get(slug=user_name_slug)
+        context_dict = {'user_profile':user_profile}
 
     except UserProfile.DoesNotExist:
         context_dict={}
@@ -300,7 +300,7 @@ def profile(request, user_name_slug):
             print "got to this user profile"
             registered = True
 
-            return render(request,'bba/user/user_profile.html',{'profile': user_profile, 'registered': registered})
+            return render(request,'bba/user/user_profile.html',{'user_profile': user_profile, 'registered': registered})
 
         else:
             print profile_form.errors
@@ -308,12 +308,20 @@ def profile(request, user_name_slug):
     else:
         profile_form = UserProfileForm()
 
-    bands = Band.objects.all().order_by('name')
+    liked_bands=LikedBand.objects.filter(user=user_profile)
+
+    likes=[]
+    for i in range(len(liked_bands)):
+        likes.append(liked_bands[i].band)
+    bands=Band.objects.all()
+    newbies=list(set(bands)-set(likes))
+
+
     registered = True
 
     print 'got to end: prof'
     # Render the template depending on the context.
-    return render(request,'bba/user/user_profile.html',{'profile':user_profile,'profile_form': profile_form, 'registered': registered, 'bands':bands})
+    return render(request,'bba/user/user_profile.html',{'user_profile':user_profile,'profile_form': profile_form, 'registered': registered, 'bands':newbies[:10],'liked_bands':liked_bands[:5]})
 
 
 
@@ -392,22 +400,23 @@ def nudge(request, user_slug, gig_id):
 @login_required
 def like_band(request):
 
-    print 'LIKING THIS!'
     band_id = None
     if request.method == 'GET':
+
+        print 'this far'
+
         band_id = request.GET['band_id']
+        print 'no this far'
+
         user_id = request.GET['user_id']
 
-        print '***band',band_id,'***user',user_id
+        user=User.objects.get(username=user_id)
+        user_profile=UserProfile.objects.get(user=user)
 
-    if band_id and user_id:
-
-        user_profile=UserProfile.objects.get(slug=user_id)
-        print 'gotta get'
         band = Band.objects.get(name=band_id)
-        print 'gotta get thru this'
         add_liked_band(band,user_profile)
-        print 'gotta go'
+
+
 
 
     return HttpResponse("")
@@ -418,11 +427,8 @@ def add_liked_band(b,u):
     print 'gotta go again',b,u,lb
     try:
         lb.save()
-    except Exception as inst:
+    except :
         print 'error'
-        print type(inst)     # the exception instance
-        print inst.args      # arguments stored in .args
-        print inst
 
     print 'here?'
     return lb

@@ -1,0 +1,21 @@
+<!-- user liked bands
+	load to user_profile.html -->
+
+<div>
+
+<h2> Liked bands </h2>
+
+    {% if liked_bands %}
+        <table><tr>
+		{% for lb in liked_bands %}
+
+            <th>
+			<div><img class="gig-image" src="{{ lb.band.image_Ref }}" alt="artists-image"></div>
+            </th>
+
+		{% endfor %}
+
+      </tr></table>
+    {% endif %}
+
+</div>

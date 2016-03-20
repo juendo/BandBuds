@@ -61,11 +61,8 @@ def populate():
 
 def add_band(name,image_Ref):
     b = Band.objects.get_or_create(name=name,image_Ref=image_Ref)[0]
+    b.save()
     return b
-
-def add_LikedBand(b,u):
-    lb = LikedBand.objects.get_or_create(band=b,user=u)[0]
-    return lb
 
 def add_profile(user, dob, gender, smokes, drinks, dances, involvement):
     u = UserProfile.objects.get_or_create(user=user, dob=dob, gender=gender,
