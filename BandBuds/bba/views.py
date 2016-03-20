@@ -199,20 +199,20 @@ def helper_get_user(gig):
 def gig_bud(request, gig_id, bud_slug):
 
 
-#    gig = Gig.objects.all().filter(gig_id=gig_id)[0]
+    #    gig = Gig.objects.all().filter(gig_id=gig_id)[0]
     gig = Gig.objects.get(gig_id=gig_id)
     buds = map(helper_get_user, GigAttendance.objects.filter(gig=gig))
     bud_to_show = UserProfile.objects.get(slug=bud_slug)
 
 
-# user = UserProfile.objects.get(username=username)
-#    user_profile = UserProfile.objects.get(user=user)
+    # user = UserProfile.objects.get(username=username)
+    #    user_profile = UserProfile.objects.get(user=user)
 
     # check to see if nudge button clicked via ajax button
   #  if request.method == 'GET':
 
  #       nudge = Buddy.objects.get_or_create(user=userProfile, bud=bud_to_show, gig=gig)[0]
-#        nudge.save()
+    #        nudge.save()
 
     context_dict = { 'bud_to_show' : bud_to_show, 'buds' : buds, 'gig' : gig}
 
@@ -353,9 +353,12 @@ def profile(request, user_name_slug):
     # data for buddy request notifications
     nudge=Buddy.objects.filter(buddy=user_profile)
     nudgeList=[]
+    print "******** nudging"
     for i in range(len(nudge)):
         if nudge[i].accept==False:
             nudgeList.append(nudge[i])
+    for i in range(len(nudgeList)):
+        print nudgeList[i].user
 
     registered = True
 
