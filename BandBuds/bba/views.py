@@ -159,6 +159,13 @@ def calendar_json(request, date_param, with_buds):
                 date__year=year,
                 date__month=month,
             )
+        if search != '':
+            gigs = gigs.filter(
+                    band__name=search
+                ) | \
+                gigs.filter(
+                    venue__name=search
+                )
 
     cal = create_calendar(year, month, day, gigs)
 
@@ -217,6 +224,13 @@ def gigs_on_date(request, date_param, with_buds):
                 date__month=date_param[1],
                 date__day=date_param[2],
             )
+        if search != '':
+            gigs = gigs.filter(
+                    band__name=search
+                ) | \
+                gigs.filter(
+                    venue__name=search
+                )
 
     return render(request, "bba/calendar/calendar_gig_list.html", { 'gigs' : gigs })    
 
