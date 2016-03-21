@@ -20,11 +20,11 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 SECRET_KEY = ')02o66$+m7vvaibz%*tyaol2mlmg$d6tqif0+6)*c^^h(be49c'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 TEMPLATE_DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['<BandBuds>.pythonanywhere.com']
 
 # Hash me out if I'm useless, this was added for registering
 AUTHENTICATION_BACKENDS = (
