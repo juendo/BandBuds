@@ -265,20 +265,20 @@ def register(request):
             user.save()
 
             # create user profile object with default fields
-            userProfile = add_profile(user)
+            user_profile = add_profile(user)
 
             # logs in user
-            userProfile.user = authenticate(username=user_form.cleaned_data['username'],
+            user_profile.user = authenticate(username=user_form.cleaned_data['username'],
                                 password=user_form.cleaned_data['password'],
                                 )
 
-            if userProfile.user.is_active:
-               login(request, userProfile.user)
+            if user_profile.user.is_active:
+               login(request, user_profile.user)
 
-            print "hello!! " + str(userProfile.user.is_authenticated())
+            print "hello!! " + str(user_profile.user.is_authenticated())
 
 
-            return HttpResponseRedirect('../profile/'+userProfile.slug)
+            return HttpResponseRedirect('../profile/'+user_profile.slug)
 
         # Invalid form or forms - mistakes or something else?
         # Print problems to the terminal.
@@ -304,35 +304,42 @@ def my_profile(request):
 def profile(request, user_name_slug):
 
     user_profile = UserProfile.objects.get(slug=user_name_slug)
-    print "hello!! " + str(user_profile.user.is_authenticated()), user_profile.user.username
+
+    print user_profile.drinks,''
 
     # If it's a HTTP POST, we're interested in processing form data.
     if request.method == 'POST':
-        print 'yo stevo', user_profile.user.is_authenticated
+
 
         profile_form = UserProfileForm(data=request.POST)
 
         if profile_form.is_valid():
-            user_profile = profile_form.save(commit=False)
+            user_data = profile_form.save(commit=False)
             print '******************* is prof valid'
 
             # Did the user provide a profile picture?
             # If so, we need to get it from the input form and put it in the UserProfile model.
             if 'image' in request.FILES:
-                user_profile.image = request.FILES['image']
+                user_data.image = request.FILES['image']
 
                 print '****************** about to save'
-                user_profile.save()
-            print "got to this user profile"
-            registered = True
 
-            return render(request,'bba/user/user_profile.html',{'user_profile': user_profile, 'registered': registered})
+
+            print "got to this user profile"
+
+
+            registered = True
+            user_profile.drinks=user_data.drinks
+            user_profile.save()
+
+
 
         else:
             print profile_form.errors
 
     else:
         profile_form = UserProfileForm()
+
 
     # data for liked bands of a user
     liked_bands=LikedBand.objects.filter(user=user_profile)
@@ -362,8 +369,11 @@ def profile(request, user_name_slug):
 
     registered = True
 
+
+    context_dict={'user_profile':user_profile,'profile_form': profile_form, 'registered': registered, 'bands':newbies[:10],'liked_bands':liked_bands[:5],'disliked_bands':disliked_bands[:5],'nudges':nudgeList[:5]}
+
     # Render the template depending on the context
-    return render(request,'bba/user/user_profile.html',{'user_profile':user_profile,'profile_form': profile_form, 'registered': registered, 'bands':newbies[:10],'liked_bands':liked_bands[:5],'disliked_bands':disliked_bands[:5],'nudges':nudgeList[:5]})
+    return render(request,'bba/user/user_profile.html',context_dict)
 
 
 
