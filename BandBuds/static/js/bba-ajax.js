@@ -79,19 +79,6 @@ $( document ).ready( function() {
 		loadCalendar(year, month);
 	});
 
-	$( '.nudge' ).click( function() {
-		var username = $( this ).data( 'user' );
-		var gigid = $( this ).data( 'gigid' );
-		var button = $( this );
-		$.get(
-			'/ajax/nudge/' + username + '/' + gigid,
-			{},
-			function(data) {
-				button.html(data);
-			}
-		)
-	});
-
 	$('.search').click()
 
     // Tool tip, Hover over button with dataitoggle att. to show what link/button dose
@@ -116,20 +103,39 @@ $( document ).ready( function() {
     });
 
     // Likes
-	$('.btn').click(function(){
-    var bandid;
-	var userid;
-	var bandslug;
-	var opinion;
-    bandid = $(this).attr("data-bandid");
-	bandslug = $(this).attr("data-bandslug")
-    userid= $(this).attr("data-user");
-	opinion=$(this).attr("id");
-	console.log(bandslug+' and '+ userid + ' '+ opinion);
-	$.get('/profile/'+opinion+'_band/', {user_id: userid, band_id: bandid}, function (data) {
-		$('.' + bandslug).hide();
+	$('.band').click(function(){
+
+	    var bandid = $(this).attr("data-bandid");
+		var bandslug = $(this).attr("data-bandslug")
+	    var userid= $(this).attr("data-user");
+		var opinion=$(this).attr("id");
+		console.log('band button'+ bandslug+' and '+ userid + ' '+ opinion);
+		$.get('/profile/'+opinion+'_band/', {user_id: userid, band_id: bandid}, function (data) {
+			$('.' + bandslug).hide();
+		});
 	});
-});
+
+	//nudge
+	$('.nudge').click(function() {
+
+		var userid= $(this).attr("data-userid");
+		var budid = $(this).attr("data-budid");
+    	var gigid= $(this).attr("data-gigid");
+		var button = $( this );
+
+		//url(r'^ajax/nudge/(?P<user_slug>[\w\-]+)/(?P<gig_id>[0-9]+)$', views.nudge, name='nudge'),
+
+		console.log(userid+ ' ' + budid + ' '+ gigid + ' ' + '/ajax/nudge/' + budid + '/' + gigid+ '/');
+		$.get(
+			'/ajax/nudge/',
+			{user_id:userid,bud_id: budid, gig_id : gigid},
+			function(data) {
+				button.html(data);
+			}
+		)
+
+
+	});
 
 
 });

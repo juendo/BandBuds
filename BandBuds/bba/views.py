@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.template.loader import render_to_string
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.contrib.auth import authenticate, login, logout
-from bba.models import Band, Gig, Venue, UserProfile, GigAttendance, User, Nudge, LikedBand,DisLikedBand
+from bba.models import Band, Gig, Venue, UserProfile, GigAttendance, User, Nudge, LikedBand,DisLikedBand, Buddy
 from datetime import date, datetime
 from calendar import monthrange
 from bba.forms import UserForm, UserProfileForm
@@ -154,21 +154,51 @@ def gigs_on_date(request, date_param, with_buds):
     # extract the date fields
     date_param = date_param.split('-')
 
+    # get the search text
     search = request.GET['search']
-    if search != '':
-        gigs = Gig.objects.filter(date__year=date_param[0], date__month=date_param[1], date__day=date_param[2], band__name=search) | \
-                Gig.objects.filter(date__year=date_param[0], date__month=date_param[1], date__day=date_param[2], venue__name=search)
+
     # if getting only gigs which are being attended
-    elif with_buds == 't':
-        # get all gig attendance objects for the date in question
-        att = GigAttendance.objects.filter(gig__date__year=date_param[0], gig__date__month=date_param[1], gig__date__day=date_param[2])
+    if with_buds == 't':
+        # get gig attendances for given month
+        att = 
+            GigAttendance.objects.filter(
+                gig__date__year=date_param[0], 
+                gig__date__month=date_param[1], 
+                gig__date__day=date_param[2],
+            ) | \
+            GigAttendance.objects.filter(
+                gig__date__year=date_param[0], 
+                gig__date__month=date_param[1], 
+                gig__date__day=date_param[2],
+            )
+            # filter on search term if necessary
+        if search != '':
+            att = 
+                att.filter(
+                    gig__band__name=search
+                ) | \
+                att.filter(
+                    gig__venue__name=search
+                )
         gigs = Set()
-        # and extract their gigs
+        # and extract the gigs
         for a in att:
             gigs.add(a.gig)
     # otherwise just get all the gigs on the given day
     else:
-        gigs = Gig.objects.filter(date__year=date_param[0], date__month=date_param[1], date__day=date_param[2])
+        gigs = 
+            Gig.objects.filter(
+                date__year=date_param[0], 
+                date__month=date_param[1], 
+                date__day=date_param[2],
+                band__name=search
+            ) | \
+            Gig.objects.filter(
+                date__year=date_param[0],
+                date__month=date_param[1],
+                date__day=date_param[2],
+                venue__name=search
+            )
 
     return render(request, "bba/calendar/calendar_gig_list.html", { 'gigs' : gigs })    
 
@@ -197,19 +227,44 @@ def gig(request, gig_id):
     return render(request, 'bba/gig.html', context_dict)
 
 @login_required
-def bud_profile(request, budSlug):
-    bud = UserProfile.objects.filter(slug=budSlug)[0]
-    return render(request, 'bba/buds/bud_profile.html', { 'bud_to_show' : bud })
+def bud_profile(request, bud_slug):
+
+    bud = UserProfile.objects.get(slug=bud_slug)
+    #user = request.user
+
+    #nudge = Buddy.objects.get_or_create(user=user, bud=bud, gig=gig)[0]
+    #nudge.save()
+
+
+    return render(request, 'bba/buds/bud_profile.html', { 'bud' : bud})
 
 def helper_get_user(gig):
         return gig.user
 
+# highlights given bud in context of bud_slug relating to gig gig_id
+# displays other buds attending as well
 def gig_bud(request, gig_id, bud_slug):
-    gig = Gig.objects.all().filter(gig_id=gig_id)[0]
+
+
+#    gig = Gig.objects.all().filter(gig_id=gig_id)[0]
+    gig = Gig.objects.get(gig_id=gig_id)
     buds = map(helper_get_user, GigAttendance.objects.filter(gig=gig))
-    bud = UserProfile.objects.filter(slug=bud_slug)[0]
-    context_dict = { 'bud_to_show' : bud, 'buds' : buds, 'gig' : gig }
+    bud_to_show = UserProfile.objects.get(slug=bud_slug)
+
+
+# user = UserProfile.objects.get(username=username)
+#    user_profile = UserProfile.objects.get(user=user)
+
+    # check to see if nudge button clicked via ajax button
+  #  if request.method == 'GET':
+
+ #       nudge = Buddy.objects.get_or_create(user=userProfile, bud=bud_to_show, gig=gig)[0]
+#        nudge.save()
+
+    context_dict = { 'bud_to_show' : bud_to_show, 'buds' : buds, 'gig' : gig}
+
     return render(request, 'bba/gig_buds.html', context_dict)
+
 
 def user(request,user_name_slug):
 
@@ -326,20 +381,33 @@ def profile(request, user_name_slug):
     else:
         profile_form = UserProfileForm()
 
+    # data for liked bands of a user
     liked_bands=LikedBand.objects.filter(user=user_profile)
-
-    likes=[]
+    prefSet=[]
     for i in range(len(liked_bands)):
-        likes.append(liked_bands[i].band)
+        prefSet.append(liked_bands[i].band)
     bands=Band.objects.all()
-    newbies=list(set(bands)-set(likes))
+    newbies=list(set(bands)-set(prefSet))
 
+    # data for disliked bands of a user
+    disliked_bands=DisLikedBand.objects.filter(user=user_profile)
+    prefSet=[]
+    for i in range(len(disliked_bands)):
+        prefSet.append(disliked_bands[i].band)
+    bands=Band.objects.all()
+    newbies=list(set(bands)-set(prefSet))
+
+    # data for buddy request notifications
+    nudge=Buddy.objects.filter(buddy=user_profile)
+    nudgeList=[]
+    for i in range(len(nudge)):
+        if nudge[i].accept==False:
+            nudgeList.append(nudge[i])
 
     registered = True
 
-    print 'got to end: prof'
-    # Render the template depending on the context.
-    return render(request,'bba/user/user_profile.html',{'user_profile':user_profile,'profile_form': profile_form, 'registered': registered, 'bands':newbies[:10],'liked_bands':liked_bands[:5]})
+    # Render the template depending on the context
+    return render(request,'bba/user/user_profile.html',{'user_profile':user_profile,'profile_form': profile_form, 'registered': registered, 'bands':newbies[:10],'liked_bands':liked_bands[:5],'disliked_bands':disliked_bands[:5],'nudges':nudgeList[:5]})
 
 
 
@@ -360,6 +428,7 @@ def user_login(request):
             # has an activie account
            if user.is_active:
                login(request, user)
+
                return HttpResponseRedirect('../calendar')
            else:
                return HttpResponse("Your account for bandbuds has been disabled.")
@@ -405,15 +474,39 @@ def im_going(request, gig_id):
 
 
 
-# for a user nuding another
+# for a user nudging another
 @login_required
-def nudge(request, user_slug, gig_id):
-    nudgee = UserProfile.objects.get(slug=user_slug)
-    nudger = request.user
-    gig = Gig.objects.get(gig_id=gig_id)
-    nudge = Nudge.objects.get_or_create(nudger=nudger, nudgee=nudgee, gig=gig)[0]
-    nudge.save()
+def nudge(request):
+
+    if request.method == 'GET':
+
+        print 'nudging..'
+
+        user_id = request.GET['user_id']
+        bud_id = request.GET['bud_id']
+        gig_id = request.GET['gig_id']
+
+        try:
+            user=User.objects.get(username=user_id)
+            user_profile=UserProfile.objects.get(user=user)
+
+            bud_profile=UserProfile.objects.get(slug=bud_id)
+
+            gig = Gig.objects.get(gig_id=gig_id)
+
+        except Exception as exp:
+            print exp
+            return HttpResponse("Error")
+
+        print 'saving..'
+
+        add_buddy_request(user_profile,bud_profile,gig)
+
+        print 'saved.'
+
+
     return HttpResponse("Nudged")
+#    return render("Nudged", 'bba/bud/bud_profile.html', context_dict)
 
 @login_required
 def like_band(request):
@@ -485,3 +578,14 @@ def add_disliked_band(b,u):
         print 'error'
     print 'step 5!!'
     return dlb
+
+# helper function - to be refactored!!!
+def add_buddy_request(user,buddy,gig):
+    try:
+        bud_req = Buddy.objects.get_or_create(user=user,buddy=buddy,gig=gig)
+        bud_req.save()
+    except Exception as exp:
+        print 'error'
+        print exp
+
+    return bud_req

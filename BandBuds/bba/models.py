@@ -61,18 +61,6 @@ class DisLikedBand(models.Model):
     def __unicode__(self):
         return self.band + ' ' + self.user
 
-class Buddy(models.Model):
-    user = models.OneToOneField(UserProfile, related_name='+')
-    buddy = models.ForeignKey(UserProfile)
-    slug = models.SlugField()
-
-    def save(self, *args, **kwargs):
-         self.slug = slugify(self.user)
-         super(Buddy, self).save(*args, **kwargs)
-
-    def __unicode__(self):
-        return self.UserProfile + ' buddied with ' + self.buddy
-
 class Venue(models.Model):
     venue_id = models.IntegerField(default=0)
     name = models.CharField(max_length=128)
@@ -110,6 +98,27 @@ class GigAttendance(models.Model):
 
     def __unicode__(self):
         return self.gig.band.name + ' ' + self.user.user.username
+
+
+class Buddy(models.Model):
+    user = models.ForeignKey(UserProfile)
+    buddy = models.ForeignKey(UserProfile, related_name='+')
+    gig=models.ForeignKey(Gig)
+    accept=models.BooleanField(default=False)
+    slug = models.SlugField()
+
+    def save(self, *args, **kwargs):
+         self.slug = slugify(self.user)
+         super(Buddy, self).save(*args, **kwargs)
+
+    def __unicode__(self):
+        return self.user + ' ' + self.buddy + ' ' + self.gig.band + ' request accepted: ' + self.accept
+
+
+
+
+
+
 
 class Nudge(models.Model):
     nudger = models.ForeignKey(User)
