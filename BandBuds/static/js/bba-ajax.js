@@ -39,7 +39,7 @@ $( document ).ready( function() {
 		if (month == 1) {
 			year++;
 		}
-		loadCalendar(year, month);
+		loadCalendar(year, month, false);
 	});
 
 	/*
@@ -61,14 +61,14 @@ $( document ).ready( function() {
 		if (month == 12) {
 			year--;
 		}
-		loadCalendar(year, month);
+		loadCalendar(year, month, true);
 	});
 
 	$( '#bud-filter' ).click( function() {
 		var params = $( '#calendar-info' ).attr( 'data-month' ).split('-');
 		var year = params[0];
 		var month = params[1];
-		loadCalendar(year, month);
+		loadCalendar(year, month, false);
 	});
 
 	$( '#search-text' ).keyup( function() {
@@ -76,7 +76,7 @@ $( document ).ready( function() {
 		var year = params[0];
 		var month = params[1];
 		var search = $( '#search-text' ).val();
-		loadCalendar(year, month);
+		loadCalendar(year, month, false);
 	});
 
 	$('.search').click()
@@ -137,6 +137,23 @@ $( document ).ready( function() {
 
 	});
 
+	$( '.next-day' ).click( function() {
+		var next = $( '.today' ).attr( 'data-next' );
+		if (next != null && next.length > 0) {
+			$( '.cell-' + next ).click();
+		} else {
+			$( '.next-month' ).click();
+		}
+	});
+
+	$( '.prev-day' ).click( function() {
+		var prev = $( '.today' ).attr( 'data-prev' );
+		if (prev != null && prev.length > 0) {
+			$( '.cell-' + prev ).click();
+		} else {
+			$( '.prev-month' ).click();
+		}
+	});
 
 });
 
@@ -176,7 +193,7 @@ function loadGigs() {
 }
 
 // reload the calendar for a given year and month
-function loadCalendar(year, month) {
+function loadCalendar(year, month, selectLast) {
 
 	var with_buds = $( '#bud-filter' ).is( ':checked' ) ? 't' : 'f';
 
@@ -188,8 +205,7 @@ function loadCalendar(year, month) {
 		url: '../../ajax/reload_calendar/' + year + '-' + month + '-1/' + with_buds,
 		data: { 'search' : search },
 		success: function(data) {
-			// load new calendar details
-	        loadCalendarFromJson(data.calendar);
+			
 
 	        // update UI to reflect new date
 	        $( '#month' ).html( data.month_string );
@@ -201,14 +217,18 @@ function loadCalendar(year, month) {
 	        // hide previous button if necessary
 	        $( '.prev-month > img' ).toggle(!data.prev_hidden);
 
+	        // load new calendar details
+	        loadCalendarFromJson(data.calendar, selectLast);
+
 	        // load gigs for new date
 	        loadGigs();
+	        
 		}
 	})
 }
 
 // load a 2D array of day numbers into the calendar
-function loadCalendarFromJson(calendar) {
+function loadCalendarFromJson(calendar, selectLast) {
 
 	// clear the current day
 	$( '.today' ).removeClass( '.today' );
@@ -218,6 +238,10 @@ function loadCalendarFromJson(calendar) {
 
 	// get the rows of the calendar
 	var rows = $( ".calendar-row" ).toArray();
+
+	// used to track the previous and next days for the cells
+	var prevDay = null;
+	var nextDay = null;
 
 	// for each row
 	for (var i = 0; i < 6; i++) {
@@ -230,19 +254,30 @@ function loadCalendarFromJson(calendar) {
 
 			// update the day data
 			cells[j].setAttribute('data-day', calendar[i][j]);
-
-			// add classes appropriately
+			// add classes and data appropriately
 			if (calendar[i][j] == 0) {
-				cells[j].className = 'calendar-cell';
+				cells[j].className = 'calendar-cell cell-' + calendar[i][j];
 				cells[j].children[0].children[0].innerHTML = "";
 			} else if (found == false) {
-				cells[j].className = 'calendar-cell gig today';
+				cells[j].setAttribute('data-prev', '');
+				cells[j].setAttribute('data-next', '');
+				cells[j].className = 'calendar-cell gig today cell-' + calendar[i][j];
 				cells[j].children[0].children[0].innerHTML = calendar[i][j];
+				prevDay = cells[j];
 				found = true;
 			} else {
-				cells[j].className = 'calendar-cell gig';
+				cells[j].setAttribute('data-prev', '');
+				cells[j].setAttribute('data-next', '');
+				prevDay.setAttribute('data-next', cells[j].getAttribute('data-day'));
+				cells[j].setAttribute('data-prev', prevDay.getAttribute('data-day'));
+				cells[j].className = 'calendar-cell gig cell-' + calendar[i][j];
 				cells[j].children[0].children[0].innerHTML = calendar[i][j];
+				prevDay = cells[j];
 			}
 		}
+	}
+
+	if (selectLast) {
+		prevDay.click();
 	}
 }

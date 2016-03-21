@@ -74,6 +74,12 @@ $( document ).ready( function() {
         console.log('testing' + t);
     });
 
+	var params = $( '#calendar-info' ).attr( 'data-month' ).split('-');
+	var year = params[0];
+	var month = params[1];
+	
+	loadCalendar(year, month, false);
+
 });
 
 
