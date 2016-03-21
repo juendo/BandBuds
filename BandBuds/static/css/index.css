@@ -261,7 +261,7 @@ html, body {
 	color: white;
 }
 #search-panel .search-gig{
-	padding-top: 2%;
+	padding: 10px;
 }
 #filter-panel {
 	background-color: #D30439;
@@ -271,15 +271,11 @@ html, body {
 }
 #search-panel {
 	z-index: 3;
+	padding: 10px;
 }
-.form-group {
-	margin: 1%;
-	width: 74%;
-	height: 50%;
-	top: 50%;
-	-webkit-transform: translateY(-50%);
-	-ms-transform: translateY(-50%);
-	transform: translateY(-50%);
+#search-text {
+	width: 100%;
+	color: black;
 }
 .login{
 	padding-top: 15%;
