@@ -5,10 +5,7 @@
 {% block top_left %}
 
 {% if user_profile.user.is_authenticated %}
-    <div class="prof-from">
-        <p>like some bands so other buds can what music you like</p>
-    </div>
-    <div class="prof-from">
+    <div class="user-profile">
     <form id="id_profile_form" method="post" action="/profile/{{ user.slug }}" enctype="multipart/form-data">
 
         {% csrf_token %}
@@ -18,8 +15,18 @@
         {% endfor %}
 
             <div class=" ">
-                {{ profile_form.image }}
+                <!--Gender slider -->
+                <div class="col-sx-6 col-sm-6 col-lg-6">
+                    <div class=" " for="{{ profile_form.gender.id_for_label }}">
+                        {{ profile_form.gender.label_tag }}
+                    </div>
+                    <div class="">
+                       {{ profile_form.gender }}
+                       <small>{{ profile_form.gender.errors }}{{ profile_form.gender.help_text }}</small>
+                    </div>
+                </div>
 
+                
                 <!--Dob slider -->
                 <div class="col-sx-6 col-sm-6 col-lg-6">
                     <div class=" " for="{{ profile_form.dob.id_for_label }}">{{ profile_form.dob.label_tag }}
@@ -30,17 +37,17 @@
                     </div>
                 </div>
 
-                <!--Gender slider -->
-                <div class=" ">
-                    <div class="col-sm-12" for="{{ profile_form.gender.id_for_label }}">
-                        {{ profile_form.gender.label_tag }}
+                <!--Image slider -->
+                <div class="col-sx-12 col-sm-12 col-lg-12">
+                    <div class=" " for="{{ profile_form.image.id_for_label }}">{{ profile_form.image.label_tag }}
                     </div>
-                    <div class="">
-                       {{ profile_form.gender }}
-                       <small>{{ profile_form.gender.errors }}{{ profile_form.gender.help_text }}</small>
+                    <div class=" ">
+                        {{ profile_form.image }}
+                        <small>{{ profile_form.image.errors }}{{ profile_form.image.help_text }}</small>
                     </div>
                 </div>
 
+                
                 <!--Smokes slider -->
                 <div class="col-sx-6 col-sm-6 col-lg-6">
                     <div class="col-sm-12" for="{{ profile_form.smokes.id_for_label }}">
@@ -85,19 +92,16 @@
                     </div>
                 </div>
 
-            <div class=" sub-btn">
-                <div class="col-sm-8">
+            <div class="row">
+                <div class="col-sm-12 text-center">
                 <!-- Provide a button to click to submit the form. -->
-                <input class="btn btn-default" type="submit" name="submit" value="Submit" />
+                <input class='btn submit' type="submit" name="submit" value="Submit" />
                 </div>
             </div>
 
             </div>
     </form>
-        <!--Liked and disliked bands-->
-        <div class="prof-form">
-        {% include 'bba/user/likedbands.html' %}
-        </div>
+        
     </div>
 
 

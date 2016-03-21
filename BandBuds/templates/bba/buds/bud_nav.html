@@ -1,9 +1,5 @@
 {% load staticfiles %}
 
-<div id="prev" class="prev-month header-component-third-width">
-  <img src="{% static 'bba/images/left.png' %}" hidden>
-</div>
-<div id="month" class="header-component-third-width">{{ bud_to_show.user.username }}</div>
-<div id="next" class="next-month header-component-third-width">
-  <img src="{% static 'bba/images/right.png' %}">
-</div>
+<h2 class='text-center'>
+	{{ bud_to_show.user.username }}
+</h2>

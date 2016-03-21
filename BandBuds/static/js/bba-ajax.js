@@ -120,19 +120,17 @@ $( document ).ready( function() {
 	//nudge
 	$('.nudge').click(function() {
 
-		var userid= $(this).attr("data-userid");
+		var userid = $(this).attr("data-userid");
 		var budid = $(this).attr("data-budid");
-    	var gigid= $(this).attr("data-gigid");
+    	var gigid = $(this).attr("data-gigid");
 		var button = $( this );
 
-		//url(r'^ajax/nudge/(?P<user_slug>[\w\-]+)/(?P<gig_id>[0-9]+)$', views.nudge, name='nudge'),
-
-		console.log(userid+ ' ' + budid + ' '+ gigid + ' ' + '/ajax/nudge/' + budid + '/' + gigid+ '/');
 		$.get(
 			'/ajax/nudge/',
 			{user_id:userid,bud_id: budid, gig_id : gigid},
 			function(data) {
 				button.html(data);
+				button.toggleClass( 'nudged' );
 			}
 		)
 

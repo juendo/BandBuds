@@ -8,37 +8,36 @@
         <div class='col-md-12'>
           <div class='row'>
             <div class='col-md-12'>
-              <h3 class='text-center'>
+              <h4 class='text-center'>
                 {{ gig.venue }}
-              </h3>
+              </h4>
             </div>
           </div>
           <div class='row'>
             <div class='col-md-12'>
-              <h3 class='text-center'>
+              <h4 class='text-center'>
                 {{ gig.date }}
-              </h3>
+              </h4>
             </div>
           </div>
           <div class='row'>
             <div class='col-md-12'>
-              <h3 class='text-center'>
+              <h4 class='text-center'>
                 {% if gig.time %} {{ gig.time }} {% else %} {{ 'Unknown time' }} {% endif %}
-              </h3>
+              </h4>
             </div>
           </div>
           <div class='row'>
             <div class='col-md-12'>
-              <h3 class='text-center'>
+              <h4 class='text-center'>
                 <button id='im-going' class='btn {{ notGoingButton }} center-block' data-gigid='{{ gig.gig_id }}'>
-                  I'm Going
+                  {% include 'bba/gig/gig_going_button.html' %}
                 </button>
-              </h3>
+              </h4>
             </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-  
 </div>

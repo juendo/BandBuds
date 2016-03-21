@@ -8,36 +8,55 @@
         <div class='col-md-12'>
           <div class='row'>
             <div class='col-md-12'>
-              <h3 class='text-center'>
+              <h4 class='text-center'>
                 {{ bud_to_show.gender }}
-              </h3>
+              </h4>
             </div>
           </div>
           <div class='row'>
             <div class='col-md-12'>
-              <h3 class='text-center'>
-                Smoker: {{ bud_to_show.smokes }}, Drinker: {{ bud_to_show.drinks }}
-              </h3>
+              <h4 class='text-center'>
+                {{ smokes }}
+              </h4>
             </div>
           </div>
           <div class='row'>
             <div class='col-md-12'>
-              <h3 class='text-center'>
-                {% if gig.time %} {{ gig.time }} {% else %} {{ 'Unknown time' }} {% endif %}
-              </h3>
+              <h4 class='text-center'>
+                {{ dances }}
+              </h4>
             </div>
           </div>
           <div class='row'>
             <div class='col-md-12'>
-              <h3 class='text-center'>
-                <button class='btn nudge center-block' data-userid='{{user.username}}' data-budid='{{ bud_to_show.slug }}' data-gigid='{{ gig.gig_id }}'>
-                  Nudge
+              <h4 class='text-center'>
+                {{ drinks }}
+              </h4>
+            </div>
+          </div>
+          <div class='row'>
+            <div class='col-md-12'>
+              <h4 class='text-center'>
+                {{ involvement }}
+              </h4>
+            </div>
+          </div>
+          <div class='row'>
+            <div class='col-md-12'>
+              <h4 class='text-center'>
+                <button class='btn nudge center-block {% if nudged %}{{ "nudged" }}{% endif %}' data-userid='{{user.username}}' data-budid='{{ bud_to_show.slug }}' data-gigid='{{ gig.gig_id }}'>
+                  {% include 'bba/buds/bud_nudge_button.html' %}
                 </button>
-              </h3>
+              </h4>
             </div>
           </div>
         </div>
       </div>
+    </div>
+  </div>
+  <div class='row'>
+    <div class='col-md-12'>
+      {% include 'bba/user/likedbands.html' %}
     </div>
   </div>
 </div>

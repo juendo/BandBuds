@@ -281,8 +281,27 @@ def gig_bud(request, gig_id, bud_slug):
     #    gig = Gig.objects.all().filter(gig_id=gig_id)[0]
     gig = Gig.objects.get(gig_id=gig_id)
     buds = map(helper_get_user, GigAttendance.objects.filter(gig=gig))
-    bud_to_show = UserProfile.objects.get(slug=bud_slug)
+    bud = UserProfile.objects.get(slug=bud_slug)
+    currentUser = UserProfile.objects.filter(user=request.user)[0]
 
+    smokeDescriptions = {0:"Non-smoker", 1:"Occasional smoker", 2:"Social smoker", 3:"Regular smoker", 4:"Smokes like a chimney"}
+    danceDescriptions = {0:"Toe-tapper", 1:"Shoulder shuffler", 2:"Hip shaker", 3:"Arms waver", 4:"Gets down"}
+    drinksDescriptions = {0:"Teetotal", 1:"Social drinker", 2:"Drinks loads", 3:"Drinks too much", 4:"Has a drink problem"}
+    involvementDescriptions = {0:"Stands at the bar", 1:"Stays at the back", 2:"Next to stage", 3:"Crowd surfer", 4:"In the mosh pit"}
+
+    smokes = smokeDescriptions[bud.smokes]
+    dances = danceDescriptions[bud.dances]
+    drinks = drinksDescriptions[bud.drinks]
+    involvement = involvementDescriptions[bud.involvement]
+
+    nudged = len(Buddy.objects.filter(user=currentUser, buddy=bud, gig=gig)) > 0
+
+    liked_bands = LikedBand.objects.filter(user=bud)[:15]
+    
+
+    # data for disliked bands of a user
+    disliked_bands = DisLikedBand.objects.filter(user=bud)[:15]
+    
 
     # user = UserProfile.objects.get(username=username)
     #    user_profile = UserProfile.objects.get(user=user)
@@ -293,7 +312,18 @@ def gig_bud(request, gig_id, bud_slug):
  #       nudge = Buddy.objects.get_or_create(user=userProfile, bud=bud_to_show, gig=gig)[0]
     #        nudge.save()
 
-    context_dict = { 'bud_to_show' : bud_to_show, 'buds' : buds, 'gig' : gig}
+    context_dict = { 
+                    'bud_to_show' : bud, 
+                    'buds' : buds, 
+                    'gig' : gig, 
+                    'smokes' : smokes, 
+                    'dances' : dances, 
+                    'drinks' : drinks, 
+                    'involvement' : involvement, 
+                    'nudged' : nudged,
+                    'liked_bands' : liked_bands,
+                    'disliked_bands' : disliked_bands
+                    }
 
     return render(request, 'bba/gig_buds.html', context_dict)
 
@@ -421,35 +451,31 @@ def profile(request, user_name_slug):
 
 
     # data for liked bands of a user
-    liked_bands=LikedBand.objects.filter(user=user_profile)
-    prefSet=[]
-    for i in range(len(liked_bands)):
-        prefSet.append(liked_bands[i].band)
-    bands=Band.objects.all()
-    newbies=list(set(bands)-set(prefSet))
+    liked_bands = LikedBand.objects.filter(user=user_profile)
+    lb = []
+    for l in liked_bands:
+        lb.append(l.band)
 
     # data for disliked bands of a user
-    disliked_bands=DisLikedBand.objects.filter(user=user_profile)
-    prefSet=[]
-    for i in range(len(disliked_bands)):
-        prefSet.append(disliked_bands[i].band)
-    bands=Band.objects.all()
-    newbies=list(set(bands)-set(prefSet))
+    disliked_bands = DisLikedBand.objects.filter(user=user_profile)
+    db = []
+    for d in disliked_bands:
+        db.append(d.band)
+
+    newbies = list(set(Band.objects.all()) - set(lb) - set(db))
 
     # data for buddy request notifications
-    nudge=Buddy.objects.filter(buddy=user_profile)
-    nudgeList=[]
-    print "******** nudging"
+    nudge = Buddy.objects.filter(buddy=user_profile)
+    nudgeList = []
+
     for i in range(len(nudge)):
-        if nudge[i].accept==False:
+        if nudge[i].accept == False:
             nudgeList.append(nudge[i])
-    for i in range(len(nudgeList)):
-        print nudgeList[i].user
 
     registered = True
 
 
-    context_dict={'user_profile':user_profile,'profile_form': profile_form, 'registered': registered, 'bands':newbies[:10],'liked_bands':liked_bands[:5],'disliked_bands':disliked_bands[:5],'nudges':nudgeList[:5]}
+    context_dict={'user_profile':user_profile,'profile_form': profile_form, 'registered': registered, 'bands':newbies[:10],'liked_bands':liked_bands[:15],'disliked_bands':disliked_bands[:15],'nudges':nudgeList[:5]}
 
     # Render the template depending on the context
     return render(request,'bba/user/user_profile.html',context_dict)
@@ -494,8 +520,8 @@ def user_logout(request):
 
 @login_required
 def im_going(request, gig_id):
-    print "im_going"
-    print gig_id
+    
+   
     try:
         gig = Gig.objects.filter(gig_id=gig_id)[0]
         print gig
@@ -503,13 +529,13 @@ def im_going(request, gig_id):
         print userProf
         # if user already going
         if len(GigAttendance.objects.filter(gig=gig, user=userProf)) > 0:
-            print "going"
+
             ga = GigAttendance.objects.filter(gig=gig, user=userProf)[0]
             ga.delete()
             context_dict = { 'gig' : gig, 'notGoingButton' : 'not-going-button' }
         # if user not going
         else:
-            print "not going"
+
             attend = GigAttendance.objects.get_or_create(gig=gig, user=userProf)[0]
             attend.save()
             context_dict = { 'going' : True, 'gig' : gig }
@@ -524,34 +550,27 @@ def im_going(request, gig_id):
 def nudge(request):
 
     if request.method == 'GET':
-
-        print 'nudging..'
-
-        user_id = request.GET['user_id']
         bud_id = request.GET['bud_id']
         gig_id = request.GET['gig_id']
+        user = request.user
 
-        try:
-            user=User.objects.get(username=user_id)
-            user_profile=UserProfile.objects.get(user=user)
+        userProf = UserProfile.objects.filter(user=user)[0]
+        budProf = UserProfile.objects.get(slug=bud_id)
+        gig = Gig.objects.get(gig_id=gig_id)
 
-            bud_profile=UserProfile.objects.get(slug=bud_id)
+        # if already nudged
+        if len(Buddy.objects.filter(gig=gig, user=userProf, buddy=budProf)) > 0:
 
-            gig = Gig.objects.get(gig_id=gig_id)
+            b = Buddy.objects.filter(gig=gig, user=userProf, buddy=budProf)[0]
+            b.delete()
+            context_dict = { 'nudged' : False }
+        # if not yet nudged
+        else:
 
-        except Exception as exp:
-            print exp
-            return HttpResponse("Error")
-
-        print 'saving..'
-
-        add_buddy_request(user_profile,bud_profile,gig)
-
-        print 'saved.'
-
-
-    return HttpResponse("Nudged")
-#    return render("Nudged", 'bba/bud/bud_profile.html', context_dict)
+            b = Buddy.objects.get_or_create(gig=gig, user=userProf, buddy=budProf)[0]
+            b.save()
+            context_dict = { 'nudged' : True }
+        return render(request, 'bba/buds/bud_nudge_button.html', context_dict)
 
 @login_required
 def like_band(request):
@@ -623,14 +642,3 @@ def add_disliked_band(b,u):
         print 'error'
     print 'step 5!!'
     return dlb
-
-# helper function - to be refactored!!!
-def add_buddy_request(user,buddy,gig):
-    try:
-        bud_req = Buddy.objects.get_or_create(user=user,buddy=buddy,gig=gig)
-        bud_req.save()
-    except Exception as exp:
-        print 'error'
-        print exp
-
-    return bud_req

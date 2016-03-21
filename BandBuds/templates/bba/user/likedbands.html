@@ -3,19 +3,27 @@
 
 <div>
     {% if liked_bands %}
-    <div class="col-sx-6 col-sm-6 col-lg-6">
-    <h5> Liked bands </h5>
-        {% for lb in liked_bands %}
-            <div clas=""><img class="gig-image-sm" src="{{ lb.band.image_Ref }}" alt="artists-image"></div>
-        {% endfor %}
-     </div>
+    <div class='row'>
+        <div class="col-sx-12 col-sm-12 col-lg-12">
+        <h5> Liked bands </h5>
+            {% for lb in liked_bands %}
+                <div>
+                    <img class="gig-image-sm" src="{{ lb.band.image_Ref }}" alt="artists-image" data-toggle="tooltip" title="{{ lb.band.name }}">
+                </div>
+            {% endfor %}
+        </div>
+    </div>
     {% endif %}
     {% if disliked_bands %}
-    <div class="col-sx-6 col-sm-6 col-lg-6">
-    <h5> Disliked bands </h5>
-        {% for dlb in disliked_bands %}
-            <div clas=""><img class="gig-image-sm" src="{{ dlb.band.image_Ref }}" alt="artists-image"></div>
-        {% endfor %}
+    <div class='row'>
+        <div class="col-sx-12 col-sm-12 col-lg-12">
+        <h5> Disliked bands </h5>
+            {% for dlb in disliked_bands %}
+                <div>
+                    <img class="gig-image-sm" src="{{ dlb.band.image_Ref }}" alt="artists-image" data-toggle="tooltip" title="{{ dlb.band.name }}">
+                </div>
+            {% endfor %}
+        </div>
     </div>
     {% endif %}
 

@@ -103,8 +103,8 @@ class GigAttendance(models.Model):
 class Buddy(models.Model):
     user = models.ForeignKey(UserProfile)
     buddy = models.ForeignKey(UserProfile, related_name='+')
-    gig=models.ForeignKey(Gig)
-    accept=models.BooleanField(default=False)
+    gig = models.ForeignKey(Gig)
+    accept = models.BooleanField(default=False)
     slug = models.SlugField()
 
     def save(self, *args, **kwargs):

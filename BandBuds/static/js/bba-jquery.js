@@ -39,16 +39,17 @@ $( document ).ready( function() {
     $("#id_smokes").slider();
     $("#id_smokes").on("slide", function(slideEvt) {
         var slide = slideEvt.value;
-        var level = new Array("not", "a cheeky one", "social","regular",".  like a chimney");
+        var level = new Array("not", "a cheeky one", "social","regular","like a chimney");
         $("#smkSliderVal").text(level[slide]);
 		$('#id_smokes').val(slide);
     });
 
     // Dancing
     $("#id_dances").slider();
+    $("#id_dances").
     $("#id_dances").on("slide", function(slideEvt) {
         var slide = slideEvt.value;
-        var level = new Array("toe tapping", "shoulder shuffle", "hips shaker","sexy",". Get Down!!");
+        var level = new Array("toe tapping", "shoulder shuffle", "hip shaker", "arms waving", "get down");
         $("#ex1SliderVal").text(level[slide]);
 		var t = $('#id_dances').val(slide);
         console.log('got here' + slide);
@@ -59,7 +60,7 @@ $( document ).ready( function() {
     $("#id_drinks").on("slide", function(slideEvt) {
 		console.log('got here' + slideEvt.value);
         var slide = slideEvt.value;
-        var level = new Array("T-total", "social", "loads","too much",". I have a problem");
+        var level = new Array("teetotal", "social", "loads","too much","I have a problem");
         $("#dnkSliderVal").text(level[slide]);
 		$('#id_drinks').val(slide);
     });
@@ -68,7 +69,7 @@ $( document ).ready( function() {
     $("#id_involvement").slider();
     $("#id_involvement").on("slide", function(slideEvt) {
         var slide = slideEvt.value;
-        var level = new Array("at the bar", "at the back", "next to stage","crowd surfing",". Mosh Pit!!");
+        var level = new Array("at the bar", "at the back", "next to stage","crowd surfing","mosh pit");
         $("#invSliderVal").text(level[slide]);
 		var t = $('#id_involvement').val(slide);
         console.log('testing' + t);
