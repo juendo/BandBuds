@@ -5,7 +5,7 @@
     margin: auto;
 }
 .prof-from{
-    float: left;
+    position: static;
 }
 .prof-slider{
     min-height: 10px;
@@ -18,11 +18,22 @@
     float:left;
 }
 
+.gig-image-sm{
+    height:40px;
+    width: 40px;
+    border-radius: 50%;
+    background-color: #D30439;
+    border: 1px;
+    border-style: solid;
+    border-color: #D30439;
+    float:left;
+}
+
 #id_gender, #id_dob{
     display: block;
-    width: 100%;
-    margin-left: 5px;
-    margin-bottom: 5px;
+    width: 90%;
+    margin-left: 2%;
+    margin-bottom: 2%;
     padding: 2px;
     font-size: 1em;
     line-height: 1.5;
@@ -35,7 +46,7 @@
 #id_image{
     display: block;
     width: 100%;
-    margin: 5px;
+    margin: 0px 0px 5px 0px;
     padding: 5px;
     font-size: 1em;
     line-height: 1.5;
@@ -55,22 +66,25 @@
 
 /* Profile sliders and forms */
 #ex1Slider .slider-selection {
-	background: #A00010;
+    background: #A00010;
 }
 
 #ex1Slider .slider-track {
-	background: #22030A;
+    background: #22030A;
 }
 
 #ex1Slider .slider-handle {
-	background: #D30439;
-	opacity: 1;
+    background: #D30439;
+    opacity: 1;
 }
 .ex1Slider{
-	display: inline-block;
-	margin: 10px 10px 10px 10px;
+    display: inline-block;
+    margin: 10px 10px 10px 10px;
 }
 
 .sub-btn{
-	margin-top: 20px;
+    margin-top: 20px;
+}
+.slider.slider-horizontal{
+    width:90%;
 }

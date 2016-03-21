@@ -126,16 +126,41 @@ def calendar_json(request, date_param, with_buds):
 
     search = request.GET['search']
 
-    if search != '':
-        gigs = Gig.objects.filter(date__year=year, date__month=month, band__name=search) | \
-                Gig.objects.filter(date__year=year, date__month=month, venue__name=search)
-    elif with_buds == 't':
-        att = GigAttendance.objects.filter(gig__date__year=year, gig__date__month=month)
+    # if getting only gigs which are being attended
+    if with_buds == 't':
+        # get gig attendances for given month
+        att = GigAttendance.objects.filter(
+                gig__date__year=year,
+                gig__date__month=month
+            ) | \
+            GigAttendance.objects.filter(
+                gig__date__year=year, 
+                gig__date__month=month
+            )
+            # filter on search term if necessary
+        if search != '':
+            att = att.filter(
+                    gig__band__name=search
+                ) | \
+                att.filter(
+                    gig__venue__name=search
+                )
         gigs = Set()
+        # and extract the gigs
         for a in att:
             gigs.add(a.gig)
-    else: 
-        gigs = Gig.objects.filter(date__year=year, date__month=month)
+    # otherwise just get all the gigs on the given day
+    else:
+        gigs = Gig.objects.filter(
+                date__year=year, 
+                date__month=month, 
+                band__name=search
+            ) | \
+            Gig.objects.filter(
+                date__year=year,
+                date__month=month,
+                venue__name=search
+            )
 
     cal = create_calendar(year, month, day, gigs)
 
@@ -160,8 +185,7 @@ def gigs_on_date(request, date_param, with_buds):
     # if getting only gigs which are being attended
     if with_buds == 't':
         # get gig attendances for given month
-        att = 
-            GigAttendance.objects.filter(
+        att = GigAttendance.objects.filter(
                 gig__date__year=date_param[0], 
                 gig__date__month=date_param[1], 
                 gig__date__day=date_param[2],
@@ -173,8 +197,7 @@ def gigs_on_date(request, date_param, with_buds):
             )
             # filter on search term if necessary
         if search != '':
-            att = 
-                att.filter(
+            att = att.filter(
                     gig__band__name=search
                 ) | \
                 att.filter(
@@ -186,8 +209,7 @@ def gigs_on_date(request, date_param, with_buds):
             gigs.add(a.gig)
     # otherwise just get all the gigs on the given day
     else:
-        gigs = 
-            Gig.objects.filter(
+        gigs = Gig.objects.filter(
                 date__year=date_param[0], 
                 date__month=date_param[1], 
                 date__day=date_param[2],
@@ -246,20 +268,20 @@ def helper_get_user(gig):
 def gig_bud(request, gig_id, bud_slug):
 
 
-#    gig = Gig.objects.all().filter(gig_id=gig_id)[0]
+    #    gig = Gig.objects.all().filter(gig_id=gig_id)[0]
     gig = Gig.objects.get(gig_id=gig_id)
     buds = map(helper_get_user, GigAttendance.objects.filter(gig=gig))
     bud_to_show = UserProfile.objects.get(slug=bud_slug)
 
 
-# user = UserProfile.objects.get(username=username)
-#    user_profile = UserProfile.objects.get(user=user)
+    # user = UserProfile.objects.get(username=username)
+    #    user_profile = UserProfile.objects.get(user=user)
 
     # check to see if nudge button clicked via ajax button
   #  if request.method == 'GET':
 
  #       nudge = Buddy.objects.get_or_create(user=userProfile, bud=bud_to_show, gig=gig)[0]
-#        nudge.save()
+    #        nudge.save()
 
     context_dict = { 'bud_to_show' : bud_to_show, 'buds' : buds, 'gig' : gig}
 
@@ -312,20 +334,20 @@ def register(request):
             user.save()
 
             # create user profile object with default fields
-            userProfile = add_profile(user)
+            user_profile = add_profile(user)
 
             # logs in user
-            userProfile.user = authenticate(username=user_form.cleaned_data['username'],
+            user_profile.user = authenticate(username=user_form.cleaned_data['username'],
                                 password=user_form.cleaned_data['password'],
                                 )
 
-            if userProfile.user.is_active:
-               login(request, userProfile.user)
+            if user_profile.user.is_active:
+               login(request, user_profile.user)
 
-            print "hello!! " + str(userProfile.user.is_authenticated())
+            print "hello!! " + str(user_profile.user.is_authenticated())
 
 
-            return HttpResponseRedirect('../profile/'+userProfile.slug)
+            return HttpResponseRedirect('../profile/'+user_profile.slug)
 
         # Invalid form or forms - mistakes or something else?
         # Print problems to the terminal.
@@ -351,35 +373,42 @@ def my_profile(request):
 def profile(request, user_name_slug):
 
     user_profile = UserProfile.objects.get(slug=user_name_slug)
-    print "hello!! " + str(user_profile.user.is_authenticated()), user_profile.user.username
+
+    print user_profile.drinks,''
 
     # If it's a HTTP POST, we're interested in processing form data.
     if request.method == 'POST':
-        print 'yo stevo', user_profile.user.is_authenticated
+
 
         profile_form = UserProfileForm(data=request.POST)
 
         if profile_form.is_valid():
-            user_profile = profile_form.save(commit=False)
+            user_data = profile_form.save(commit=False)
             print '******************* is prof valid'
 
             # Did the user provide a profile picture?
             # If so, we need to get it from the input form and put it in the UserProfile model.
             if 'image' in request.FILES:
-                user_profile.image = request.FILES['image']
+                user_data.image = request.FILES['image']
 
                 print '****************** about to save'
-                user_profile.save()
-            print "got to this user profile"
-            registered = True
 
-            return render(request,'bba/user/user_profile.html',{'user_profile': user_profile, 'registered': registered})
+
+            print "got to this user profile"
+
+
+            registered = True
+            user_profile.drinks=user_data.drinks
+            user_profile.save()
+
+
 
         else:
             print profile_form.errors
 
     else:
         profile_form = UserProfileForm()
+
 
     # data for liked bands of a user
     liked_bands=LikedBand.objects.filter(user=user_profile)
@@ -400,14 +429,20 @@ def profile(request, user_name_slug):
     # data for buddy request notifications
     nudge=Buddy.objects.filter(buddy=user_profile)
     nudgeList=[]
+    print "******** nudging"
     for i in range(len(nudge)):
         if nudge[i].accept==False:
             nudgeList.append(nudge[i])
+    for i in range(len(nudgeList)):
+        print nudgeList[i].user
 
     registered = True
 
+
+    context_dict={'user_profile':user_profile,'profile_form': profile_form, 'registered': registered, 'bands':newbies[:10],'liked_bands':liked_bands[:5],'disliked_bands':disliked_bands[:5],'nudges':nudgeList[:5]}
+
     # Render the template depending on the context
-    return render(request,'bba/user/user_profile.html',{'user_profile':user_profile,'profile_form': profile_form, 'registered': registered, 'bands':newbies[:10],'liked_bands':liked_bands[:5],'disliked_bands':disliked_bands[:5],'nudges':nudgeList[:5]})
+    return render(request,'bba/user/user_profile.html',context_dict)
 
 
 
