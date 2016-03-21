@@ -1,0 +1,19 @@
+{% extends 'bba/left_right.html' %}
+
+{% load staticfiles %}
+
+{% block top_left_header %}
+	{% include 'bba/buds/bud_nav.html' %}
+{% endblock %}
+
+{% block top_left %}
+	{% include 'bba/buds/bud_profile.html' %}
+{% endblock %}
+
+{% block bottom_right_header %}
+	<h3 class='center-text'>Nudges</h3>
+{% endblock %}
+
+{% block bottom_right %}
+	{% include 'bba/user/nudge_list.html' %}
+{% endblock %}

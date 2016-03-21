@@ -18,6 +18,7 @@ urlpatterns = patterns('',
     url(r'^profile/dislike_band/$', views.dislike_band, name='dislike_band'),
     url(r'^profile/(?P<user_name_slug>[\w\-]+)/$', views.profile, name='profile'),
     url(r'^profile/', views.my_profile, name='my_profile'),
+    url(r'^edit-profile/', views.edit_profile, name='edit-profile'),
 
     # ajax requests
     url(r'^ajax/nudge/$', views.nudge, name='nudge'),

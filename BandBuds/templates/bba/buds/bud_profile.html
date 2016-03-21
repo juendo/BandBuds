@@ -44,9 +44,17 @@
           <div class='row'>
             <div class='col-md-12'>
               <h4 class='text-center'>
-                <button class='btn nudge center-block {% if nudged %}{{ "nudged" }}{% endif %}' data-userid='{{user.username}}' data-budid='{{ bud_to_show.slug }}' data-gigid='{{ gig.gig_id }}'>
-                  {% include 'bba/buds/bud_nudge_button.html' %}
-                </button>
+                {% if profile %}
+                  <a href='/edit-profile/'>
+                    <button class='btn center-block'>
+                      Edit Profile
+                    </button>
+                  </a>
+                {% else %}
+                  <button class='btn nudge center-block {% if nudged %}{{ "nudged" }}{% endif %}' data-userid='{{user.username}}' data-budid='{{ bud_to_show.slug }}' data-gigid='{{ gig.gig_id }}'>
+                    {% include 'bba/buds/bud_nudge_button.html' %}
+                  </button>
+                {% endif %}
               </h4>
             </div>
           </div>

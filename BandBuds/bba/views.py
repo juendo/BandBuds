@@ -322,7 +322,8 @@ def gig_bud(request, gig_id, bud_slug):
                     'involvement' : involvement, 
                     'nudged' : nudged,
                     'liked_bands' : liked_bands,
-                    'disliked_bands' : disliked_bands
+                    'disliked_bands' : disliked_bands,
+                    'profile' : False
                     }
 
     return render(request, 'bba/gig_buds.html', context_dict)
@@ -406,15 +407,10 @@ def register(request):
     # Render the template depending on the context.
     return render(request,'bba/index.html',context_dict)
 
+@login_required
 def my_profile(request):
-    userProf = UserProfile.objects.get(user=request.user)
-    return profile(request, userProf.slug)
 
-def profile(request, user_name_slug):
-
-    user_profile = UserProfile.objects.get(slug=user_name_slug)
-
-    print user_profile.drinks,''
+    profile = UserProfile.objects.get(user=request.user)
 
     # If it's a HTTP POST, we're interested in processing form data.
     if request.method == 'POST':
@@ -423,13 +419,86 @@ def profile(request, user_name_slug):
         profile_form = UserProfileForm(data=request.POST)
 
         if profile_form.is_valid():
-            user_data = profile_form.save(commit=False)
+            profile.dob = request.POST['dob']
+            profile.gender = request.POST['gender']
+            profile.smokes = request.POST['smokes']
+            profile.drinks = request.POST['drinks']
+            profile.dances = request.POST['dances']
+            profile.involvement = request.POST['involvement']
+
+            # Did the user provide a profile picture?
+            # If so, we need to get it from the input form and put it in the UserProfile model.
+            if 'image' in request.FILES:
+                profile.image = request.FILES['image']
+            registered = True
+            profile.user = request.user
+            profile.save()
+
+
+
+        else:
+            print profile_form.errors
+
+    else:
+        profile_form = UserProfileForm()
+
+
+    bud = UserProfile.objects.get(user=request.user)
+    smokeDescriptions = {0:"Non-smoker", 1:"Occasional smoker", 2:"Social smoker", 3:"Regular smoker", 4:"Smokes like a chimney"}
+    danceDescriptions = {0:"Toe-tapper", 1:"Shoulder shuffler", 2:"Hip shaker", 3:"Arms waver", 4:"Gets down"}
+    drinksDescriptions = {0:"Teetotal", 1:"Social drinker", 2:"Drinks loads", 3:"Drinks too much", 4:"Has a drink problem"}
+    involvementDescriptions = {0:"Stands at the bar", 1:"Stays at the back", 2:"Next to stage", 3:"Crowd surfer", 4:"In the mosh pit"}
+
+    smokes = smokeDescriptions[bud.smokes]
+    dances = danceDescriptions[bud.dances]
+    drinks = drinksDescriptions[bud.drinks]
+    involvement = involvementDescriptions[bud.involvement]
+
+    liked_bands = LikedBand.objects.filter(user=bud)[:15]
+    nudges = Buddy.objects.filter(buddy=bud)
+
+    # data for disliked bands of a user
+    disliked_bands = DisLikedBand.objects.filter(user=bud)[:15]
+
+    context_dict = { 
+                    'bud_to_show' : bud, 
+                    'gig' : gig, 
+                    'smokes' : smokes, 
+                    'dances' : dances, 
+                    'drinks' : drinks, 
+                    'involvement' : involvement, 
+                    'liked_bands' : liked_bands,
+                    'disliked_bands' : disliked_bands,
+                    'nudges' : nudges,
+                    'profile' : True,
+                    }
+
+    return render(request, 'bba/user/my_profile.html', context_dict)
+
+@login_required
+def edit_profile(request):
+    userProf = UserProfile.objects.get(user=request.user)
+    return profile(request, userProf.slug)
+
+def profile(request, user_name_slug):
+
+    profile = UserProfile.objects.get(slug=user_name_slug)
+
+    # If it's a HTTP POST, we're interested in processing form data.
+    if request.method == 'POST':
+
+
+        profile_form = UserProfileForm(data=request.POST)
+
+        if profile_form.is_valid():
+            profile.delete()
+            profile = profile_form.save(commit=False)
             print '******************* is prof valid'
 
             # Did the user provide a profile picture?
             # If so, we need to get it from the input form and put it in the UserProfile model.
             if 'image' in request.FILES:
-                user_data.image = request.FILES['image']
+                profile.image = request.FILES['image']
 
                 print '****************** about to save'
 
@@ -438,8 +507,8 @@ def profile(request, user_name_slug):
 
 
             registered = True
-            user_profile.drinks=user_data.drinks
-            user_profile.save()
+            profile.user = request.user
+            profile.save()
 
 
 
@@ -451,13 +520,13 @@ def profile(request, user_name_slug):
 
 
     # data for liked bands of a user
-    liked_bands = LikedBand.objects.filter(user=user_profile)
+    liked_bands = LikedBand.objects.filter(user=profile)
     lb = []
     for l in liked_bands:
         lb.append(l.band)
 
     # data for disliked bands of a user
-    disliked_bands = DisLikedBand.objects.filter(user=user_profile)
+    disliked_bands = DisLikedBand.objects.filter(user=profile)
     db = []
     for d in disliked_bands:
         db.append(d.band)
@@ -465,7 +534,7 @@ def profile(request, user_name_slug):
     newbies = list(set(Band.objects.all()) - set(lb) - set(db))
 
     # data for buddy request notifications
-    nudge = Buddy.objects.filter(buddy=user_profile)
+    nudge = Buddy.objects.filter(buddy=profile)
     nudgeList = []
 
     for i in range(len(nudge)):
@@ -475,7 +544,7 @@ def profile(request, user_name_slug):
     registered = True
 
 
-    context_dict={'user_profile':user_profile,'profile_form': profile_form, 'registered': registered, 'bands':newbies[:10],'liked_bands':liked_bands[:15],'disliked_bands':disliked_bands[:15],'nudges':nudgeList[:5]}
+    context_dict={'user_profile':profile,'profile_form': profile_form, 'registered': registered, 'bands':newbies[:10],'liked_bands':liked_bands[:15],'disliked_bands':disliked_bands[:15],'nudges':nudgeList[:5]}
 
     # Render the template depending on the context
     return render(request,'bba/user/user_profile.html',context_dict)

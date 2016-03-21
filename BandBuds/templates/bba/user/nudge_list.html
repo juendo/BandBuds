@@ -1,0 +1,30 @@
+{% load staticfiles %}
+<!--bud profile-->
+
+<!--Gig start -->
+{% if nudges %}
+{% for nudge in nudges %}
+
+<a>
+<div class="gig-box">
+  <div class="gig-info-box">
+    <div class="act-name-box">
+      <div class="act-name">
+        {{ nudge.user.user.username }}
+      </div>
+    </div>
+    <div class="venue-name-box">
+      <div class="venue-name">
+        {{ nudge.gig.band.name }} at {{ nudge.gig.venue.name }} on {{ nudge.gig.date }}
+      </div>
+    </div>
+  </div>
+  <div class="gig-time-box">
+    <img class="gig-image" src="/media/{{nudge.user.image}}" alt="{{ nudger.user.slug }}">
+  </div>
+</div>
+</a>
+
+{% endfor %}
+
+{% endif %}

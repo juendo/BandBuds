@@ -8,9 +8,9 @@ from django.template.defaultfilters import slugify
 from datetime import date
 
 GENDER_CHOICES = (
-    ('U', 'Undisclosed'),
-    ('F', 'Female'),
-    ('M', 'Male'),
+    ('Undisclosed', 'Undisclosed'),
+    ('Female', 'Female'),
+    ('Male', 'Male'),
 )
 
 
@@ -18,7 +18,7 @@ class UserProfile(models.Model):
 
     user = models.OneToOneField(User)
     dob = models.DateField(default=date.today())
-    gender = models.CharField(default="U", max_length=1, choices=GENDER_CHOICES)
+    gender = models.CharField(default="Undisclosed", max_length=200, choices=GENDER_CHOICES)
 
     smokes = models.IntegerField(default=0)
     drinks = models.IntegerField(default=0)
@@ -29,8 +29,8 @@ class UserProfile(models.Model):
     slug = models.SlugField()
 
     def save(self, *args, **kwargs):
-         self.slug = slugify(self.user)
-         super(UserProfile, self).save(*args, **kwargs)
+        self.slug = slugify(self.user.username)
+        super(UserProfile, self).save(*args, **kwargs)
 
     def __unicode__(self):
         return self.user.username

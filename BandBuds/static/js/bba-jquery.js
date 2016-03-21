@@ -43,10 +43,10 @@ $( document ).ready( function() {
         $("#smkSliderVal").text(level[slide]);
 		$('#id_smokes').val(slide);
     });
+    $("#id_smokes").val(2);
 
     // Dancing
     $("#id_dances").slider();
-    $("#id_dances").
     $("#id_dances").on("slide", function(slideEvt) {
         var slide = slideEvt.value;
         var level = new Array("toe tapping", "shoulder shuffle", "hip shaker", "arms waving", "get down");
@@ -54,6 +54,7 @@ $( document ).ready( function() {
 		var t = $('#id_dances').val(slide);
         console.log('got here' + slide);
     });
+    $("#id_dances").val(2);
 
     // Drinks
     $("#id_drinks").slider();
@@ -64,6 +65,7 @@ $( document ).ready( function() {
         $("#dnkSliderVal").text(level[slide]);
 		$('#id_drinks').val(slide);
     });
+    $("#id_drinks").val(2);
 
     // Involvment
     $("#id_involvement").slider();
@@ -74,6 +76,7 @@ $( document ).ready( function() {
 		var t = $('#id_involvement').val(slide);
         console.log('testing' + t);
     });
+    $("#id_involvement").val(2);
 
 	var params = $( '#calendar-info' ).attr( 'data-month' ).split('-');
 	var year = params[0];

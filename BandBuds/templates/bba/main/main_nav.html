@@ -16,7 +16,6 @@
           <li><a href="/profile/">Profile</a></li>
           {% if user.is_authenticated %}
           <li><a href="/logout/">Logout</a></li>
-          <li><a>{{ user.username }} you have been nudged by {% include 'bba/user/bud_requests.html' %}</a></li>
           {% else %}
           <li><a href="/login/">Login</a></li>
           <li><a>You are no signed in?</a></li>
