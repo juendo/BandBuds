@@ -237,6 +237,8 @@ html, body {
 	border: 0px;
 	color: #FFF;
 	font-size: 20px;
+	text-align: center;
+	line-height: 40px;
 }
 .footer-left {
 	background-color: #000;
@@ -401,10 +403,7 @@ html, body {
 	height: 100%;
 	overflow: auto;
 }
-.not-going-button {
-	background-color: #6fb900;
-	color: white;
-}
+
 .two-thirds-width {
 	min-width: 67%;
 	max-width: 67%;
@@ -412,9 +411,9 @@ html, body {
 	text-align: center;
 }
 .gig-profile-image {
-	width: 33%;
-	float: left;
-	border-radius: 50%;
+	border: 5px;
+	border-style: solid;
+	border-color: #D30439;
 }
 #bud-image {
 	float:right;
@@ -499,6 +498,15 @@ html, body {
 	margin-top: 75px;
 	height: 100%;
 	background-color: #ffe6e6;
+}
+#im-going, .not-going-button {
+	font-size: 20px;
+	color: white;
+	background-color: #D30439;
+}
+#im-going.not-going-button {
+	background-color: #6fb900;
+	color: white;
 }
 
 

@@ -1,5 +1,49 @@
 <div class='container-fluid bud-box'>
   <div class='row'>
+    <div class='col-md-6'>
+      <img class='img-responsive img-circle center-block gig-profile-image' src="/media/{{bud_to_show.image}}" alt="{{ bud_to_show.slug }}">
+    </div>
+    <div class='col-md-6'>
+      <div class='row'>
+        <div class='col-md-12'>
+          <div class='row'>
+            <div class='col-md-12'>
+              <h3 class='text-center'>
+                {{ bud_to_show.gender }}
+              </h3>
+            </div>
+          </div>
+          <div class='row'>
+            <div class='col-md-12'>
+              <h3 class='text-center'>
+                Smoker: {{ bud_to_show.smokes }}, Drinker: {{ bud_to_show.drinks }}
+              </h3>
+            </div>
+          </div>
+          <div class='row'>
+            <div class='col-md-12'>
+              <h3 class='text-center'>
+                {% if gig.time %} {{ gig.time }} {% else %} {{ 'Unknown time' }} {% endif %}
+              </h3>
+            </div>
+          </div>
+          <div class='row'>
+            <div class='col-md-12'>
+              <h3 class='text-center'>
+                <button class='btn nudge center-block' data-userid='{{user.username}}' data-budid='{{ bud_to_show.slug }}' data-gigid='{{ gig.gig_id }}'>
+                  Nudge
+                </button>
+              </h3>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!--
+<div class='container-fluid bud-box'>
+  <div class='row'>
     <div class='col-md-3'>
       <img class='img-responsive img-circle' src="/media/{{bud_to_show.image}}" alt="{{ bud_to_show.slug }}">
     </div>
@@ -28,3 +72,4 @@
     </div>
   </div>
 </div>
+-->

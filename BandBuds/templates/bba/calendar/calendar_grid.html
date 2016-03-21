@@ -1,32 +1,34 @@
 {% load staticfiles %}
-
-<!-- Calendar header row with day names -->
-<div id='calendar-info' class="calendar-row" data-month='{{ month_string }}'>
-  <a class = "calendar-cell-day"><div class="calendar-circle-day"><div class="calendar-text-day">M</div></div></a>
-  <a class = "calendar-cell-day"><div class="calendar-circle-day"><div class="calendar-text-day">T</div></div></a>
-  <a class = "calendar-cell-day"><div class="calendar-circle-day"><div class="calendar-text-day">W</div></div></a>
-  <a class = "calendar-cell-day"><div class="calendar-circle-day"><div class="calendar-text-day">Th</div></div></a>
-  <a class = "calendar-cell-day"><div class="calendar-circle-day"><div class="calendar-text-day">F</div></div></a>
-  <a class = "calendar-cell-day"><div class="calendar-circle-day"><div class="calendar-text-day">S</div></div></a>
-  <a class = "calendar-cell-day"><div class="calendar-circle-day"><div class="calendar-text-day">S</div></div></a>
-</div>
-<!-- Calendar header row end -->
-{% for week in month %}
-  <!-- Calendar days row -->
-  <div class="calendar-row">
-  {% for day in week %}
-      <!-- Calendar day cell -->
-      <a class="calendar-cell {% if day == today %}today{% endif %} {% if day > 0 %}gig{% endif %}" data-day='{{day}}'>
-        <div class="calendar-circle">
-          <div class="calendar-text">
-            {% if day > 0 %}
-              {{ day }}
-            {% endif %}
-          </div>
-        </div>
-      </a>
-      <!--Calendar day cell end -->
-  {% endfor %}
+<div id="calendar-grid">
+  <!-- Calendar header row with day names -->
+  <div id='calendar-info' class="calendar-row" data-month='{{ month_string }}'>
+    <a class = "calendar-cell-day"><div class="calendar-circle-day"><div class="calendar-text-day">M</div></div></a>
+    <a class = "calendar-cell-day"><div class="calendar-circle-day"><div class="calendar-text-day">T</div></div></a>
+    <a class = "calendar-cell-day"><div class="calendar-circle-day"><div class="calendar-text-day">W</div></div></a>
+    <a class = "calendar-cell-day"><div class="calendar-circle-day"><div class="calendar-text-day">Th</div></div></a>
+    <a class = "calendar-cell-day"><div class="calendar-circle-day"><div class="calendar-text-day">F</div></div></a>
+    <a class = "calendar-cell-day"><div class="calendar-circle-day"><div class="calendar-text-day">S</div></div></a>
+    <a class = "calendar-cell-day"><div class="calendar-circle-day"><div class="calendar-text-day">S</div></div></a>
   </div>
-  <!--Calendar days row end -->
-{% endfor %}
+  <!-- Calendar header row end -->
+  {% for week in month %}
+    <!-- Calendar days row -->
+    <div class="calendar-row">
+    {% for day in week %}
+        <!-- Calendar day cell -->
+        <a class="calendar-cell {% if day == today %}today{% endif %} {% if day > 0 %}gig{% endif %}" data-day='{{day}}'>
+          <div class="calendar-circle">
+            <div class="calendar-text">
+              {% if day > 0 %}
+                {{ day }}
+              {% endif %}
+            </div>
+          </div>
+        </a>
+        <!--Calendar day cell end -->
+    {% endfor %}
+    </div>
+    <!--Calendar days row end -->
+  {% endfor %}
+
+</div>
