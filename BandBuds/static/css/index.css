@@ -230,7 +230,7 @@ html, body {
 	background-color: #000;
 	z-index: 5;
 }
-#search-button, #filter-button {
+.footer-left, .footer-right {
 	width: 50%;
 	height: 100%;
 	float: left;
@@ -238,14 +238,14 @@ html, body {
 	color: #FFF;
 	font-size: 20px;
 }
-#search-button {
+.footer-left {
 	background-color: #000;
 }
 #search-button:focus,
 #filter-button:focus {
 	outline: 0;
 }
-#filter-button {
+.footer-right {
 	background-color: #D30439;
 }
 #search-panel, #filter-panel {
@@ -265,8 +265,12 @@ html, body {
 }
 #filter-panel {
 	background-color: #D30439;
-	height: 150px;
-	line-height: 150px;
+	height: 100px;
+	padding-top: 5px;
+	z-index: 2;
+}
+#search-panel {
+	z-index: 3;
 }
 .form-group {
 	margin: 1%;

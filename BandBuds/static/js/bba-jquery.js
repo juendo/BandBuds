@@ -7,24 +7,12 @@ $( document ).ready( function() {
 
 	// when search button pressed, close filter panel and open search panel
 	$( '#search-button' ).click( function() {
-		if ($( '#filter-panel' ).is(':visible')) {
-			$( '#filter-panel').slideToggle(200, function() {
-				$( '#search-panel' ).slideToggle(200);
-			});
-		} else {
-			$( '#search-panel' ).slideToggle(200);
-		}
+		$( '#search-panel' ).slideToggle(200);
 	});
 
 	// when filter button is pressed, close search panel and open filter panel
 	$( '#filter-button' ).click( function() {
-		if ($( '#search-panel' ).is(':visible')) {
-			$( '#search-panel').slideToggle(200, function() {
-				$( '#filter-panel' ).slideToggle(200);
-			});
-		} else {
-			$( '#filter-panel' ).slideToggle(200);
-		}
+		$( '#filter-panel' ).slideToggle(200);
 	});
 
 	// when window scrolls, fix right hand/bottom header so it never scrolls above left hand/top header
