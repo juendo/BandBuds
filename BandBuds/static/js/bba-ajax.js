@@ -61,6 +61,8 @@ $( document ).ready( function() {
 		if (month == 12) {
 			year--;
 		}
+		// final field is true as we want to load the final day of the previous month
+		// in case user is using back button on day nav
 		loadCalendar(year, month, true);
 	});
 
@@ -137,20 +139,30 @@ $( document ).ready( function() {
 
 	});
 
+	// when the next day arrow is clicked in the calendar day nav
 	$( '.next-day' ).click( function() {
+		// get the day number of the next day with gigs from today
 		var next = $( '.today' ).attr( 'data-next' );
+		// if there is such a day
 		if (next != null && next.length > 0) {
+			// act as if the cell corresponding to that day was clicked
 			$( '.cell-' + next ).click();
 		} else {
+			// otherwise load the next month
 			$( '.next-month' ).click();
 		}
 	});
 
+	// when the previous day arrow is clicked in the calendar day nav
 	$( '.prev-day' ).click( function() {
+		// get the day number of the previous day with gigs from today
 		var prev = $( '.today' ).attr( 'data-prev' );
+		// if there is such a day
 		if (prev != null && prev.length > 0) {
+			// act as if the cell corresponding to that day was clicked
 			$( '.cell-' + prev ).click();
 		} else {
+			// otherwise load the previous month
 			$( '.prev-month' ).click();
 		}
 	});
@@ -227,7 +239,10 @@ function loadCalendar(year, month, selectLast) {
 	})
 }
 
-// load a 2D array of day numbers into the calendar
+// load a 2D array of day numbers into the calendar, expected in the form
+// [[0,0,0,1,2,3,4], [5,6,7,0,0,10,11]]... etc, with 0s for days with no gigs
+// select last is a boolean parameter for whether to make today the last day of the month
+// instead of the first
 function loadCalendarFromJson(calendar, selectLast) {
 
 	// clear the current day
@@ -239,9 +254,8 @@ function loadCalendarFromJson(calendar, selectLast) {
 	// get the rows of the calendar
 	var rows = $( ".calendar-row" ).toArray();
 
-	// used to track the previous and next days for the cells
+	// used to track the previous day which has gigs
 	var prevDay = null;
-	var nextDay = null;
 
 	// for each row
 	for (var i = 0; i < 6; i++) {
@@ -254,21 +268,34 @@ function loadCalendarFromJson(calendar, selectLast) {
 
 			// update the day data
 			cells[j].setAttribute('data-day', calendar[i][j]);
-			// add classes and data appropriately
+			// add classes and data appropriately:
+
+			// if the day has no gigs
 			if (calendar[i][j] == 0) {
-				cells[j].className = 'calendar-cell cell-' + calendar[i][j];
+				// set the text to 0
+				cells[j].className = 'calendar-cell';
 				cells[j].children[0].children[0].innerHTML = "";
-			} else if (found == false) {
+			} 
+			// otherwise, if this is the first day with gigs
+			else if (found == false) {
+				// clear the previous and next day data
 				cells[j].setAttribute('data-prev', '');
 				cells[j].setAttribute('data-next', '');
+				// add classes, including 'today' representing the current day, and display the day number
 				cells[j].className = 'calendar-cell gig today cell-' + calendar[i][j];
 				cells[j].children[0].children[0].innerHTML = calendar[i][j];
+				// store reference to day
 				prevDay = cells[j];
 				found = true;
-			} else {
+			} 
+			// otherwise, if it is a subsequent day with gigs
+			else {
+				// clear the previous and next day data
 				cells[j].setAttribute('data-prev', '');
 				cells[j].setAttribute('data-next', '');
+				// set the next day attribute of the previous day
 				prevDay.setAttribute('data-next', cells[j].getAttribute('data-day'));
+				// and the previous day attribute of this day
 				cells[j].setAttribute('data-prev', prevDay.getAttribute('data-day'));
 				cells[j].className = 'calendar-cell gig cell-' + calendar[i][j];
 				cells[j].children[0].children[0].innerHTML = calendar[i][j];
