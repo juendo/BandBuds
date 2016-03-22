@@ -11,11 +11,15 @@ from sets import Set
 import random
 
 # descriptions of gig attributes for each possible integer value
-SMOKE = {0:"Non-smoker", 1:"Occasional smoker", 2:"Social smoker", 3:"Regular smoker", 4:"Smokes like a chimney"}
 DANCE = {0:"Toe-tapper", 1:"Shoulder shuffler", 2:"Hip shaker", 3:"Arms waver", 4:"Gets down"}
 DRINK = {0:"Teetotal", 1:"Social drinker", 2:"Drinks loads", 3:"Drinks too much", 4:"Has a drink problem"}
 INVOLVE = {0:"Stands at the bar", 1:"Stays at the back", 2:"Next to stage", 3:"Crowd surfer", 4:"In the mosh pit"}
+SMOKE = {0:"Non-smoker", 1:"Occasional smoker", 2:"Social smoker", 3:"Regular smoker", 4:"Smokes like a chimney"}
 
+SMOKE_IMGS = {0:"bb_smoke_not", 1:"bb_smoke_chimney", 2:"bb_smoke_social", 3:"bb_smoke_regular", 4:"bb_smoke_chimney"}
+DRINK_IMGS = {0:"bb_drinks_teetotal", 1:"bb_drinks_social", 2:"bb_drinks_loads", 3:"bb_drinks_too_much", 4:"bb_drinks_i_have_a_problem"}
+INVOLVE_IMGS = {0:"bb_involvement_bar", 1:"bb_involvement_back", 2:"bb_involvement_crowd", 3:"bb_involvement_stage", 4:"bb_involvement_pit"}
+DANCE_IMGS = {0:"bb_dance_toe_tap", 1:"bb_dance_shoulder_shuffle", 2:"bb_dance_hip_shaker", 3:"bb_dance_arms_waving", 4:"bb_dance_get_down"}
 # load the home page
 def index(request):
 
@@ -307,7 +311,11 @@ def gig_bud(request, gig_id, bud_slug):
         'smokes' : SMOKE[bud.smokes], 
         'dances' : DANCE[bud.dances], 
         'drinks' : DRINK[bud.drinks], 
-        'involvement' : INVOLVE[bud.involvement], 
+        'involvement' : INVOLVE[bud.involvement],
+        'smokes_img' : SMOKE_IMGS[bud.smokes], 
+        'dances_img' : DANCE_IMGS[bud.dances], 
+        'drinks_img' : DRINK_IMGS[bud.drinks], 
+        'involvement_img' : INVOLVE_IMGS[bud.involvement],
         'nudged' : nudged,
         'liked_bands' : liked_bands,
         'disliked_bands' : disliked_bands,
@@ -393,6 +401,10 @@ def my_profile(request):
         'dances' : DANCE[profile.dances], 
         'drinks' : DRINK[profile.drinks], 
         'involvement' : INVOLVE[profile.involvement], 
+        'smokes_img' : SMOKE_IMGS[profile.smokes], 
+        'dances_img' : DANCE_IMGS[profile.dances], 
+        'drinks_img' : DRINK_IMGS[profile.drinks], 
+        'involvement_img' : INVOLVE_IMGS[profile.involvement],
         'liked_bands' : liked_bands,
         'disliked_bands' : disliked_bands,
         'nudges' : nudges,

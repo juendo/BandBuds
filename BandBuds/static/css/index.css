@@ -513,6 +513,41 @@ html, body {
 .submit {
 	margin-top: 25px;
 }
+#liked-bands {
+	padding-bottom:25px;
+}
+.gig-image-sm {
+	margin: 2px;
+}
+
+/* gig attrs */
+#gig-attrs {
+	position: relative;
+	color: #D30439;
+	padding: 5px;
+}
+.gig-attrs-line {
+	border-color: #D30439;
+	border-width: 3px;
+	padding: 0px;
+	margin-top: 5px;
+	margin-bottom: 5px;
+}
+.gig-attr {
+	margin: 0px;
+	width: 49%;
+	display: inline-block;
+	height: 75px;
+	overflow: hidden;
+	padding: 0px;
+}
+.gig-attr-header {
+	padding: 0px;
+	margin-top: 0px;
+	margin-bottom: 5px;
+	color: black;
+}
+
 
 /* screen wider */
 @media screen and (min-width: 800px) {
