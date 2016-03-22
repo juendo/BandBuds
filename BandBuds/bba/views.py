@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.template.loader import render_to_string
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.contrib.auth import authenticate, login, logout
-from bba.models import Band, Gig, Venue, UserProfile, GigAttendance, User, Nudge, LikedBand,DisLikedBand, Buddy
+from bba.models import Band, Gig, Venue, UserProfile, GigAttendance, User, LikedBand,DisLikedBand, Buddy
 from datetime import date, datetime
 from calendar import monthrange
 from bba.forms import UserForm, UserProfileForm
