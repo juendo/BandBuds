@@ -279,9 +279,7 @@ html, body {
 	width: 100%;
 	color: black;
 }
-.login{
-	padding-top: 15%;
-}
+
 
 
 /* list of gigs */
@@ -569,23 +567,24 @@ img {
 	z-index: 3;
 	background-color: #ffe6e6;
 }
+
+.bud-nav-fixed {
+
 }
 
-/*Profile form*/
+}
 
-
-#bb-container {
-	text-align: center;
+#bb-container{
 	display:block;
-	position: absolute;
-	top: 100px;
-	width:100%;
+	position: relative;
+	top: 15px;
+	width:60%;
 	max-width: 520px;
-	min-width: 321px;
+	min-width: 320px;
 	height: 500px;
-	overflow: auto;
-	background: #D30439;
-	top: 55px;
+	overflow: hidden;
+	background: white;
+	margin: 0 auto;
 }
 
 .bb-btn,.bb-an{
@@ -593,7 +592,7 @@ img {
 	float:left;
 	display:block;
 	width:100%;
-	overflow: auto;
+	overflow: hidden;
 	margin: auto;
 }
 .bba-btn{
@@ -602,31 +601,34 @@ img {
 	height: 100px;
 	text-align:center;
 	vertical-align: bottom;
-	background: #D30439;
+	background: white;
 }
 .bb-an{
 	height: 250px;
 	background: #eee;
 }
 .bb-up{
-	background:#D30439;
+	background:white;
 	height:50%;
 	width:100%;
 	position:absolute;
 }
 .bb-img{
-
+	float:left;
 	z-index:2;
 	width:100%;
-
-}
-.fill {
-	text-align: center;
-	background-color: #D30439;
-	width: 100%;
-	position: absolute;
-	top: 0px;
-	bottom: 0px;
+	position:absolute;
 }
 
+@media screen and (min-width: 768px) { 
+#bba-container{
+	position: relative;
+	width:100%;
+	min-width: 300px;	
+}
+#bba-an{
+	position: relative;
+	width:100%;
+	min-width: 300px;	
+}
 }	
