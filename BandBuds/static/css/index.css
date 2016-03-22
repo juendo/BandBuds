@@ -343,11 +343,7 @@ html, body {
 	float: left;
 	margin-top: 10px;
 }
-.bud-buttons-box > button {
-	width: 75%;
-	height: 30px;
-	margin: auto;
-}
+
 .act-name-box, .venue-name-box {
 	width: 100%;
 	height: 50%;
@@ -499,11 +495,10 @@ html, body {
 	height: 100%;
 	background-color: #ffe6e6;
 }
-#im-going, .not-going-button, .nudge, .submit {
+#im-going, .not-going-button, .nudge, .submit, .edit-profile {
 	font-size: 20px;
 	color: white;
 	background-color: #D30439;
-
 }
 #im-going.not-going-button, .nudge.nudged {
 	background-color: #6fb900;
@@ -574,9 +569,64 @@ img {
 	z-index: 3;
 	background-color: #ffe6e6;
 }
+}
 
-.bud-nav-fixed {
+/*Profile form*/
 
+
+#bb-container{
+	text-align: center;
+	display:block;
+	position: absolute;
+	top: 100px;
+	width:100%;
+	max-width: 520px;
+	min-width: 320px;
+	height: 500px;
+	overflow: auto;
+	background: #D30439;
+	top: 55px;
+}
+
+.bb-btn,.bb-an{
+	padding: 10px;
+	float:left;
+	display:block;
+	width:100%;
+	overflow: auto;
+	margin: auto;
+}
+.bba-btn{
+	border:1px solid;
+	border-radius:2px;
+	height: 100px;
+	text-align:center;
+	vertical-align: bottom;
+	background: #D30439;
+}
+.bb-an{
+	height: 250px;
+	background: #eee;
+}
+.bb-up{
+	background:#D30439;
+	height:50%;
+	width:100%;
+	position:absolute;
+}
+.bb-img{
+
+	z-index:2;
+	width:100%;
+
+}
+.fill {
+	text-align: center;
+	background-color: #D30439;
+	width: 100%;
+	position: absolute;
+	top: 0px;
+	bottom: 0px;
 }
 
 }	

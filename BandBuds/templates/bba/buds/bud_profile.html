@@ -1,18 +1,11 @@
 <div class='container-fluid bud-box'>
   <div class='row'>
     <div class='col-md-6'>
-      <img class='img-responsive img-circle center-block gig-profile-image' src="/media/{{bud_to_show.image}}" alt="{{ bud_to_show.slug }}">
+      <img class='img-responsive center-block' src="/media/{{bud_to_show.image}}" alt="{{ bud_to_show.slug }}">
     </div>
     <div class='col-md-6'>
       <div class='row'>
-        <div class='col-md-12'>
-          <div class='row'>
-            <div class='col-md-12'>
-              <h4 class='text-center'>
-                {{ bud_to_show.gender }}
-              </h4>
-            </div>
-          </div>
+
           <div class='row'>
             <div class='col-md-12'>
               <h4 class='text-center'>
@@ -41,26 +34,8 @@
               </h4>
             </div>
           </div>
-          <div class='row'>
-            <div class='col-md-12'>
-              <h4 class='text-center'>
-                {% if profile %}
-                  <a href='/edit-profile/'>
-                    <button class='btn center-block'>
-                      Edit Profile
-                    </button>
-                  </a>
-                {% else %}
-                  <button class='btn nudge center-block {% if nudged %}{{ "nudged" }}{% endif %}' data-userid='{{user.username}}' data-budid='{{ bud_to_show.slug }}' data-gigid='{{ gig.gig_id }}'>
-                    {% include 'bba/buds/bud_nudge_button.html' %}
-                  </button>
-                {% endif %}
-              </h4>
-            </div>
-          </div>
         </div>
       </div>
-    </div>
   </div>
   <div class='row'>
     <div class='col-md-12'>

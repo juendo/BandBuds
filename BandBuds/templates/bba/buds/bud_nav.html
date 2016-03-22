@@ -2,4 +2,15 @@
 
 <h2 class='text-center'>
 	{{ bud_to_show.user.username }}
+{% if profile %}
+  <a class='pull-right' href='/edit-profile/'>
+    <button class='btn center-block edit-profile'>
+      Edit Profile
+    </button>
+  </a>
+{% else %}
+  <button class='btn nudge center-block {% if nudged %}{{ "nudged" }}{% endif %} pull-right' data-userid='{{user.username}}' data-budid='{{ bud_to_show.slug }}' data-gigid='{{ gig.gig_id }}'>
+    {% include 'bba/buds/bud_nudge_button.html' %}
+  </button>
+{% endif %}
 </h2>

@@ -379,7 +379,9 @@ def my_profile(request):
     profile = UserProfile.objects.get(user=request.user)
 
     liked_bands = LikedBand.objects.filter(user=profile)[:15]
-    nudges = Buddy.objects.filter(buddy=profile)
+    nudges = Buddy.objects.filter(buddy=profile, accept=False)
+
+    accepted = Buddy.objects.filter(user=profile, accept=True)
 
     # data for disliked bands of a user
     disliked_bands = DisLikedBand.objects.filter(user=profile)[:15]
@@ -394,6 +396,7 @@ def my_profile(request):
         'liked_bands' : liked_bands,
         'disliked_bands' : disliked_bands,
         'nudges' : nudges,
+        'accepted' : accepted,
         'profile' : True,
     }
 
@@ -502,7 +505,7 @@ def im_going(request, gig_id):
         context_dict = { 'gig' : gig }
 
     # return the new button to show
-    return render(request, 'bba/gig/gig_going_button.html', context_dict)
+    return HttpResponse('Going')
 
 # allow a user to nudge another user
 # this is an ajax reqest
@@ -597,3 +600,30 @@ def new_bands(profile):
 
     # return those bands yet to be liked or disliked
     return list(set(Band.objects.all()) - set(lb) - set(db))
+
+# accept a nudge
+def accept(request):
+    if request.method == 'GET':
+        gig_id = request.GET['gigid']
+        budslug = request.GET['bud']
+        gig = Gig.objects.filter(gig_id=gig_id)[0]
+        bud = UserProfile.objects.filter(slug=budslug)
+        userProfile = UserProfile.objects.filter(user=request.user)[0]
+        nudge = Buddy.objects.filter(gig=gig, user=bud, buddy=userProfile)[0]
+        nudge.accept = True
+        nudge.save()
+    return HttpResponse('')
+
+# accept a nudge
+def decline(request):
+    if request.method == 'GET':
+        gig_id = request.GET['gigid']
+        budslug = request.GET['bud']
+        gig = Gig.objects.filter(gig_id=gig_id)[0]
+        bud = UserProfile.objects.filter(slug=budslug)
+        userProfile = UserProfile.objects.filter(user=request.user)[0]
+        nudge = Buddy.objects.filter(gig=gig, user=bud, buddy=userProfile)[0]
+        nudge.delete()
+    return HttpResponse('')
+
+
