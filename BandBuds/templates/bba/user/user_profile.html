@@ -6,7 +6,7 @@
 
 {% if user_profile.user.is_authenticated %}
     <div class="user-profile">
-    <form id="id_profile_form" method="post" action="/profile/{{ user.slug }}" enctype="multipart/form-data">
+    <form id="id_profile_form" method="post" action="/edit-profile/" enctype="multipart/form-data">
 
         {% csrf_token %}
 
@@ -95,7 +95,7 @@
             <div class="row">
                 <div class="col-sm-12 text-center">
                 <!-- Provide a button to click to submit the form. -->
-                <input class='btn submit' type="submit" name="submit" value="Submit" />
+                <input class='btn submit' type="submit" name="submit" value="Save Profile" />
                 </div>
             </div>
 

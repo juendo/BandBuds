@@ -112,7 +112,7 @@ $( document ).ready( function() {
 	    var userid= $(this).attr("data-user");
 		var opinion=$(this).attr("id");
 		console.log('band button'+ bandslug+' and '+ userid + ' '+ opinion);
-		$.get('/profile/'+opinion+'_band/', {user_id: userid, band_id: bandid}, function (data) {
+		$.get('/ajax/'+opinion+'_band/', {user_id: userid, band_id: bandid}, function (data) {
 			$('.' + bandslug).hide();
 		});
 	});

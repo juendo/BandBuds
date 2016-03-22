@@ -9,22 +9,20 @@ from bba.forms import UserForm, UserProfileForm
 from django.contrib.auth.decorators import login_required
 from sets import Set
 
+# descriptions of gig attributes for each possible integer value
+SMOKE = {0:"Non-smoker", 1:"Occasional smoker", 2:"Social smoker", 3:"Regular smoker", 4:"Smokes like a chimney"}
+DANCE = {0:"Toe-tapper", 1:"Shoulder shuffler", 2:"Hip shaker", 3:"Arms waver", 4:"Gets down"}
+DRINK = {0:"Teetotal", 1:"Social drinker", 2:"Drinks loads", 3:"Drinks too much", 4:"Has a drink problem"}
+INVOLVE = {0:"Stands at the bar", 1:"Stays at the back", 2:"Next to stage", 3:"Crowd surfer", 4:"In the mosh pit"}
 
-print 'got here views'
-
+# load the home page
 def index(request):
 
-    print 'got to index'
+    return render(request, 'bba/index.html', {})
 
-    gigs = Gig.objects.all().order_by('date')
-    # date of gigs for day
-
-    context_dict = { 'gigs' : gigs }
-    # Render the response and send it back!
-    return render(request, 'bba/index.html', context_dict)
-
-# load the calendar page, including calendar for selecting a day from a month, and
-# the list of gigs on today
+# load the calendar page, this includes:
+# a calendar for selecting a day and a month
+# a list of the gigs on that day
 def calendar(request):
 
     # get today's date
@@ -33,12 +31,12 @@ def calendar(request):
     # get all the gigs on today
     gigs = Gig.objects.filter(date__year=today.year, date__month=today.month, date__day=today.day)
 
-
-
+    # pass this data the template
     context_dict = {
         'gigs' : gigs,
         'month_string' : date.strftime(today, "%Y-%m"),
         'today' : today.day,
+        # this is a 2D array explaining to the template how to load the calendar cells
         'month' : create_calendar(
                     today.year, 
                     today.month, 
@@ -46,10 +44,11 @@ def calendar(request):
                     list(Gig.objects.filter(date__year=today.year, date__month=today.month))
                 )
     }
-
-    # Render the response and send it back!
     return render(request, 'bba/calendar.html', context_dict)
 
+# helper function to create 2D array to describe the cells in the calendar
+# eg [[0,0,0,1,2,3,4], [5,6,7,8,9,10,11],...] etc
+# accepts a list of gigs, so that days with no gigs on that list can be blanked from the calendar
 def create_calendar(year, month, day, gigs):
 
     # get today's date
@@ -108,22 +107,24 @@ def create_calendar(year, month, day, gigs):
 
     return calendar
 
-# return json for reloading the calendar
+# return json so that calendar cells may be reloaded to adjust to
+# search or filter parameters
 def calendar_json(request, date_param, with_buds):
 
+    # extract the date info from the url
     params = date_param.split('-')
     year = int(params[0])
     month = int(params[1])
     day = int(params[2])
 
-    # check if date is the current month
+    # check if the requested date falls in the current month
     today = date.today()
     is_today = False
-
     if year == today.year and month == today.month:
         day = today.day
         is_today = True
 
+    # get the search parameter, if any
     search = request.GET['search']
 
     # if getting only gigs which are being attended
@@ -146,10 +147,10 @@ def calendar_json(request, date_param, with_buds):
                     gig__venue__name=search
                 )
         gigs = Set()
-        # and extract the gigs
+        # and extract the unique gigs (each may have more than one atendance)
         for a in att:
             gigs.add(a.gig)
-    # otherwise just get all the gigs on the given day
+    # if not filtering on attended gigs, just get all the gigs on the given day
     else:
         gigs = Gig.objects.filter(
                 date__year=year, 
@@ -159,6 +160,7 @@ def calendar_json(request, date_param, with_buds):
                 date__year=year,
                 date__month=month,
             )
+        # and possibly filter by the search parameter
         if search != '':
             gigs = gigs.filter(
                     band__name=search
@@ -167,18 +169,22 @@ def calendar_json(request, date_param, with_buds):
                     venue__name=search
                 )
 
+    # create 2D calendar array for the given date, and list of gigs
     cal = create_calendar(year, month, day, gigs)
 
     data = { 
         'calendar' : cal,
         'month_string' : str(year) + '-' + str(month).zfill(2),
+        # day string is first day with gigs, if any, otherwise just No Gigs!
         'day_string' : str(next((x for i, x in enumerate(sum(cal, [])) if x != 0), 'No Gigs!')),
         'prev_hidden' : is_today,
     }
-
+    # return the json
     return JsonResponse(data)
 
-# return the list of gigs on a given date
+# return the calendar gig list template, complete with gigs
+# matching the request (used in ajax request)
+# similar to calendar_json, but for loading the gigs into the view
 def gigs_on_date(request, date_param, with_buds):
 
     # extract the date fields
@@ -234,123 +240,84 @@ def gigs_on_date(request, date_param, with_buds):
 
     return render(request, "bba/calendar/calendar_gig_list.html", { 'gigs' : gigs })    
 
+# load the gig page for gig with given id
+# by this point the user must be logged in
 @login_required
 def gig(request, gig_id):
-    gig = Gig.objects.all().filter(gig_id=gig_id)[0]
-    print gig
-    print 'who is the user?'
-    print request.user
-    #profiles = UserProfile.objects.all()
-    #for profile in profiles.iterator():
-    #    ga = GigAttendance.objects.get_or_create(user=profile, gig=gig)[0]
-    #    ga.save()
 
+    # get the requested gig
+    gig = Gig.objects.all().filter(gig_id=gig_id)[0]
+
+    # get the logged in user's profile
     userProf = UserProfile.objects.filter(user=request.user)[0]
+
+    # check if the user is attending this gig
     going = len(GigAttendance.objects.filter(user=userProf, gig=gig)) > 0
 
-    nudges = Nudge.objects.filter(nudgee=userProf)
+    # helper function to get user from GigAttendance object
+    def helper_get_user(gigAtt):
+        return gigAtt.user
 
-    buds = map(helper_get_user, GigAttendance.objects.filter(gig=gig))
+    # get the profiles of the users who are attending this gig (excluding current user)
+    buds = map(helper_get_user, GigAttendance.objects.filter(gig=gig).exclude(user=userProf))
+
+    # if user is going, pass parameter to alter css of the I'm Going button so that it appears green
     if going:
         notGoing = 'not-going-button'
     else:
         notGoing = ''
-    context_dict = { 'gig' : gig , 'going' : going, 'buds' : buds, 'notGoingButton' : notGoing, 'nudges' : nudges }
+
+    # render the template
+    context_dict = { 'gig' : gig , 'going' : going, 'buds' : buds, 'notGoingButton' : notGoing }
     return render(request, 'bba/gig.html', context_dict)
 
-@login_required
-def bud_profile(request, bud_slug):
-
-    bud = UserProfile.objects.get(slug=bud_slug)
-    #user = request.user
-
-    #nudge = Buddy.objects.get_or_create(user=user, bud=bud, gig=gig)[0]
-    #nudge.save()
-
-
-    return render(request, 'bba/buds/bud_profile.html', { 'bud' : bud})
-
-def helper_get_user(gig):
-        return gig.user
-
-# highlights given bud in context of bud_slug relating to gig gig_id
-# displays other buds attending as well
+# view a potntial bud's profile in the context of a specific gig:
+# i.e. the other buds going to that gig are shown in the list
 def gig_bud(request, gig_id, bud_slug):
 
-
-    #    gig = Gig.objects.all().filter(gig_id=gig_id)[0]
-    gig = Gig.objects.get(gig_id=gig_id)
-    buds = map(helper_get_user, GigAttendance.objects.filter(gig=gig))
-    bud = UserProfile.objects.get(slug=bud_slug)
+    # get the current user's profile
     currentUser = UserProfile.objects.filter(user=request.user)[0]
 
-    smokeDescriptions = {0:"Non-smoker", 1:"Occasional smoker", 2:"Social smoker", 3:"Regular smoker", 4:"Smokes like a chimney"}
-    danceDescriptions = {0:"Toe-tapper", 1:"Shoulder shuffler", 2:"Hip shaker", 3:"Arms waver", 4:"Gets down"}
-    drinksDescriptions = {0:"Teetotal", 1:"Social drinker", 2:"Drinks loads", 3:"Drinks too much", 4:"Has a drink problem"}
-    involvementDescriptions = {0:"Stands at the bar", 1:"Stays at the back", 2:"Next to stage", 3:"Crowd surfer", 4:"In the mosh pit"}
+    # get the gig
+    gig = Gig.objects.get(gig_id=gig_id)
 
-    smokes = smokeDescriptions[bud.smokes]
-    dances = danceDescriptions[bud.dances]
-    drinks = drinksDescriptions[bud.drinks]
-    involvement = involvementDescriptions[bud.involvement]
+    # helper function to get user from GigAttendance object
+    def helper_get_user(gigAtt):
+        return gigAtt.user
 
+    # get the bud to view
+    bud = UserProfile.objects.get(slug=bud_slug)
+
+    # get the buds (not including the current user or the bud being viewed)
+    buds = map(helper_get_user, GigAttendance.objects.filter(gig=gig).exclude(user=currentUser).exclude(user=bud))
+
+    # check if the user has already nudged this person
     nudged = len(Buddy.objects.filter(user=currentUser, buddy=bud, gig=gig)) > 0
 
+    # get the potential bud's likes and dislikes
     liked_bands = LikedBand.objects.filter(user=bud)[:15]
-    
-
-    # data for disliked bands of a user
     disliked_bands = DisLikedBand.objects.filter(user=bud)[:15]
-    
 
-    # user = UserProfile.objects.get(username=username)
-    #    user_profile = UserProfile.objects.get(user=user)
-
-    # check to see if nudge button clicked via ajax button
-  #  if request.method == 'GET':
-
- #       nudge = Buddy.objects.get_or_create(user=userProfile, bud=bud_to_show, gig=gig)[0]
-    #        nudge.save()
-
+    # render template
     context_dict = { 
-                    'bud_to_show' : bud, 
-                    'buds' : buds, 
-                    'gig' : gig, 
-                    'smokes' : smokes, 
-                    'dances' : dances, 
-                    'drinks' : drinks, 
-                    'involvement' : involvement, 
-                    'nudged' : nudged,
-                    'liked_bands' : liked_bands,
-                    'disliked_bands' : disliked_bands,
-                    'profile' : False
-                    }
+        'bud_to_show' : bud, 
+        'buds' : buds, 
+        'gig' : gig, 
+        'smokes' : SMOKE[bud.smokes], 
+        'dances' : DANCE[bud.dances], 
+        'drinks' : DRINK[bud.drinks], 
+        'involvement' : INVOLVE[bud.involvement], 
+        'nudged' : nudged,
+        'liked_bands' : liked_bands,
+        'disliked_bands' : disliked_bands,
+        'profile' : False
+    }
 
     return render(request, 'bba/gig_buds.html', context_dict)
 
-
-def user(request,user_name_slug):
-
-    print 'got to user'
-
-    try:
-        user_profile=UserProfile.objects.get(slug=user_name_slug)
-        context_dict = {'user_profile':user_profile}
-
-    except UserProfile.DoesNotExist:
-        context_dict={}
-
-    # Render the response and send it back!
-    return render(request, 'bba/user/UserProfile.html', context_dict)
-
-def add_profile(user):
-    u = UserProfile.objects.get_or_create(user=user)[0]
-    u.save()
-    return u
-
-
+# register a user
 def register(request):
-    context_dict ={}
+    context_dict = {}
     # A boolean value for telling the template whether the registration was successful.
     # Set to False initially. Code changes value to True when registration succeeds.
     registering = True
@@ -360,12 +327,10 @@ def register(request):
         # Attempt to grab information from the raw form information.
         # Note that we make use of both UserForm and UserProfileForm.
         user_form = UserForm(data=request.POST)
-        print " is it valid?"
 
         # If the two forms are valid...
         if user_form.is_valid():
 
-            print "yes valid"
             # Save the user's form data to the database.
             user = user_form.save()
 
@@ -375,26 +340,24 @@ def register(request):
             user.save()
 
             # create user profile object with default fields
-            user_profile = add_profile(user)
+            user_profile = UserProfile.objects.get_or_create(user=user)[0]
 
             # logs in user
-            user_profile.user = authenticate(username=user_form.cleaned_data['username'],
-                                password=user_form.cleaned_data['password'],
+            user_profile.user = authenticate(
+                                    username=user_form.cleaned_data['username'],
+                                    password=user_form.cleaned_data['password'],
                                 )
+            user_profile.save()
 
             if user_profile.user.is_active:
                login(request, user_profile.user)
 
-            print "hello!! " + str(user_profile.user.is_authenticated())
-
-
-            return HttpResponseRedirect('../profile/'+user_profile.slug)
+            return HttpResponseRedirect('../edit-profile/')
 
         # Invalid form or forms - mistakes or something else?
         # Print problems to the terminal.
         # They'll also be shown to the user.
         else:
-            print user_form.errors
             return render(request,'bba/index.html',{'user_form': user_form, 'errors': user_form.errors})
 
     # Not a HTTP POST, so we render our form using two ModelForm instances.
@@ -407,155 +370,80 @@ def register(request):
     # Render the template depending on the context.
     return render(request,'bba/index.html',context_dict)
 
+# show the current user their profile
 @login_required
 def my_profile(request):
 
+    # get the user's profile
     profile = UserProfile.objects.get(user=request.user)
 
-    # If it's a HTTP POST, we're interested in processing form data.
-    if request.method == 'POST':
-
-
-        profile_form = UserProfileForm(data=request.POST)
-
-        if profile_form.is_valid():
-            profile.dob = request.POST['dob']
-            profile.gender = request.POST['gender']
-            profile.smokes = request.POST['smokes']
-            profile.drinks = request.POST['drinks']
-            profile.dances = request.POST['dances']
-            profile.involvement = request.POST['involvement']
-
-            # Did the user provide a profile picture?
-            # If so, we need to get it from the input form and put it in the UserProfile model.
-            if 'image' in request.FILES:
-                profile.image = request.FILES['image']
-            registered = True
-            profile.user = request.user
-            profile.save()
-
-
-
-        else:
-            print profile_form.errors
-
-    else:
-        profile_form = UserProfileForm()
-
-
-    bud = UserProfile.objects.get(user=request.user)
-    smokeDescriptions = {0:"Non-smoker", 1:"Occasional smoker", 2:"Social smoker", 3:"Regular smoker", 4:"Smokes like a chimney"}
-    danceDescriptions = {0:"Toe-tapper", 1:"Shoulder shuffler", 2:"Hip shaker", 3:"Arms waver", 4:"Gets down"}
-    drinksDescriptions = {0:"Teetotal", 1:"Social drinker", 2:"Drinks loads", 3:"Drinks too much", 4:"Has a drink problem"}
-    involvementDescriptions = {0:"Stands at the bar", 1:"Stays at the back", 2:"Next to stage", 3:"Crowd surfer", 4:"In the mosh pit"}
-
-    smokes = smokeDescriptions[bud.smokes]
-    dances = danceDescriptions[bud.dances]
-    drinks = drinksDescriptions[bud.drinks]
-    involvement = involvementDescriptions[bud.involvement]
-
-    liked_bands = LikedBand.objects.filter(user=bud)[:15]
-    nudges = Buddy.objects.filter(buddy=bud)
+    liked_bands = LikedBand.objects.filter(user=profile)[:15]
+    nudges = Buddy.objects.filter(buddy=profile)
 
     # data for disliked bands of a user
-    disliked_bands = DisLikedBand.objects.filter(user=bud)[:15]
+    disliked_bands = DisLikedBand.objects.filter(user=profile)[:15]
 
     context_dict = { 
-                    'bud_to_show' : bud, 
-                    'gig' : gig, 
-                    'smokes' : smokes, 
-                    'dances' : dances, 
-                    'drinks' : drinks, 
-                    'involvement' : involvement, 
-                    'liked_bands' : liked_bands,
-                    'disliked_bands' : disliked_bands,
-                    'nudges' : nudges,
-                    'profile' : True,
-                    }
+        'bud_to_show' : profile, 
+        'gig' : gig, 
+        'smokes' : SMOKE[profile.smokes], 
+        'dances' : DANCE[profile.dances], 
+        'drinks' : DRINK[profile.drinks], 
+        'involvement' : INVOLVE[profile.involvement], 
+        'liked_bands' : liked_bands,
+        'disliked_bands' : disliked_bands,
+        'nudges' : nudges,
+        'profile' : True,
+    }
 
     return render(request, 'bba/user/my_profile.html', context_dict)
 
+# allow a user to edit their profile
 @login_required
 def edit_profile(request):
-    userProf = UserProfile.objects.get(user=request.user)
-    return profile(request, userProf.slug)
 
-def profile(request, user_name_slug):
+    # get the user's profile
+    profile = UserProfile.objects.get(user=request.user)
 
-    profile = UserProfile.objects.get(slug=user_name_slug)
-
-    # If it's a HTTP POST, we're interested in processing form data.
+    # if they have submitted profile data
     if request.method == 'POST':
 
-
         profile_form = UserProfileForm(data=request.POST)
-
+        # validate it
         if profile_form.is_valid():
-            profile.delete()
-            profile = profile_form.save(commit=False)
-            print '******************* is prof valid'
+            profile.dob = profile_form.cleaned_data['dob']
+            profile.gender = profile_form.cleaned_data['gender']
+            profile.smokes = profile_form.cleaned_data['smokes']
+            profile.drinks = profile_form.cleaned_data['drinks']
+            profile.dances = profile_form.cleaned_data['dances']
+            profile.involvement = profile_form.cleaned_data['involvement']
 
             # Did the user provide a profile picture?
             # If so, we need to get it from the input form and put it in the UserProfile model.
             if 'image' in request.FILES:
                 profile.image = request.FILES['image']
 
-                print '****************** about to save'
-
-
-            print "got to this user profile"
-
-
+            # save and show take the user to their profile
             registered = True
             profile.user = request.user
             profile.save()
 
-
-
-        else:
-            print profile_form.errors
-
-    else:
-        profile_form = UserProfileForm()
-
-
-    # data for liked bands of a user
-    liked_bands = LikedBand.objects.filter(user=profile)
-    lb = []
-    for l in liked_bands:
-        lb.append(l.band)
-
-    # data for disliked bands of a user
-    disliked_bands = DisLikedBand.objects.filter(user=profile)
-    db = []
-    for d in disliked_bands:
-        db.append(d.band)
-
-    newbies = list(set(Band.objects.all()) - set(lb) - set(db))
-
-    # data for buddy request notifications
-    nudge = Buddy.objects.filter(buddy=profile)
-    nudgeList = []
-
-    for i in range(len(nudge)):
-        if nudge[i].accept == False:
-            nudgeList.append(nudge[i])
+            return HttpResponseRedirect('/profile/')
 
     registered = True
 
-
-    context_dict={'user_profile':profile,'profile_form': profile_form, 'registered': registered, 'bands':newbies[:10],'liked_bands':liked_bands[:15],'disliked_bands':disliked_bands[:15],'nudges':nudgeList[:5]}
+    context_dict = {
+        'user_profile':profile,
+        'profile_form': UserProfileForm(), 
+        'registered': registered, 
+        'bands':new_bands(profile)[:10],
+    }
 
     # Render the template depending on the context
     return render(request,'bba/user/user_profile.html',context_dict)
 
-
-
-
+# login a user
 def user_login(request):
-
-    print 'got to user login'
-
     # Gather username and password
     if request.method == 'POST':
         username = request.POST.get('username')
@@ -569,55 +457,58 @@ def user_login(request):
            if user.is_active:
                login(request, user)
 
-               return HttpResponseRedirect('../calendar')
+               return HttpResponseRedirect('/calendar/')
            else:
-               return HttpResponse("Your account for bandbuds has been disabled.")
+               return HttpResponseRedirect('/login/')
         else:
-            print "Invalid login details: {0}, {1}".format(username, password)
-            return HttpResponse("Sorry bud! Invalid login details supplied.")
+            return HttpResponseRedirect('/login/')
     else:
         return render(request, 'bba/index.html',{})
 
-@login_required
-def restricted(request):
-    return HttpResponse("Since you're logged in, you can see this text!")
-
+# logout the user
 @login_required
 def user_logout(request):
     logout(request)
     return HttpResponseRedirect('/')
 
+# either indicate that a user is attending a gig, 
+# or that they no longer are attending
+# this is called as an ajax request
 @login_required
 def im_going(request, gig_id):
     
-   
     try:
+        # get the gig and user in question
         gig = Gig.objects.filter(gig_id=gig_id)[0]
-        print gig
+
         userProf = UserProfile.objects.filter(user=request.user)[0]
-        print userProf
+
         # if user already going
         if len(GigAttendance.objects.filter(gig=gig, user=userProf)) > 0:
 
             ga = GigAttendance.objects.filter(gig=gig, user=userProf)[0]
+
+            # delete the attendance object
             ga.delete()
             context_dict = { 'gig' : gig, 'notGoingButton' : 'not-going-button' }
         # if user not going
         else:
-
+            # create attendance object
             attend = GigAttendance.objects.get_or_create(gig=gig, user=userProf)[0]
             attend.save()
             context_dict = { 'going' : True, 'gig' : gig }
     except:
         context_dict = { 'gig' : gig }
+
+    # return the new button to show
     return render(request, 'bba/gig/gig_going_button.html', context_dict)
 
-
-
-# for a user nudging another
+# allow a user to nudge another user
+# this is an ajax reqest
 @login_required
 def nudge(request):
 
+    # get the details of the nudge request
     if request.method == 'GET':
         bud_id = request.GET['bud_id']
         gig_id = request.GET['gig_id']
@@ -631,48 +522,43 @@ def nudge(request):
         if len(Buddy.objects.filter(gig=gig, user=userProf, buddy=budProf)) > 0:
 
             b = Buddy.objects.filter(gig=gig, user=userProf, buddy=budProf)[0]
+            # remove the nudge
             b.delete()
             context_dict = { 'nudged' : False }
         # if not yet nudged
         else:
-
+            # save the nudge
             b = Buddy.objects.get_or_create(gig=gig, user=userProf, buddy=budProf)[0]
             b.save()
             context_dict = { 'nudged' : True }
+
+        # return the new nudge button
         return render(request, 'bba/buds/bud_nudge_button.html', context_dict)
 
+# indicate that a user likes a given band
 @login_required
 def like_band(request):
 
     band_id = None
     if request.method == 'GET':
 
+        # get the details
         band_id = request.GET['band_id']
         user_id = request.GET['user_id']
 
-        user=User.objects.get(username=user_id)
-        user_profile=UserProfile.objects.get(user=user)
+        user = User.objects.get(username=user_id)
+        user_profile = UserProfile.objects.get(user=user)
 
+        # create the liked band object
         band = Band.objects.get(name=band_id)
-        add_liked_band(band,user_profile)
-
-
+        lb = LikedBand.objects.get_or_create(band=band, user=user_profile)[0]
+        try:
+            lb.save()
+        except :
+            pass
     return HttpResponse("")
 
-# Like buttons helper function - to be refactored!!!
-def add_liked_band(b,u):
-    lb = LikedBand.objects.get_or_create(band=b,user=u)[0]
-    print 'gotta go again',b,u,lb
-    try:
-        lb.save()
-    except :
-        print 'error'
-
-    print 'here?'
-    return lb
-
-
-
+# indicate the a user dislikes a given band
 @login_required
 def dislike_band(request):
     band_id = None
@@ -681,33 +567,32 @@ def dislike_band(request):
         band_id = request.GET['band_id']
         user_id = request.GET['user_id']
 
-        user=User.objects.get(username=user_id)
-        user_profile=UserProfile.objects.get(user=user)
+        user = User.objects.get(username=user_id)
+        user_profile = UserProfile.objects.get(user=user)
         band = Band.objects.get(name=band_id)
 
-        add_disliked_band(band,user_profile)
-
-    print 'disliked band!!!!'
+        # create the disliked band object
+        band = Band.objects.get(name=band_id)
+        dlb = DisLikedBand.objects.get_or_create(band=band, user=user_profile)[0]
+        try:
+            dlb.save()
+        except :
+            pass
     return HttpResponse("")
 
-# Like buttons helper function - to be refactored!!!
-def add_liked_band(b,u):
-    lb = LikedBand.objects.get_or_create(band=b,user=u)[0]
-    try:
-        lb.save()
-    except :
-        print 'error'
+# get some new bands for a user to like or dislike
+def new_bands(profile):
+    # get their liked bands
+    liked_bands = LikedBand.objects.filter(user=profile)
+    lb = []
+    for l in liked_bands:
+        lb.append(l.band)
 
-    return lb
+    # and disliked bands
+    disliked_bands = DisLikedBand.objects.filter(user=profile)
+    db = []
+    for d in disliked_bands:
+        db.append(d.band)
 
-# Like buttons helper function - to be refactored!!!
-def add_disliked_band(b,u):
-    print 'step 4!!'
-
-    dlb = DisLikedBand.objects.get_or_create(band=b,user=u)[0]
-    try:
-        dlb.save()
-    except :
-        print 'error'
-    print 'step 5!!'
-    return dlb
+    # return those bands yet to be liked or disliked
+    return list(set(Band.objects.all()) - set(lb) - set(db))
