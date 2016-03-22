@@ -114,7 +114,7 @@ def add_gig(gig_id, date, time, city, venue, band):
     print "added gig"
     return gig
 
-# adds a gig attendence given gig and user
+## adds a gig attendence given gig and user
 def add_gig_attendance(gig, user):
     # check that the gig and user are not already present
     if len(GigAttendance.objects.filter(gig=gig,user=user))>0:
