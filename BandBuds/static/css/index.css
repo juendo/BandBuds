@@ -581,54 +581,61 @@ img {
 	width:60%;
 	max-width: 520px;
 	min-width: 320px;
-	height: 500px;
+	max-height: 500px;
 	overflow: hidden;
 	background: white;
 	margin: 0 auto;
 }
 
-.bb-btn,.bb-an{
-	padding: 10px;
+.bb-btn,.bb-an{;
 	float:left;
 	display:block;
 	width:100%;
 	overflow: hidden;
 	margin: auto;
 }
-.bba-btn{
+.bb-btn{
 	border:1px solid;
+	z-index: 10;
 	border-radius:2px;
-	height: 100px;
+	height: 80px;
 	text-align:center;
 	vertical-align: bottom;
-	background: white;
+	font-size: 20px;
+	color: white;
+	background-color: #D30439;
+}
+.bb-acc{
+	margin-top: 5%;
 }
 .bb-an{
-	height: 250px;
+	min-height: 250px;
 	background: #eee;
 }
 .bb-up{
+	z-index: 2;
 	background:white;
-	height:50%;
+	height:78%;
 	width:100%;
 	position:absolute;
 }
 .bb-img{
 	float:left;
-	z-index:2;
+	z-index:5;
 	width:100%;
 	position:absolute;
 }
 
 @media screen and (min-width: 768px) { 
-#bba-container{
+#bb-container{
 	position: relative;
 	width:100%;
 	min-width: 300px;	
 }
-#bba-an{
+.bb-an{
 	position: relative;
 	width:100%;
-	min-width: 300px;	
+	min-width: 300px;
 }
-}	
+
+}

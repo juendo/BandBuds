@@ -7,6 +7,11 @@
 {% block body_block %}
 
 <div class="col-xs-10 col-xs-offset-1 col-md-10 col-md-offset-1 login">
+
+    <div id="bb-container" >
+        <div class="bb-an">
+
+
     {% if registering %}
     <!--Register -->
     {% include 'bba/user/register.html' %}
@@ -16,10 +21,17 @@
         <strong>{{ user.username }}<a href="../calendar/"> checkout the calendar</a></strong>
         <a href="../profile/">or fill in your profile</a><br />
         {% else %}
+            <!--Animation-->
+            <img class="bb-img" src="/static/bba/images/bb_animation.gif">
+            <div class="bb-up"></div><div class = "bb-acc">
+
         <!--Login-->
         {% include 'bba/login.html' %}
-        {% endif %}
+        <div> </div><button type="button" class="bb-btn " name="">Join in</button>
+            {% endif %}
+            <div> </div>
     {% endif %}
+                    </div></div>
 </div>
 
 {% endblock %}
