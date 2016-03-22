@@ -5,35 +5,7 @@
     </div>
     <div class='col-md-6'>
       <div class='row'>
-
-          <div class='row'>
-            <div class='col-md-12'>
-              <h4 class='text-center'>
-                {{ smokes }}
-              </h4>
-            </div>
-          </div>
-          <div class='row'>
-            <div class='col-md-12'>
-              <h4 class='text-center'>
-                {{ dances }}
-              </h4>
-            </div>
-          </div>
-          <div class='row'>
-            <div class='col-md-12'>
-              <h4 class='text-center'>
-                {{ drinks }}
-              </h4>
-            </div>
-          </div>
-          <div class='row'>
-            <div class='col-md-12'>
-              <h4 class='text-center'>
-                {{ involvement }}
-              </h4>
-            </div>
-          </div>
+        {% include 'bba/buds/bud_gig_attrs.html' %}
         </div>
       </div>
   </div>
@@ -43,35 +15,3 @@
     </div>
   </div>
 </div>
-<!--
-<div class='container-fluid bud-box'>
-  <div class='row'>
-    <div class='col-md-3'>
-      <img class='img-responsive img-circle' src="/media/{{bud_to_show.image}}" alt="{{ bud_to_show.slug }}">
-    </div>
-    <div class='col-md-9'>
-      <div class='row'>
-        <div class='col-md-8'>
-          <h6>
-            {{ bud_to_show.gender }}
-          </h6>
-        </div>
-        <div class='col-md-4'>
-          <button class='btn nudge' data-userid='{{user.username}}' data-budid='{{ bud_to_show.slug }}' data-gigid='{{ gig.gig_id }}'>
-            Nudge
-          </button>
-        </div>
-      </div>
-      <div class='row'>
-        <div class='col-md-8'>
-          <h6>
-            Smoker: {{ bud_to_show.smokes }}, Drinker: {{ bud_to_show.drinks }}
-          </h6>
-        </div>
-        <div class='col-md-4'>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
--->
