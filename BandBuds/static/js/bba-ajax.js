@@ -105,16 +105,22 @@ $( document ).ready( function() {
     });
 
     // Likes
-	$('.band').click(function(){
+	$( document ).on( 'click', '.band', function() {
 
-	    var bandid = $(this).attr("data-bandid");
-		var bandslug = $(this).attr("data-bandslug")
-	    var userid= $(this).attr("data-user");
-		var opinion=$(this).attr("id");
-		console.log('band button'+ bandslug+' and '+ userid + ' '+ opinion);
-		$.get('/ajax/'+opinion+'_band/', {user_id: userid, band_id: bandid}, function (data) {
-			$('.' + bandslug).hide();
-		});
+	    var bandid = $( this ).attr( "data-bandid" );
+		var bandslug = $( this ).attr( "data-bandslug" )
+	    var userid = $( this ).attr( "data-user" );
+		var opinion = $( this ).attr( "id" );
+
+		$.get(
+			'/ajax/' + opinion + '_band/', 
+			{ user_id: userid, band_id: bandid }, 
+			function (data) {
+				$('.' + bandslug).html(data);
+				$('.' + bandslug).addClass($('.' + bandslug + ' > #like').attr( 'data-bandslug' ));
+				$('.' + bandslug).removeClass( '.' + bandslug )
+			}
+		);
 	});
 
 	//nudge

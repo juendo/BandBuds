@@ -8,6 +8,7 @@ from calendar import monthrange
 from bba.forms import UserForm, UserProfileForm
 from django.contrib.auth.decorators import login_required
 from sets import Set
+import random
 
 # descriptions of gig attributes for each possible integer value
 SMOKE = {0:"Non-smoker", 1:"Occasional smoker", 2:"Social smoker", 3:"Regular smoker", 4:"Smokes like a chimney"}
@@ -556,7 +557,7 @@ def like_band(request):
             lb.save()
         except :
             pass
-    return HttpResponse("")
+    return render(request, 'bba/user/band_like_box.html', { 'band' : random.choice(new_bands(user_profile)), 'user_profile' : user_profile })
 
 # indicate the a user dislikes a given band
 @login_required
@@ -578,7 +579,7 @@ def dislike_band(request):
             dlb.save()
         except :
             pass
-    return HttpResponse("")
+    return render(request, 'bba/user/band_like_box.html', { 'band' : random.choice(new_bands(user_profile)), 'user_profile' : user_profile })
 
 # get some new bands for a user to like or dislike
 def new_bands(profile):

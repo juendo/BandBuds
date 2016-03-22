@@ -1,0 +1,8 @@
+<!--artist image-->
+<div><img class="gig-image center-block" src="{{ band.image_Ref }}" alt="artists-image"></div>
+<!--artist name-->
+<div><h4 class='center-text'>{{band.name}}</h4></div>
+<!--like button-->
+<button class="btn btn-primary band" id="like" data-bandslug='{{ band.slug }}' data-bandid="{{ band.name }}" data-user="{{ user_profile.user.username}}"  type="button">Like</button>
+<!--dislike button-->
+<button class="btn btn-primary band" id="dislike" data-bandslug='{{ band.slug }}' data-bandid="{{ band.name }}" data-user="{{ user_profile.user.username}}"  type="button">Dislike</button>
