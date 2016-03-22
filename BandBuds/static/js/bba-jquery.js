@@ -78,11 +78,14 @@ $( document ).ready( function() {
     });
     $("#id_involvement").val(2);
 
-	var params = $( '#calendar-info' ).attr( 'data-month' ).split('-');
-	var year = params[0];
-	var month = params[1];
+    if ($( '#calendar-info' ).attr( 'data-month' ) != undefined) {
+    	var params = $( '#calendar-info' ).attr( 'data-month' ).split('-');
+		var year = params[0];
+		var month = params[1];
+		
+		loadCalendar(year, month, false);
+    }
 	
-	loadCalendar(year, month, false);
 
 });
 

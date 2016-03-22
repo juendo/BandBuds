@@ -1,23 +1,16 @@
 <!-- user music preference
 	load to user_profile.html -->
-
+{% load staticfiles %}
 {% if bands %}
+<div class='row'>
 {% for band in bands %}
 	{% if band.name %}
 	<div class="col-sx-4 col-sm-6 col-lg-6 band-like-box">
 		<div class = "{{ band.slug }}" >
-			<!--artist image-->
-			<div><img class="gig-image center-block" src="{{ band.image_Ref }}" alt="artists-image"></div>
-			<!--artist name-->
-			<div><h4 class='center-text'>{{band.name}}</h4></div>
-			<!--like button-->
-			<button class="btn btn-primary band {{ band.slug }}" id="like" data-bandslug={{ band.slug }} data-bandid="{{ band.name }}" data-user="{{ user_profile.user.username}}"  type="button">Like</button>
-			<!--dislike button-->
-			<button class="btn btn-primary band {{ band.slug }}" id="dislike" data-bandslug={{ band.slug }} data-bandid="{{ band.name }}" data-user="{{ user_profile.user.username}}"  type="button">Dislike</button>
+			{% include 'bba/user/band_like_box.html' %}
 		</div>
 	</div>
 	{% endif %}
 {% endfor %}
-{% else %}
-<h2> nae bands ken!!</h2>
+</div>
 {% endif %}
