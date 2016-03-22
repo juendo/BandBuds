@@ -23,7 +23,8 @@ def populate():
 
     #added in users for presentation
     # Creating mock users
-    stevo_user = add_user('steve','e@m.ail','sesame')
+    stevo_user = add_user('steve','e@m.ail','123')
+    neil_user = add_user('neil','neil@hotmail.com', '123')
     anaJ_user = add_user('Ana Jahnke','ana_jahnke@hotmail.com','123')
     lewis_user = add_user('Lewis','l@hotmail.com','123')
     gladis_user = add_user('Gladis','glad@hotmail.com','123')
@@ -36,17 +37,18 @@ def populate():
     leifos_user = add_user('leifos','leifos@hotmail.com','123')
 
     # Create profile
-    stevo_profile = add_profile(stevo_user,date(1983,1,26),'Male',0,0,0,0)
+    stevo_profile = add_profile(stevo_user,date(1983,1,26),'Male',0,4,4,3)
+    neil_profile = add_profile(neil_user,date(1992,3,16), 'Male',3,2,3,4)
     lewis_profile = add_profile(lewis_user,date(1990,1,14),'Male',0,0,1,1)
-    anaJ_profile = add_profile(anaJ_user,date(1950,2,26),'Male',0,1,1,0)
-    gladis_profile = add_profile(gladis_user,date(1950,2,26),'Female',1,1,0,0)
-    joel_profile = add_profile(joel_user,date(1993,1,15),'Male',0,0,0,0)
-    rob_profile = add_profile(rob_user,date(1993,1,20),'Male',0,0,0,0)
-    mario_profile = add_profile(mario_user,date(1984,3,26),'Male',0,0,0,0)
-    polly_profile = add_profile(polly_user,date(1982,5,26),'Female',0,0,0,0)
-    david_profile = add_profile(david_user,date(1985,7,26),'Male',0,0,0,0)
-    laura_profile = add_profile(laura_user,date(1988,8,26),'Male',0,0,0,0)
-    leifos_profile = add_profile(leifos_user,date(1989,9,26),'Male',0,0,0,0)
+    anaJ_profile = add_profile(anaJ_user,date(1950,2,26),'Male',0,1,1,4)
+    gladis_profile = add_profile(gladis_user,date(1950,2,26),'Female',1,1,3,2)
+    joel_profile = add_profile(joel_user,date(1983,11,07),'Male',4,4,4,4)
+    rob_profile = add_profile(rob_user,date(1984,8,30),'Male',1,4,3,3)
+    mario_profile = add_profile(mario_user,date(1984,3,26),'Male',2,1,3,1)
+    polly_profile = add_profile(polly_user,date(1982,5,26),'Female',3,1,2,4)
+    david_profile = add_profile(david_user,date(1985,7,26),'Male',2,3,4,1)
+    laura_profile = add_profile(laura_user,date(1988,8,26),'Male',2,3,1,3)
+    leifos_profile = add_profile(leifos_user,date(1989,9,26),'Male',2,1,3,4)
 
     # Print out what we have added to the user
     for m in User.objects.all():
@@ -60,24 +62,40 @@ def populate():
             add_gig_attendance(gig, u)
 
 
+# adds a band to the database, checks whether they already exist
 def add_band(name,image_Ref):
+    if len(Band.objects.filter(name=name))>0:
+        print 'band already populated'
+        return Band.objects.get(name=name)
+
     b = Band.objects.get_or_create(name=name,image_Ref=image_Ref)[0]
     b.save()
     return b
 
 def add_profile(user, dob, gender, smokes, drinks, dances, involvement):
+    if len(UserProfile.objects.filter(user=user))>0:
+        print 'profile already populated'
+        return UserProfile.objects.get(user=user)
     u = UserProfile.objects.get_or_create(user=user, dob=dob, gender=gender,
             smokes=smokes, drinks=drinks,dances=dances,involvement=involvement)[0]
     u.save()
     return u
 
 def add_user(username,email,password):
+
+    if len(User.objects.filter(username=username))>0:
+        print 'user already populated'
+        return User.objects.get(username=username)
     u = User.objects.create_user(username, email, password)
     u.save()
     return u
 
 # New venue for populate db with songkick
 def add_venue(venue_id, name):
+    if len(Venue.objects.filter(venue_id=venue_id))>0:
+        print 'venue already populated'
+        return Venue.objects.get(venue_id=venue_id)
+
     print "venue entered"
     v = Venue.objects.get_or_create(venue_id=venue_id, name=name)[0]
     v.save()
@@ -86,13 +104,23 @@ def add_venue(venue_id, name):
 
 # New gig for populate db with songkick
 def add_gig(gig_id, date, time, city, venue, band):
-    print "gig entered"
+    if len(Gig.objects.filter(gig_id=gig_id))>0:
+        print 'gig already populated'
+        return Gig.objects.get(gig_id=gig_id)
+
+    print band,"gig entered"
     gig = Gig.objects.get_or_create(gig_id=gig_id, date=date, time=time, city=city, venue=venue, band=band)[0]
     gig.save()
     print "added gig"
     return gig
 
+# adds a gig attendence given gig and user
 def add_gig_attendance(gig, user):
+    # check that the gig and user are not already present
+    if len(GigAttendance.objects.filter(gig=gig,user=user))>0:
+        print 'gig attendance already populated'
+        return GigAttendance.objects.get(gig=gig,user=user)
+
     print "gig att entered"
     ga = GigAttendance.objects.get_or_create(gig=gig, user=user)[0]
     ga.save()
