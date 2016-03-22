@@ -85,7 +85,10 @@ $( document ).ready( function() {
 		
 		loadCalendar(year, month, false);
     }
-	
+	$(".bb-btn").click(function(){
+        $(".bb-img").hide();
+        $(".bb-up").animate({height: '0%'});
+    });
 
 });
 

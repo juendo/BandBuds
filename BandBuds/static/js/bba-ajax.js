@@ -171,6 +171,32 @@ $( document ).ready( function() {
 		}
 	});
 
+	$( '.accept' ).click( function() {
+		var gigid = $( this ).attr( 'data-gigid' );
+		var bud = $( this ).attr( 'data-bud' );
+		$.ajax({
+			type: 'GET',
+			url: '/ajax/accept/',
+			data: { 'gigid' : gigid, 'bud' : bud },
+			success: function(data) {
+				$( '.' + bud + '.gig-' + gigid ).remove();
+			}
+		});
+	});
+
+	$( '.decline' ).click( function() {
+		var gigid = $( this ).attr( 'data-gigid' );
+		var bud = $( this ).attr( 'data-bud' );
+		$.ajax({
+			type: 'GET',
+			url: '/ajax/decline/',
+			data: { 'gigid' : gigid, 'bud' : bud },
+			success: function(data) {
+				$( '.' + bud + '.gig-' + gigid ).remove();
+			}
+		});
+	});
+
 });
 
 

@@ -1,16 +1,18 @@
 {% load staticfiles %}
-<!--bud profile-->
 
-<!--Gig start -->
+<!--accepted start -->
 {% if nudges %}
-{% for nudge in nudges %}
+{% for nudge in accepted %}
 
-<a>
-<div class="gig-box">
+
+<div class="gig-box {{ nudge.user.slug }} gig-{{ nudge.gig.gig_id }}">
+
   <div class="gig-info-box">
     <div class="act-name-box">
+      
+      
       <div class="act-name">
-        {{ nudge.user.user.username }}
+        {{ nudge.buddy.user.username }} accepted your nudge!
       </div>
     </div>
     <div class="venue-name-box">
@@ -18,12 +20,52 @@
         {{ nudge.gig.band.name }} at {{ nudge.gig.venue.name }} on {{ nudge.gig.date }}
       </div>
     </div>
+
   </div>
   <div class="gig-time-box">
-    <img class="gig-image" src="/media/{{nudge.user.image}}" alt="{{ nudger.user.slug }}">
+    <img class="gig-image" src="/media/{{nudge.user.image}}" alt="{{ nudge.user.slug }}">
   </div>
 </div>
-</a>
+
+
+{% endfor %}
+
+{% endif %}
+<!--bud profile-->
+
+<!--nudges start -->
+{% if nudges %}
+{% for nudge in nudges %}
+
+
+<div class="gig-box {{ nudge.user.slug }} gig-{{ nudge.gig.gig_id }}">
+
+  <div class="gig-info-box">
+    <div class="act-name-box">
+      
+      
+      <div class="act-name">
+        nudged by {{ nudge.user.user.username }}
+      <button class='btn decline pull-right btn-default' data-bud='{{ nudge.user.slug }}' data-gigid='{{ nudge.gig.gig_id }}'/>
+        Decline
+      </button>
+      <button class='btn accept pull-right btn-default' data-bud='{{ nudge.user.slug }}' data-gigid='{{ nudge.gig.gig_id }}'>
+        Accept
+      </button>
+      </div>
+    </div>
+    <div class="venue-name-box">
+      <div class="venue-name">
+        {{ nudge.gig.band.name }} at {{ nudge.gig.venue.name }} on {{ nudge.gig.date }}
+      </div>
+    </div>
+
+  </div>
+  <div class="gig-time-box">
+    <img class="gig-image" src="/media/{{nudge.user.image}}" alt="{{ nudge.user.slug }}">
+  </div>
+</div>
+
 
 {% endfor %}
 
