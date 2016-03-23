@@ -115,7 +115,7 @@ class Buddy(models.Model):
     # if accept is set to true, the request is accepted and
     # the two UserProfiles are deemed to be 'buddies'
     user = models.ForeignKey(UserProfile)
-    # as we have two UserProfile foreign keys, one must be unique
+    # as we have two UserProfile foreign keys one must be unique
     # a user can have multiple buddy links, but each buddy must be unique
     buddy = models.ForeignKey(UserProfile, related_name='+')
     gig = models.ForeignKey(Gig)
