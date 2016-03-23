@@ -82,16 +82,6 @@ class Migration(migrations.Migration):
             bases=(models.Model,),
         ),
         migrations.CreateModel(
-            name='Nudge',
-            fields=[
-                ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('gig', models.ForeignKey(to='bba.Gig')),
-            ],
-            options={
-            },
-            bases=(models.Model,),
-        ),
-        migrations.CreateModel(
             name='PerformingBand',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
@@ -106,8 +96,8 @@ class Migration(migrations.Migration):
             name='UserProfile',
             fields=[
                 ('id', models.AutoField(verbose_name='ID', serialize=False, auto_created=True, primary_key=True)),
-                ('dob', models.DateField(default=datetime.date(2016, 3, 20))),
-                ('gender', models.CharField(default=b'U', max_length=1, choices=[(b'U', b'Undisclosed'), (b'F', b'Female'), (b'M', b'Male')])),
+                ('dob', models.DateField(default=datetime.date(2016, 3, 22))),
+                ('gender', models.CharField(default=b'Undisclosed', max_length=200, choices=[(b'Undisclosed', b'Undisclosed'), (b'Female', b'Female'), (b'Male', b'Male')])),
                 ('smokes', models.IntegerField(default=0)),
                 ('drinks', models.IntegerField(default=0)),
                 ('dances', models.IntegerField(default=0)),
@@ -130,18 +120,6 @@ class Migration(migrations.Migration):
             options={
             },
             bases=(models.Model,),
-        ),
-        migrations.AddField(
-            model_name='nudge',
-            name='nudgee',
-            field=models.ForeignKey(to='bba.UserProfile'),
-            preserve_default=True,
-        ),
-        migrations.AddField(
-            model_name='nudge',
-            name='nudger',
-            field=models.ForeignKey(to=settings.AUTH_USER_MODEL),
-            preserve_default=True,
         ),
         migrations.AddField(
             model_name='likedband',
@@ -170,7 +148,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='buddy',
             name='buddy',
-            field=models.ForeignKey(to='bba.UserProfile'),
+            field=models.ForeignKey(related_name=b'+', to='bba.UserProfile'),
             preserve_default=True,
         ),
         migrations.AddField(
@@ -182,7 +160,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='buddy',
             name='user',
-            field=models.OneToOneField(related_name=b'+', to='bba.UserProfile'),
+            field=models.ForeignKey(to='bba.UserProfile'),
             preserve_default=True,
         ),
     ]

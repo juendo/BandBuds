@@ -19,4 +19,6 @@ urlpatterns = patterns('',
     url(r'^ajax/reload_calendar/(?P<date_param>[0-9-]+)/(?P<with_buds>[tf]{1})/$', views.calendar_json, name='reload_calendar'),
     url(r'^ajax/like_band/$', views.like_band, name='like_band'),
     url(r'^ajax/dislike_band/$', views.dislike_band, name='dislike_band'),
+    url(r'^ajax/accept/$', views.accept, name='accept'),
+    url(r'^ajax/decline/$', views.decline, name='decline'),
 )

@@ -279,9 +279,7 @@ html, body {
 	width: 100%;
 	color: black;
 }
-.login{
-	padding-top: 15%;
-}
+
 
 
 /* list of gigs */
@@ -343,11 +341,7 @@ html, body {
 	float: left;
 	margin-top: 10px;
 }
-.bud-buttons-box > button {
-	width: 75%;
-	height: 30px;
-	margin: auto;
-}
+
 .act-name-box, .venue-name-box {
 	width: 100%;
 	height: 50%;
@@ -499,11 +493,10 @@ html, body {
 	height: 100%;
 	background-color: #ffe6e6;
 }
-#im-going, .not-going-button, .nudge, .submit {
+#im-going, .not-going-button, .nudge, .submit, .edit-profile {
 	font-size: 20px;
 	color: white;
 	background-color: #D30439;
-
 }
 #im-going.not-going-button, .nudge.nudged {
 	background-color: #6fb900;
@@ -520,6 +513,41 @@ html, body {
 .submit {
 	margin-top: 25px;
 }
+#liked-bands {
+	padding-bottom:25px;
+}
+.gig-image-sm {
+	margin: 2px;
+}
+
+/* gig attrs */
+#gig-attrs {
+	position: relative;
+	color: #D30439;
+	padding: 5px;
+}
+.gig-attrs-line {
+	border-color: #D30439;
+	border-width: 3px;
+	padding: 0px;
+	margin-top: 5px;
+	margin-bottom: 5px;
+}
+.gig-attr {
+	margin: 0px;
+	width: 49%;
+	display: inline-block;
+	height: 75px;
+	overflow: hidden;
+	padding: 0px;
+}
+.gig-attr-header {
+	padding: 0px;
+	margin-top: 0px;
+	margin-bottom: 5px;
+	color: black;
+}
+
 
 /* screen wider */
 @media screen and (min-width: 800px) {
@@ -579,4 +607,70 @@ img {
 
 }
 
-}	
+}
+
+#bb-container{
+	display:block;
+	position: relative;
+	top: 15px;
+	width:60%;
+	max-width: 520px;
+	min-width: 320px;
+	max-height: 500px;
+	overflow: hidden;
+	background: white;
+	margin: 0 auto;
+}
+
+.bb-btn,.bb-an{;
+	float:left;
+	display:block;
+	width:100%;
+	overflow: hidden;
+	margin: auto;
+}
+.bb-btn{
+	border:1px solid;
+	z-index: 10;
+	border-radius:2px;
+	height: 80px;
+	text-align:center;
+	vertical-align: bottom;
+	font-size: 20px;
+	color: white;
+	background-color: #D30439;
+}
+.bb-acc{
+	margin-top: 5%;
+}
+.bb-an{
+	min-height: 250px;
+	background: #eee;
+}
+.bb-up{
+	z-index: 2;
+	background:white;
+	height:78%;
+	width:100%;
+	position:absolute;
+}
+.bb-img{
+	float:left;
+	z-index:5;
+	width:100%;
+	position:absolute;
+}
+
+@media screen and (min-width: 768px) { 
+#bb-container{
+	position: relative;
+	width:100%;
+	min-width: 300px;	
+}
+.bb-an{
+	position: relative;
+	width:100%;
+	min-width: 300px;
+}
+
+}

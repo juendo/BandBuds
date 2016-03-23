@@ -62,7 +62,8 @@ def populate():
             add_gig_attendance(gig, u)
 
 
-# adds a band to the database, checks whether they already exist
+# adds a band to the database or if they already exist
+# returns the existing object
 def add_band(name,image_Ref):
     if len(Band.objects.filter(name=name))>0:
         print 'band already populated'
@@ -72,7 +73,11 @@ def add_band(name,image_Ref):
     b.save()
     return b
 
+# adds a user profile to the database or if they already exist
+# returns the existing object
 def add_profile(user, dob, gender, smokes, drinks, dances, involvement):
+    # first check whether the user is already present,
+    # if so return the existing object
     if len(UserProfile.objects.filter(user=user))>0:
         print 'profile already populated'
         return UserProfile.objects.get(user=user)
@@ -81,6 +86,8 @@ def add_profile(user, dob, gender, smokes, drinks, dances, involvement):
     u.save()
     return u
 
+# adds a user to the database or if they already exist
+# returns the existing object
 def add_user(username,email,password):
 
     if len(User.objects.filter(username=username))>0:
@@ -90,7 +97,8 @@ def add_user(username,email,password):
     u.save()
     return u
 
-# New venue for populate db with songkick
+# adds a venue to the database or if they already exist
+# returns the existing object
 def add_venue(venue_id, name):
     if len(Venue.objects.filter(venue_id=venue_id))>0:
         print 'venue already populated'
@@ -102,7 +110,8 @@ def add_venue(venue_id, name):
     print "added venue"
     return v
 
-# New gig for populate db with songkick
+# adds a gig to the database or if they already exist
+# returns the existing object
 def add_gig(gig_id, date, time, city, venue, band):
     if len(Gig.objects.filter(gig_id=gig_id))>0:
         print 'gig already populated'
@@ -114,7 +123,8 @@ def add_gig(gig_id, date, time, city, venue, band):
     print "added gig"
     return gig
 
-## adds a gig attendence given gig and user
+# adds a gig attendance to the database or if they already exist
+# returns the existing object
 def add_gig_attendance(gig, user):
     # check that the gig and user are not already present
     if len(GigAttendance.objects.filter(gig=gig,user=user))>0:
