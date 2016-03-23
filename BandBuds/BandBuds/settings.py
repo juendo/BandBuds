@@ -24,7 +24,7 @@ DEBUG = False
 
 TEMPLATE_DEBUG = True
 
-ALLOWED_HOSTS = ['<BandBuds>.pythonanywhere.com']
+ALLOWED_HOSTS = ['BandBuds.pythonanywhere.com']
 
 # Hash me out if I'm useless, this was added for registering
 AUTHENTICATION_BACKENDS = (
