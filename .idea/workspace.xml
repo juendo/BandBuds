@@ -3,11 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="386400e3-761d-49af-a200-0c7ceb06e09c" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BandBuds/BandBuds/settings.py" afterPath="$PROJECT_DIR$/BandBuds/BandBuds/settings.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BandBuds/templates/bba/base.html" afterPath="$PROJECT_DIR$/BandBuds/templates/bba/base.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BandBuds/templates/bba/index.html" afterPath="$PROJECT_DIR$/BandBuds/templates/bba/index.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BandBuds/templates/bba/login.html" afterPath="$PROJECT_DIR$/BandBuds/templates/bba/login.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/BandBuds/templates/bba/main/main_nav.html" afterPath="$PROJECT_DIR$/BandBuds/templates/bba/main/main_nav.html" />
     </list>
     <list id="9d10907d-71c4-4a6c-92e6-c71614e138d1" name="New changelist" comment="not sure whats happening here" />
     <ignored path="BandBuds.iws" />
@@ -782,7 +777,13 @@
       <option name="project" value="LOCAL" />
       <updated>1458733230779</updated>
     </task>
-    <option name="localTasksCounter" value="19" />
+    <task id="LOCAL-00019" summary="changed index templates...">
+      <created>1458752008138</created>
+      <option name="number" value="00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1458752008138</updated>
+    </task>
+    <option name="localTasksCounter" value="20" />
     <servers />
   </component>
   <component name="ToolWindowManager">
@@ -853,7 +854,8 @@
     <MESSAGE value="updated the population script:&#10;&#10;Now checks for existing entries and doesn't populate if it has." />
     <MESSAGE value="updated the population script re: lief email" />
     <MESSAGE value="set debug value to true and chaged allowed hosts" />
-    <option name="LAST_COMMIT_MESSAGE" value="set debug value to true and chaged allowed hosts" />
+    <MESSAGE value="changed index templates..." />
+    <option name="LAST_COMMIT_MESSAGE" value="changed index templates..." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
