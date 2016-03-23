@@ -23,7 +23,7 @@ def populate():
 
     #added in users for presentation
     # Creating mock users
-    stevo_user = add_user('steve','e@m.ail','123')
+    stevo_user = add_user('steve','steve@mail','123')
     neil_user = add_user('neil','neil@hotmail.com', '123')
     anaJ_user = add_user('Ana Jahnke','ana_jahnke@hotmail.com','123')
     lewis_user = add_user('Lewis','l@hotmail.com','123')
