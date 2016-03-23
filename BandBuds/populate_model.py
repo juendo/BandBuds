@@ -32,9 +32,9 @@ def populate():
     rob_user = add_user('Rob','Rob@hotmail.com','123')
     mario_user = add_user('Mario','mario@hotmail.com','123')
     polly_user = add_user('Polly','poll@hotmail.com','123')
-    david_user = add_user('david','david@hotmail.com','123')
-    laura_user = add_user('laura','laura@hotmail.com','123')
-    leifos_user = add_user('leifos','leifos@hotmail.com','123')
+    david_user = add_user('david','david@hotmail.com','david')
+    laura_user = add_user('laura','laura@hotmail.com','laura')
+    leifos_user = add_user('leifos','leifos@hotmail.com','leifos')
 
     # Create profile
     stevo_profile = add_profile(stevo_user,date(1983,1,26),'Male',0,4,4,3)
