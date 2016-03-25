@@ -1,10 +1,10 @@
 {% load staticfiles %}
 
 
-<div id="prev" class="prev-day header-component-third-width">
-  <img src="{% static 'bba/images/leftBlack.png' %}">
+<div class="prev prev-day header-component-third-width">
+  <img src="{% static 'bba/images/leftBlack.png' %}" alt='left'>
 </div>
 <div id="current-day" class="header-component-third-width">{{ today }}</div>
-<div id="next" class="next-day header-component-third-width">
-  <img src="{% static 'bba/images/rightBlack.png' %}">
+<div class="next next-day header-component-third-width">
+  <img src="{% static 'bba/images/rightBlack.png' %}" alt='right'>
 </div>

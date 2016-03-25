@@ -151,7 +151,7 @@ html, body {
 	width: 33%;
 	float: right;
 }
-#next, #prev {
+.next, .prev {
 	color: #D30439;
 }
 #calendar-grid {
@@ -222,7 +222,7 @@ html, body {
 
 
 /* bottom search and filter bar */
-#bottom {
+.bottom {
 	position: fixed;
 	bottom: 0px;
 	width: 100%;

@@ -110,7 +110,7 @@ $( document ).ready( function() {
 	    var bandid = $( this ).attr( "data-bandid" );
 		var bandslug = $( this ).attr( "data-bandslug" )
 	    var userid = $( this ).attr( "data-user" );
-		var opinion = $( this ).attr( "id" );
+		var opinion = $( this ).attr( "data-like" );
 
 		$.get(
 			'/ajax/' + opinion + '_band/', 

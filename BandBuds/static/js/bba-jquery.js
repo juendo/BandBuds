@@ -89,7 +89,6 @@ $( document ).ready( function() {
         $(".bb-img").hide();
         $(".bb-up").animate({height: '0%'});
     });
-
 });
 
 

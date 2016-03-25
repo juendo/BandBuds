@@ -17,10 +17,10 @@
             <div class=" ">
                 <!--Gender slider -->
                 <div class="col-sx-6 col-sm-6 col-lg-6">
-                    <div class=" " for="{{ profile_form.gender.id_for_label }}">
+                    <div>
                         {{ profile_form.gender.label_tag }}
                     </div>
-                    <div class="">
+                    <div>
                        {{ profile_form.gender }}
                        <small>{{ profile_form.gender.errors }}{{ profile_form.gender.help_text }}</small>
                     </div>
@@ -29,9 +29,9 @@
                 
                 <!--Dob slider -->
                 <div class="col-sx-6 col-sm-6 col-lg-6">
-                    <div class=" " for="{{ profile_form.dob.id_for_label }}">{{ profile_form.dob.label_tag }}
+                    <div>{{ profile_form.dob.label_tag }}
                     </div>
-                    <div class=" ">
+                    <div>
                         {{ profile_form.dob }}
                         <small>{{ profile_form.dob.errors }}{{ profile_form.dob.help_text }}</small>
                     </div>
@@ -39,9 +39,9 @@
 
                 <!--Image slider -->
                 <div class="col-sx-12 col-sm-12 col-lg-12">
-                    <div class=" " for="{{ profile_form.image.id_for_label }}">{{ profile_form.image.label_tag }}
+                    <div>{{ profile_form.image.label_tag }}
                     </div>
-                    <div class=" ">
+                    <div>
                         {{ profile_form.image }}
                         <small>{{ profile_form.image.errors }}{{ profile_form.image.help_text }}</small>
                     </div>
@@ -50,7 +50,7 @@
                 
                 <!--Smokes slider -->
                 <div class="col-sx-6 col-sm-6 col-lg-6">
-                    <div class="col-sm-12" for="{{ profile_form.smokes.id_for_label }}">
+                    <div class="col-sm-12">
                         {{ profile_form.smokes.label_tag }}<span id="smkSliderVal"></span>
                     </div>
                     <div class="prof-slider">
@@ -61,7 +61,7 @@
 
                 <!--Dances slider -->
                 <div class="col-sx-6 col-sm-6 col-lg-6">
-                    <div class="col-sm-12" for="{{ profile_form.dances.id_for_label }}">
+                    <div class="col-sm-12">
                         {{ profile_form.dances.label_tag }}<span id="ex1SliderVal"></span>
                     </div>
                     <div class="prof-slider">
@@ -72,7 +72,7 @@
 
                 <!--Involvment slider -->
                 <div class="col-sx-6 col-sm-6 col-lg-6">
-                    <div class="col-sm-12" for="{{ profile_form.involvement.id_for_label }}">
+                    <div class="col-sm-12">
                         {{ profile_form.involvement.label_tag }}<span id="invSliderVal"></span>
                     </div>
                     <div class="prof-slider">
@@ -83,7 +83,7 @@
 
                 <!--Drinks slider -->
                 <div class="col-sx-6 col-sm-6  col-lg-6">
-                    <div class="col-sm-12" for="{{ profile_form.drinks.id_for_label }}">
+                    <div class="col-sm-12">
                         {{ profile_form.drinks.label_tag }}<span id="dnkSliderVal"></span>
                     </div>
                     <div class="prof-slider">
